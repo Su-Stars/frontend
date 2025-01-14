@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import '@/styles/globals.css'
-import { server } from '@/mocks/worker'
+import { server } from '@/mocks/node'
 import GlobalProvider from '@/providers/global-provider'
 
 // 개발 환경에서만 MSW 서버를 시작합니다.
