@@ -9,7 +9,7 @@ export default function Header() {
           <Image src="/logo_image.svg" width={50} height={50} alt="logo" />
           <Image src="/logo_title.svg" width={100} height={50} alt="title" />
         </Link>
-        <ul className="flex w-[640px] items-center justify-start gap-6 px-6">
+        <ul className="flex max-w-[640px] items-center justify-start gap-6 px-6">
           <li>
             <Link href="/">수영장 찾기</Link>
           </li>
