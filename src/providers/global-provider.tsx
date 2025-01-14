@@ -10,12 +10,10 @@ interface GlobalProviderProps {
 const GlobalProvider = ({ children }: GlobalProviderProps) => {
   return (
     <MSWProvider>
-      (
-    <ReactQueryProvider>
-      <CounterStoreProvider>{children}</CounterStoreProvider>
+      <ReactQueryProvider>
+        <CounterStoreProvider>{children}</CounterStoreProvider>
+      </ReactQueryProvider>
     </MSWProvider>
-  )
-    </ReactQueryProvider>
   )
 }
 
