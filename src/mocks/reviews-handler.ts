@@ -3,7 +3,7 @@ import { http, HttpResponse } from 'msw'
 // 핸들러 예시 코드입니다. 실제 코드 작성시에는 userHandler.ts 같이 새 파일을 만들어서 작성하는 것을 권장합니다.
 export const reviewsHandlers = [
   // Intercept "GET https://example.com/user" requests...
-  http.get('https://localhost/api/reviews', () => {
+  http.get('http://localhost:9999/api/reviews', () => {
     // ...and respond to them using this JSON response.
     return HttpResponse.json({
       status: 'success',
@@ -33,7 +33,7 @@ export const reviewsHandlers = [
       },
     })
   }),
-  http.post('https://localhost/api/reviews', () => {
+  http.post('http://localhost:9999/api/reviews', () => {
     return HttpResponse.json({
       status: 'success',
       message: '수영장 리뷰 작성 성공',
@@ -42,14 +42,14 @@ export const reviewsHandlers = [
       },
     })
   }),
-  http.patch('https://localhost/api/reviews/:review_id', (req) => {
+  http.patch('http://localhost:9999/api/reviews', (req) => {
     const { review_id } = req.params
     return HttpResponse.json({
       status: 'success',
       message: `리뷰 ID ${review_id} 수정 성공`,
     })
   }),
-  http.delete('https://localhost/api/reviews/:review_id', (req) => {
+  http.delete('http://localhost:9999/api/reviews', (req) => {
     const { review_id } = req.params
     return HttpResponse.json({
       status: 'success',
