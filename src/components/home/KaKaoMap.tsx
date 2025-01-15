@@ -59,6 +59,13 @@ export default function KaKaoMap() {
               position: markerPosition,
             })
             marker.setMap(mapInstance)
+
+            // 줌 컨트롤러 추가
+            const zoomControl = new window.kakao.maps.ZoomControl()
+            mapInstance.addControl(
+              zoomControl,
+              window.kakao.maps.ControlPosition.RIGHT,
+            )
           }
         })
       })
@@ -66,7 +73,7 @@ export default function KaKaoMap() {
     mapScript.addEventListener('load', onLoadKakaoMap)
   }, [])
 
-  // 지오코딩을 이용해 지도의 중심 좌표로 행정동 주소 가져오기
+  // 지오코딩을 이용해 지도의 중심 좌표로 행정동 주소를 콘솔창에 출력가져오기
   useEffect(() => {
     if (map) {
       const markerPosition = new window.kakao.maps.LatLng(
