@@ -1,10 +1,7 @@
 import { http, HttpResponse } from 'msw'
 
-// 핸들러 예시 코드입니다. 실제 코드 작성시에는 userHandler.ts 같이 새 파일을 만들어서 작성하는 것을 권장합니다.
 export const reviewsHandlers = [
-  // Intercept "GET https://example.com/user" requests...
   http.get('http://localhost:9999/api/pools/:pool_id/reviews', () => {
-    // ...and respond to them using this JSON response.
     return HttpResponse.json({
       status: 'success',
       message: '수영장 리뷰 목록 조회 성공',
