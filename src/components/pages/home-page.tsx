@@ -22,17 +22,30 @@ import useCenterStore from '@/stores/center-store'
 import { REGION, Region } from '@/lib/constants'
 import { useState } from 'react'
 import { useRegions } from '@/hooks/useRegions'
+import { useSearch } from '@/hooks/useSearch'
 
 export default function HomePage() {
   const { address, setAddress } = useCenterStore()
   const [selectedRegion, setSelectedRegion] = useState<Region | null>(null)
   const [selectedDistrict, setSelectedDistrict] = useState<string>('')
+  const [keyword, setKeyword] = useState<string>('')
 
-  const { districts, isLoading } = useRegions(selectedRegion?.code || '')
+  const { districts, isLoading } = useRegions({
+    code: selectedRegion?.code || '',
+  })
+
+  const {} = useSearch({
+    region: selectedDistrict,
+    keyword,
+  })
 
   const clickDistrict = (district: string) => {
     setSelectedDistrict(district)
     setAddress(district)
+  }
+
+  const handleChange = (value: string) => {
+    setKeyword(value)
   }
 
   return (
@@ -83,17 +96,35 @@ export default function HomePage() {
                       </DialogClose>
                     </Button>
                   ))
-                : REGION.map((item) => (
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="text-black"
-                      onClick={() => setSelectedRegion(item)}
-                      key={item.code}
-                    >
-                      <span className="text-md font-semibold">{item.name}</span>
-                    </Button>
-                  ))}
+                : REGION.map((item) =>
+                    item.name === '전국' ? (
+                      <Button
+                        size="lg"
+                        variant="outline"
+                        className="text-black"
+                        onClick={() => setSelectedRegion(item)}
+                        key={item.code}
+                      >
+                        <DialogClose className="w-full">
+                          <span className="text-md font-semibold">
+                            {item.name}
+                          </span>
+                        </DialogClose>
+                      </Button>
+                    ) : (
+                      <Button
+                        size="lg"
+                        variant="outline"
+                        className="text-black"
+                        onClick={() => setSelectedRegion(item)}
+                        key={item.code}
+                      >
+                        <span className="text-md font-semibold">
+                          {item.name}
+                        </span>
+                      </Button>
+                    ),
+                  )}
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
@@ -103,7 +134,7 @@ export default function HomePage() {
         검색 결과 <span className="text-theme">8 </span>개
       </h2>
 
-      <Input placeholder="명칭으로 검색" />
+      <Input placeholder="명칭으로 검색" value={keyword} />
     </div>
   )
 }

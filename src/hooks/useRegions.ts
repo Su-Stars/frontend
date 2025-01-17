@@ -16,7 +16,7 @@ interface DistrictResponse {
   result: Result[]
 }
 
-export const useRegions = (code: string) => {
+export const useRegions = ({ code }: useRegionsParams) => {
   const { data: accessToken } = useQuery({
     queryKey: ['sgis-auth'],
     queryFn: async () => {

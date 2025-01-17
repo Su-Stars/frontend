@@ -5,16 +5,20 @@ export interface Region {
 
 export const REGION: Region[] = [
   {
+    name: '전국',
+    code: '00',
+  },
+  {
     name: '서울',
     code: '11',
   },
   {
     name: '경기도',
-    code: '41',
+    code: '31',
   },
   {
     name: '강원도',
-    code: '42',
+    code: '32',
   },
   {
     name: '세종',
@@ -22,54 +26,54 @@ export const REGION: Region[] = [
   },
   {
     name: '충청북도',
-    code: '43',
+    code: '33',
   },
   {
     name: '충청남도',
-    code: '44',
+    code: '34',
   },
   {
     name: '인천',
-    code: '28',
+    code: '23',
   },
   {
     name: '대전',
-    code: '30',
+    code: '25',
   },
   {
     name: '전라북도',
-    code: '45',
+    code: '35',
   },
   {
     name: '전라남도',
-    code: '46',
+    code: '36',
   },
   {
     name: '광주',
-    code: '29',
+    code: '24',
   },
   {
     name: '경상남도',
-    code: '48',
+    code: '38',
   },
   {
     name: '경상북도',
-    code: '47',
+    code: '37',
   },
   {
     name: '대구',
-    code: '27',
+    code: '22',
   },
   {
     name: '부산',
-    code: '26',
+    code: '21',
   },
   {
     name: '울산',
-    code: '31',
+    code: '26',
   },
   {
     name: '제주도',
-    code: '50',
+    code: '39',
   },
 ]
