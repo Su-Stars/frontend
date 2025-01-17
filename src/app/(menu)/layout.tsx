@@ -1,12 +1,21 @@
-import Header from '@/components/header'
+import DesktopHeader from '@/components/desktop-header'
+import MobileHeader from '@/components/mobile-header'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
-      <Header />
-      <main className="bg-gray flex h-full min-h-screen w-full items-center justify-center bg-[#d9d9d9]">
-        <div className="min-h-screen w-[640px] bg-white px-6">{children}</div>
+    <>
+      {/* 데스크톱 환경에서만 표시되는 헤더 */}
+      <DesktopHeader />
+
+      {/* 메인 컨텐츠 영역 */}
+      <main className="flex h-full min-h-screen w-full items-center justify-center bg-[rgb(247,247,247)]">
+        <div className="min-h-screen w-[640px] bg-white px-6 shadow-sm">
+          {children}
+        </div>
       </main>
-    </div>
+
+      {/* 모바일 환경에서만 표시되는 헤더 */}
+      <MobileHeader />
+    </>
   )
 }
