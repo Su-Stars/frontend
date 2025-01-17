@@ -9,6 +9,9 @@ import {
   DialogTrigger,
   DialogClose,
 } from '@/components/ui/dialog'
+
+import { useForm } from 'react-hook-form'
+
 import KaKaoMap from '../home/KaKaoMap'
 import { Button } from '../ui/button'
 import {
@@ -24,6 +27,10 @@ import { useState } from 'react'
 import { useRegions } from '@/hooks/useRegions'
 import { useSearch } from '@/hooks/useSearch'
 
+interface SearchFormValues {
+  keyword: string
+}
+
 export default function HomePage() {
   const { address, setAddress } = useCenterStore()
   const [selectedRegion, setSelectedRegion] = useState<Region | null>(null)
@@ -34,7 +41,13 @@ export default function HomePage() {
     code: selectedRegion?.code || '',
   })
 
-  const {} = useSearch({
+  const { register, handleSubmit } = useForm<SearchFormValues>()
+
+  const onSubmit = (data: SearchFormValues) => {
+    setKeyword(data.keyword)
+  }
+
+  const { searchResults, isLoading: isSearchLoading } = useSearch({
     region: selectedDistrict,
     keyword,
   })
@@ -44,14 +57,20 @@ export default function HomePage() {
     setAddress(district)
   }
 
-  const handleChange = (value: string) => {
-    setKeyword(value)
-  }
-
   return (
     <div className="flex flex-col space-y-4">
       <h2 className="text-2xl font-bold">인근 수영장</h2>
       <KaKaoMap />
+
+      <form onSubmit={handleSubmit(onSubmit)} className="flex space-x-2">
+        <Input
+          {...register('keyword')}
+          placeholder="검색어를 입력하세요"
+          className="flex-1"
+        />
+        <Button type="submit">검색</Button>
+      </form>
+
       <Dialog>
         <DialogTrigger asChild>
           <Button className="w-fit">
@@ -133,8 +152,11 @@ export default function HomePage() {
       <h2 className="text-2xl font-bold">
         검색 결과 <span className="text-theme">8 </span>개
       </h2>
-
-      <Input placeholder="명칭으로 검색" value={keyword} />
+      {isSearchLoading ? (
+        <LuLoader />
+      ) : (
+        searchResults?.data.pools.map((pool) => <div>수영장</div>)
+      )}
     </div>
   )
 }

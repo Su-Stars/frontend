@@ -8,16 +8,35 @@ interface useSearchParams {
   limit?: number
 }
 
+interface Pool {
+  id: 1
+  name: string
+  address: string
+  thumbnail: string
+  isBookMarked: boolean
+}
+interface useSearchResponse {
+  data: {
+    total: number
+    page: number
+    limit: number
+    pools: Pool[]
+  }
+}
+
 export const useSearch = ({
   region = '',
   keyword = '',
   page = 1,
   limit = 10,
 }: useSearchParams) => {
-  const { data: searchResults, isLoading } = useQuery({
-    queryKey: ['search', region],
+  const { data: searchResults, isLoading } = useQuery<useSearchResponse>({
+    queryKey: ['search', region, keyword],
     queryFn: async () => {
       try {
+        if (region === '전국') {
+          region = ''
+        }
         const params = new URLSearchParams({
           region,
           keyword,
@@ -37,6 +56,7 @@ export const useSearch = ({
         return json()
       } catch (error) {
         console.log(error)
+        return []
       }
     },
   })
