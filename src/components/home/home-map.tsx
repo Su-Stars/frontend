@@ -4,7 +4,7 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk'
 import { useEffect, useRef } from 'react'
 import useCenterStore from '@/stores/center-store'
 
-export default function KaKaoMap() {
+export default function HomeKaKaoMap() {
   const { setCenter, center, setAddress } = useCenterStore()
   const mapRef = useRef<kakao.maps.Map>(null)
 

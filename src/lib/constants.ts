@@ -22,7 +22,7 @@ export const REGION: Region[] = [
   },
   {
     name: '세종',
-    code: '36',
+    code: '29',
   },
   {
     name: '충청북도',

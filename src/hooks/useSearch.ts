@@ -8,7 +8,7 @@ interface useSearchParams {
   limit?: number
 }
 
-interface Pool {
+export interface Pool {
   id: 1
   name: string
   address: string
@@ -16,30 +16,36 @@ interface Pool {
   isBookMarked: boolean
 }
 interface useSearchResponse {
-  data: {
-    total: number
-    page: number
-    limit: number
-    pools: Pool[]
-  }
+  total: number
+  page: number
+  limit: number
+  pools: Pool[]
+}
+
+const defaultResponse: useSearchResponse = {
+  total: 0,
+  page: 1,
+  limit: 10,
+  pools: [],
 }
 
 export const useSearch = ({
-  region = '',
-  keyword = '',
+  region = 'all',
+  keyword = 'all',
   page = 1,
   limit = 10,
 }: useSearchParams) => {
+  if (region === 'all' && keyword === 'all') {
+    return { total: 0 }
+  }
+
   const { data: searchResults, isLoading } = useQuery<useSearchResponse>({
     queryKey: ['search', region, keyword],
     queryFn: async () => {
       try {
-        if (region === '전국') {
-          region = ''
-        }
         const params = new URLSearchParams({
-          region,
-          keyword,
+          keyword: keyword,
+          region: region,
           page: page.toString(),
           limit: limit.toString(),
         })
@@ -53,10 +59,10 @@ export const useSearch = ({
         }
 
         const json = await res.json()
-        return json()
+        return json.data
       } catch (error) {
         console.log(error)
-        return []
+        return defaultResponse
       }
     },
   })
