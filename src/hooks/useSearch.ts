@@ -12,6 +12,7 @@ export interface Pool {
   name: string
   address: string
   thumbnail: string
+  distance?: number
   isBookMarked: boolean
 }
 

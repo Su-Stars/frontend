@@ -48,8 +48,6 @@ const bagelFatOne = localFont({
   weight: '400',
 })
 
-const APP_KEY = '0d929ba008c86e3296bdbeb4f341c2cc'
-
 // Google Analytics ID
 const GA_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ''
 
@@ -60,12 +58,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <head>
-        <Script
-          src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${APP_KEY}&libraries=services,clusterer&autoload=false`}
-          strategy="beforeInteractive"
-        />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${pretendard.variable} ${bagelFatOne.variable} font-pretendard antialiased`}
       >

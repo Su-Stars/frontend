@@ -21,8 +21,9 @@ import {
   LuLoader,
 } from 'react-icons/lu'
 import { Input } from '../ui/input'
-import Link from 'next/link'
-import Image from 'next/image'
+import useCenterStore from '@/stores/center-store'
+import { useNearby } from '@/hooks/useNearby'
+import PoolCard from './home-pool-card'
 
 export default function HomeSearch() {
   const [address, setAddress] = useState('전국')
@@ -31,8 +32,16 @@ export default function HomeSearch() {
   const [value, setValue] = useState<string>('')
   const [keyword, setKeyword] = useState<string>('all')
 
+  const { center } = useCenterStore()
+
   const { districts, isLoading: isRegionLoading } = useRegions({
     code: selectedRegion?.code || '',
+  })
+
+  const { nearbySwimmingPools } = useNearby({
+    latitude: center.lat,
+    longitude: center.lng,
+    radius: 5,
   })
 
   const {
@@ -215,28 +224,36 @@ export default function HomeSearch() {
       </form>
 
       {/*결과 출력*/}
+      {/*초기에는 nearbySwimmingPools를 사용 */}
+      {/*검색을 하면 searchResults를 사용*/}
       <h2 className="text-2xl font-bold">
-        검색 결과{' '}
+        {keyword === 'all' && finalRegion === 'all'
+          ? '주변 수영장'
+          : '검색 결과'}{' '}
         <span className="text-theme">
-          {searchResults?.total ? searchResults.total : 0}{' '}
+          {keyword === 'all' && finalRegion === 'all'
+            ? nearbySwimmingPools?.pools.length || 0
+            : searchResults?.total || 0}{' '}
         </span>
         개
       </h2>
       {isError ? (
         <LuLoader />
-      ) : searchResults?.total === 0 ? (
+      ) : keyword === 'all' && finalRegion === 'all' ? (
+        // 초기 상태: 주변 수영장 표시
+        nearbySwimmingPools?.pools.length === 0 ? (
+          <h1>주변 수영장이 없습니다</h1>
+        ) : (
+          nearbySwimmingPools?.pools?.map((pool: Pool) => (
+            <PoolCard pool={pool} key={`${pool.id} nearby`} />
+          ))
+        )
+      ) : // 검색 결과 표시
+      searchResults?.total === 0 ? (
         <h1>검색 결과가 없습니다</h1>
       ) : (
         searchResults?.pools.map((pool: Pool) => (
-          <div key={pool.id}>
-            <Link className="flex gap-4" href={`/pool/${pool.id}`}>
-              <Image src={pool.thumbnail} alt="이미지" width={70} height={70} />
-              <div className="flex-col gap-4">
-                <div className="text-lg font-semibold">{pool.name}</div>
-                <div className="text-sm text-gray-400">{pool.address}</div>
-              </div>
-            </Link>
-          </div>
+          <PoolCard pool={pool} key={`${pool.id} search`} />
         ))
       )}
     </>
