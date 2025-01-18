@@ -22,6 +22,7 @@ import {
 } from 'react-icons/lu'
 import { Input } from '../ui/input'
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function HomeSearch() {
   const [address, setAddress] = useState('전국')
@@ -228,11 +229,11 @@ export default function HomeSearch() {
       ) : (
         searchResults?.pools.map((pool: Pool) => (
           <div key={pool.id}>
-            <Link className="flex" href={`/pool/${pool.id}`}>
-              <div className="size-10 bg-gray-400" />
-              <div>
-                <span>{pool.name}</span>
-                <span>{pool.address}</span>
+            <Link className="flex gap-4" href={`/pool/${pool.id}`}>
+              <Image src={pool.thumbnail} alt="이미지" width={70} height={70} />
+              <div className="flex-col gap-4">
+                <div className="text-lg font-semibold">{pool.name}</div>
+                <div className="text-sm text-gray-400">{pool.address}</div>
               </div>
             </Link>
           </div>
