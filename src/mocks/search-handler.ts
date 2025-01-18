@@ -50,9 +50,6 @@ const dummy = [
   },
 ]
 
-// keyword(name에 keyword가 포함되어 있는지)
-// region (address에 region이 포함되어 있는지)
-
 export const searchHandler = [
   http.get('http://localhost:9999/api/v1/pools', ({ request }) => {
     const url = new URL(request.url)
@@ -60,21 +57,22 @@ export const searchHandler = [
     const keyword = url.searchParams.get('keyword') || ''
     const region = url.searchParams.get('region') || ''
 
-    const filteredPools = dummy.filter((pool) => {
-      const nameMatch = keyword
-        ? pool.name.toLowerCase().includes(keyword.toLowerCase())
-        : true
-      const regionMatch = region
-        ? pool.address.toLowerCase().includes(region.toLowerCase())
-        : true
-      return nameMatch && regionMatch
-    })
+    let filteredPools = []
+    if (keyword === 'all') {
+      filteredPools = dummy.filter((pool) => pool.address.includes(region))
+    } else if (keyword !== 'all' && region === 'all') {
+      filteredPools = dummy.filter((pool) => pool.name.includes(keyword))
+    } else {
+      filteredPools = dummy.filter((pool) => {
+        pool.name.includes(keyword) && pool.address.includes(region)
+      })
+    }
 
     return HttpResponse.json({
       status: 'success',
       message: '지역별 수영장 목록 조회 성공',
       data: {
-        total: dummy.length, // 전체 수영장 수
+        total: filteredPools.length, // 전체 수영장 수
         page: 1, // 현재 페이지 번호
         limit: 10, // 페이지당 수영장 수
         pools: filteredPools,

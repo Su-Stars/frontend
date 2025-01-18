@@ -1,6 +1,4 @@
-import { REGION } from '@/lib/constants'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
 
 interface useRegionsParams {
   code: string
@@ -18,9 +16,15 @@ interface DistrictResponse {
   result: Result[]
 }
 
-export const useRegions = ({ code }: useRegionsParams) => {
-  const queryClient = useQueryClient()
+const defaultResponse: Result = {
+  y_coor: '0',
+  full_addr: '0',
+  x_coor: '0',
+  addr_name: '0',
+  cd: '0',
+}
 
+export const useRegions = ({ code }: useRegionsParams) => {
   // sgis accessToken 받아오기
   const { data: accessToken } = useQuery({
     queryKey: ['sgis-auth'],
@@ -51,39 +55,16 @@ export const useRegions = ({ code }: useRegionsParams) => {
           throw new Error('Network response was not ok')
         }
         const json = await res.json()
-        console.log(json)
+
         return json
       } catch (error) {
         console.log(error)
+
+        return defaultResponse
       }
     },
     enabled: !!accessToken && !!code,
   })
-
-  // Prefetching 로직
-  useEffect(() => {
-    if (!accessToken) return
-
-    const prefetchDistricts = async () => {
-      for (let i = 0; i < REGION.length; i++) {
-        await queryClient.prefetchQuery({
-          queryKey: ['sgis-district', REGION[i].code],
-          queryFn: async () => {
-            try {
-              const res = await fetch(`/api/sgis-district?cd=${REGION[i].code}`)
-              if (!res.ok) {
-                throw new Error('Network response was not ok')
-              }
-              return res.json()
-            } catch (error) {
-              console.log(error)
-            }
-          },
-        })
-      }
-    }
-    prefetchDistricts()
-  }, [accessToken])
 
   return { districts, isLoading }
 }

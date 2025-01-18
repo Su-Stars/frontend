@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react'
 import useCenterStore from '@/stores/center-store'
 
 export default function HomeKaKaoMap() {
-  const { setCenter, center, setAddress } = useCenterStore()
+  const { setCenter, center } = useCenterStore()
   const mapRef = useRef<kakao.maps.Map>(null)
 
   useEffect(() => {

@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { useSearchParams } from 'next/navigation'
 
-interface useSearchParams {
+interface UseSearchParams {
   region?: string
   keyword?: string
   page?: number
@@ -15,14 +14,15 @@ export interface Pool {
   thumbnail: string
   isBookMarked: boolean
 }
-interface useSearchResponse {
+
+interface UseSearchResponse {
   total: number
   page: number
   limit: number
   pools: Pool[]
 }
 
-const defaultResponse: useSearchResponse = {
+const defaultResponse: UseSearchResponse = {
   total: 0,
   page: 1,
   limit: 10,
@@ -34,25 +34,26 @@ export const useSearch = ({
   keyword = 'all',
   page = 1,
   limit = 10,
-}: useSearchParams) => {
-  if (region === 'all' && keyword === 'all') {
-    return { total: 0 }
-  }
-
-  const { data: searchResults, isLoading } = useQuery<useSearchResponse>({
-    queryKey: ['search', region, keyword],
+}: UseSearchParams) => {
+  // useQuery는 항상 호출하되, enabled 옵션으로 실행 조건을 제어
+  const {
+    data: searchResults = defaultResponse,
+    isLoading,
+    isError,
+  } = useQuery<UseSearchResponse>({
+    queryKey: ['search', region, keyword, page, limit],
     queryFn: async () => {
       try {
-        const params = new URLSearchParams({
-          keyword: keyword,
-          region: region,
-          page: page.toString(),
-          limit: limit.toString(),
-        })
+        const params = new URLSearchParams()
+        params.append('keyword', encodeURIComponent(keyword))
+        params.append('region', encodeURI(encodeURIComponent(region)))
+        params.append('page', String(page))
+        params.append('limit', String(limit))
+        console.log(params)
+        const url = `http://localhost:9999/api/v1/pools?${params}`
 
-        const res = await fetch(
-          `http://localhost:9999/api/v1/pools?${params.toString()}`,
-        )
+        const res = await fetch(url)
+        console.log('Fetching:', url)
 
         if (!res.ok) {
           throw new Error('네트워크 에러')
@@ -61,10 +62,19 @@ export const useSearch = ({
         const json = await res.json()
         return json.data
       } catch (error) {
-        console.log(error)
+        console.error('Search error:', error)
         return defaultResponse
       }
     },
+    enabled: !(region === 'all' && keyword === 'all'),
+    retry: 1,
+    staleTime: 1000 * 60 * 5, // 5분
   })
-  return { searchResults, isLoading }
+
+  return {
+    searchResults,
+    isLoading,
+    isError,
+    total: searchResults.total,
+  }
 }

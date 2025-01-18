@@ -3,7 +3,6 @@
 import { useRegions } from '@/hooks/useRegions'
 import { Pool, useSearch } from '@/hooks/useSearch'
 import { REGION, Region } from '@/lib/constants'
-import useCenterStore from '@/stores/center-store'
 import { useState } from 'react'
 import { Button } from '../ui/button'
 import {
@@ -25,65 +24,55 @@ import { Input } from '../ui/input'
 import Link from 'next/link'
 
 export default function HomeSearch() {
-  const { address, setAddress } = useCenterStore()
-  const [selectedRegion, setSelectedRegion] = useState<Region | null>()
-  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null)
-  const [finalRegion, setFinalRegion] = useState<string>('')
+  const [address, setAddress] = useState('전국')
+  const [selectedRegion, setSelectedRegion] = useState<Region | null>(null)
+  const [finalRegion, setFinalRegion] = useState<string>('all')
+  const [value, setValue] = useState<string>('')
   const [keyword, setKeyword] = useState<string>('all')
-  const [searchKeyword, setsearchKeyword] = useState<string>('')
 
   const { districts, isLoading } = useRegions({
     code: selectedRegion?.code || '',
   })
 
-  // 검색 버튼 클릭 시 키워드에 대해서만 실행함
-  const handleSubmit = (e: React.FormEvent) => {
-    if (searchKeyword === '') {
-      return
-    }
-
-    e.preventDefault()
-    setKeyword(keyword)
-    setsearchKeyword('all')
-  }
-
-  const { searchResults, isLoading: isSearchLoading } = useSearch({
+  const {
+    searchResults,
+    isLoading: isSearchLoading,
+    isError,
+  } = useSearch({
     region: finalRegion,
     keyword,
   })
 
-  // 지역구 클릭 시
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (value === '') {
+      return
+    }
+    if (value !== keyword) {
+      setKeyword(value) // 최종 keyword 변경
+    }
+    setValue('')
+  }
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    setValue(e.target.value)
+  }
+
   const clickDistrict = (district: string) => {
-    //필터 이름 변경
     const DISTRICT =
       district.split(' ').length === 2
         ? district.split(' ')[1]
         : district.split(' ')[1] + ' ' + district.split(' ')[2]
 
-    setSelectedDistrict(DISTRICT)
     setAddress(`${selectedRegion?.name} ${DISTRICT}`)
-
-    // useQuery 키 수정하면서 지역구에 해당하는 수영장 정보 요청
-    if (address.includes('전국')) {
-      setFinalRegion('all')
-    } else if (address.includes('전체')) {
-      setFinalRegion(address.split(' ')[0])
-    } else {
-      setFinalRegion(address)
-    }
-
+    setFinalRegion(`${selectedRegion?.name} ${DISTRICT}`)
     setSelectedRegion(null)
-    setSelectedDistrict(null)
-  }
-
-  // 전국 클릭시
-  const clickAll = () => {
-    setSelectedRegion(null)
-    setAddress('전국')
   }
 
   return (
     <>
+      {/*지역구 선택 */}
       <Dialog>
         <DialogTrigger asChild>
           <div>
@@ -113,7 +102,7 @@ export default function HomeSearch() {
                 '지역을 선택해주세요'
               )}
             </h3>
-            <DialogDescription className="grid max-h-56 grid-cols-2 gap-0 overflow-y-auto">
+            <DialogDescription className="grid h-[370px] grid-cols-2 gap-0 overflow-y-auto">
               {selectedRegion ? (
                 <>
                   <DialogClose asChild>
@@ -122,8 +111,9 @@ export default function HomeSearch() {
                       variant="outline"
                       className="text-black"
                       onClick={() => {
-                        setSelectedDistrict(null)
                         setAddress(`${selectedRegion.name} 전체`)
+                        setFinalRegion(selectedRegion.name)
+                        setSelectedRegion(null)
                       }}
                     >
                       <span className="text-md font-semibold">전체</span>
@@ -156,7 +146,11 @@ export default function HomeSearch() {
                         size="lg"
                         variant="outline"
                         className="text-black"
-                        onClick={clickAll}
+                        onClick={() => {
+                          setAddress('전국')
+                          setSelectedRegion(null)
+                          setFinalRegion('all')
+                        }}
                       >
                         <span className="text-md font-semibold">
                           {item.name}
@@ -181,16 +175,18 @@ export default function HomeSearch() {
         </DialogContent>
       </Dialog>
 
+      {/*검색어 입력 */}
       <form onSubmit={handleSubmit} className="flex space-x-2">
         <Input
           placeholder="검색어를 입력하세요"
           className="flex-1"
-          value={searchKeyword}
-          onChange={(e) => setsearchKeyword(e.target.value)}
+          value={value}
+          onChange={onChange}
         />
         <Button type="submit">검색</Button>
       </form>
 
+      {/*결과 출력*/}
       <h2 className="text-2xl font-bold">
         검색 결과{' '}
         <span className="text-theme">
@@ -198,9 +194,9 @@ export default function HomeSearch() {
         </span>
         개
       </h2>
-      {isSearchLoading ? (
+      {isError ? (
         <LuLoader />
-      ) : searchResults!.total === 0 ? (
+      ) : searchResults?.total === 0 ? (
         <h1>검색 결과가 없습니다</h1>
       ) : (
         searchResults?.pools.map((pool: Pool) => (

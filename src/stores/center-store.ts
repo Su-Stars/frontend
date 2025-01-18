@@ -3,8 +3,6 @@ import { create } from 'zustand'
 interface CenterState {
   center: Center
   setCenter: (newCenter: Center) => void
-  address: string
-  setAddress: (newAddress: string) => void
 }
 
 export interface Center {
@@ -19,9 +17,6 @@ const initialState: Center = {
 }
 
 const useCenterStore = create<CenterState>((set) => ({
-  address: '선택',
-  setAddress: (newAddress: string) => set({ address: newAddress }),
-
   center: initialState,
   setCenter: (newCenter: Center) => set({ center: newCenter }),
 }))
