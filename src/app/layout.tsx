@@ -1,11 +1,9 @@
-import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import '@/styles/globals.css'
 import { server } from '@/mocks/node'
 import GlobalProvider from '@/providers/global-provider'
 import localFont from 'next/font/local'
 import { GoogleAnalytics } from '@next/third-parties/google'
-import Script from 'next/script'
 
 // 개발 환경에서만 MSW 서버를 시작합니다.
 if (process.env.NODE_ENV === 'development') {

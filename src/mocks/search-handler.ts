@@ -90,8 +90,8 @@ export const searchHandlers = [
 
     // Todo : 무한스크롤 기능 추가
     // 페이징 처리
-    const startIndex = (page - 1) * limit
-    const paginatedPools = filteredPools.slice(startIndex, startIndex + limit)
+    // const startIndex = (page - 1) * limit
+    // const paginatedPools = filteredPools.slice(startIndex, startIndex + limit)
 
     return HttpResponse.json({
       status: 'success',

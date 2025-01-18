@@ -1,7 +1,7 @@
 'use client'
 
 import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk'
-import { Suspense, useEffect, useRef, useState } from 'react'
+import { Suspense, useEffect, useRef } from 'react'
 import useCenterStore from '@/stores/center-store'
 import { LuLoaderCircle } from 'react-icons/lu'
 
@@ -45,7 +45,7 @@ function HomeKakaoMap() {
     }
 
     getCurrentLocation()
-  }, [])
+  }, [setCenter])
 
   if (loading) {
     return (

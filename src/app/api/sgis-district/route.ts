@@ -10,7 +10,10 @@ export async function GET(request: Request) {
   const cd = new URL(request.url).searchParams.get('cd')
 
   if (!accessToken || !cd) {
-    return 'accessToken이 필요합니다'
+    return NextResponse.json(
+      { message: 'accessToken이 필요합니다' },
+      { status: 400 },
+    )
   }
 
   const params = new URLSearchParams({
@@ -27,5 +30,6 @@ export async function GET(request: Request) {
     return NextResponse.json(json)
   } catch (error) {
     console.log(error)
+    return NextResponse.json({ message: 'API 요청 실패' }, { status: 500 })
   }
 }

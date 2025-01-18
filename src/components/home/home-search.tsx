@@ -32,23 +32,13 @@ export default function HomeSearch() {
   const [value, setValue] = useState<string>('')
   const [keyword, setKeyword] = useState<string>('all')
 
-  const { center } = useCenterStore()
-
-  const { districts, isLoading: isRegionLoading } = useRegions({
+  const { districts } = useRegions({
     code: selectedRegion?.code || '',
   })
 
-  const { nearbySwimmingPools } = useNearby({
-    latitude: center.lat,
-    longitude: center.lng,
-    radius: 5,
-  })
+  const { nearbySwimmingPools } = useNearby()
 
-  const {
-    searchResults,
-    isLoading: isSearchLoading,
-    isError,
-  } = useSearch({
+  const { searchResults, isError } = useSearch({
     region: finalRegion,
     keyword,
   })
