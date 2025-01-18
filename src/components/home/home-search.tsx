@@ -30,7 +30,7 @@ export default function HomeSearch() {
   const [value, setValue] = useState<string>('')
   const [keyword, setKeyword] = useState<string>('all')
 
-  const { districts, isLoading } = useRegions({
+  const { districts, isLoading: isRegionLoading } = useRegions({
     code: selectedRegion?.code || '',
   })
 
@@ -43,14 +43,24 @@ export default function HomeSearch() {
     keyword,
   })
 
+  // 검색 기능 수행
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+
+    // 입력 없이 검색 버튼만 누른 경우
+    // 키워드는 'all'로 초기화
+    // 지역구에 대해서만 검색
     if (value === '') {
-      return
+      setKeyword('all')
     }
+
+    // 입력 값이 있으면 keyword 변경 후
+    // 지역구 + 키워드로 검색 실행
     if (value !== keyword) {
       setKeyword(value) // 최종 keyword 변경
     }
+
+    // 인풋 박스의 값은 초기화
     setValue('')
   }
 
@@ -59,14 +69,41 @@ export default function HomeSearch() {
     setValue(e.target.value)
   }
 
-  const clickDistrict = (district: string) => {
-    const DISTRICT =
-      district.split(' ').length === 2
-        ? district.split(' ')[1]
-        : district.split(' ')[1] + ' ' + district.split(' ')[2]
+  // 전국 클릭 시
+  const clickAllRegion = () => {
+    setKeyword('all') // 키워드 초기화
+    setAddress('전국') // address 전국으로 표시
+    setFinalRegion('all') // 전국 으로 검색 요청
+    setSelectedRegion(null) // 필터의 검색 지역 초기화
+  }
 
-    setAddress(`${selectedRegion?.name} ${DISTRICT}`)
-    setFinalRegion(`${selectedRegion?.name} ${DISTRICT}`)
+  // 지역구의 전체 버튼 클릭 시
+  // ex) 경기도 전체에 대해 검색을 실행
+  const clickAllDistrict = (region: string) => {
+    setAddress(`${region} 전체`) // 해당 지역으로 표시
+    setKeyword('all') // 키워드 초기화
+    setFinalRegion(region) // 해당 지역 전체로 검색 요청
+    setSelectedRegion(null) // 필터의 검색 지역 초기화
+  }
+
+  // 지역구 클릭 시
+  const clickDistrict = (district: string) => {
+    setKeyword('all') // 키워드 초기화
+
+    const DISTRICT = parseDistrict(district)
+    const query = `${selectedRegion?.name} ${DISTRICT}`
+    setAddress(query) // address를 선택한 지역구로 표시
+    setFinalRegion(query) // 선택한 지역구로 검색 요청
+    setSelectedRegion(null) // // 필터의 검색 지역 초기화
+  }
+
+  const parseDistrict = (name: string) => {
+    return name.split(' ').length === 2
+      ? name.split(' ')[1]
+      : name.split(' ')[1] + ' ' + name.split(' ')[2]
+  }
+
+  const clickBack = () => {
     setSelectedRegion(null)
   }
 
@@ -92,7 +129,7 @@ export default function HomeSearch() {
                   <Button
                     className="bg-white text-black hover:text-white"
                     size="icon"
-                    onClick={() => setSelectedRegion(null)}
+                    onClick={clickBack}
                   >
                     <LuChevronLeft />
                   </Button>
@@ -110,11 +147,7 @@ export default function HomeSearch() {
                       size="lg"
                       variant="outline"
                       className="text-black"
-                      onClick={() => {
-                        setAddress(`${selectedRegion.name} 전체`)
-                        setFinalRegion(selectedRegion.name)
-                        setSelectedRegion(null)
-                      }}
+                      onClick={() => clickAllDistrict(selectedRegion.name)}
                     >
                       <span className="text-md font-semibold">전체</span>
                     </Button>
@@ -128,32 +161,24 @@ export default function HomeSearch() {
                         onClick={() => clickDistrict(district.full_addr)}
                       >
                         <span className="text-md font-semibold">
-                          {district.full_addr.split(' ').length === 2
-                            ? district.full_addr.split(' ')[1]
-                            : district.full_addr.split(' ')[1] +
-                              ' ' +
-                              district.full_addr.split(' ')[2]}
+                          {parseDistrict(district.full_addr)}
                         </span>
                       </Button>
                     </DialogClose>
                   ))}
                 </>
               ) : (
-                REGION.map((item) =>
-                  item.name === '전국' ? (
-                    <DialogClose asChild key={item.code}>
+                REGION.map((region) =>
+                  region.name === '전국' ? (
+                    <DialogClose asChild key={region.code}>
                       <Button
                         size="lg"
                         variant="outline"
                         className="text-black"
-                        onClick={() => {
-                          setAddress('전국')
-                          setSelectedRegion(null)
-                          setFinalRegion('all')
-                        }}
+                        onClick={clickAllRegion}
                       >
                         <span className="text-md font-semibold">
-                          {item.name}
+                          {region.name}
                         </span>
                       </Button>
                     </DialogClose>
@@ -162,10 +187,12 @@ export default function HomeSearch() {
                       size="lg"
                       variant="outline"
                       className="text-black"
-                      onClick={() => setSelectedRegion(item)}
-                      key={item.code}
+                      onClick={() => setSelectedRegion(region)}
+                      key={region.code}
                     >
-                      <span className="text-md font-semibold">{item.name}</span>
+                      <span className="text-md font-semibold">
+                        {region.name}
+                      </span>
                     </Button>
                   ),
                 )

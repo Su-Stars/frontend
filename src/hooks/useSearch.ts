@@ -44,22 +44,23 @@ export const useSearch = ({
     queryKey: ['search', region, keyword, page, limit],
     queryFn: async () => {
       try {
-        const params = new URLSearchParams()
-        params.append('keyword', encodeURIComponent(keyword))
-        params.append('region', encodeURI(encodeURIComponent(region)))
-        params.append('page', String(page))
-        params.append('limit', String(limit))
-        console.log(params)
-        const url = `http://localhost:9999/api/v1/pools?${params}`
+        const url = new URL('http://localhost:9999/api/v1/pools')
+        url.search = new URLSearchParams({
+          region,
+          keyword,
+          page: String(page),
+          limit: String(limit),
+        }).toString()
 
-        const res = await fetch(url)
-        console.log('Fetching:', url)
+        const requestUrl = url.toString()
+        const res = await fetch(requestUrl)
 
         if (!res.ok) {
           throw new Error('네트워크 에러')
         }
 
         const json = await res.json()
+        console.log(json)
         return json.data
       } catch (error) {
         console.error('Search error:', error)

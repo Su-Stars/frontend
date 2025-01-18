@@ -11,7 +11,7 @@ const dummy = [
   {
     id: 2,
     name: '수정스포츠센터',
-    address: '경기 수원시 장안구 대평로 128 파크프라자',
+    address: '경기도 수원시 장안구 대평로 128 파크프라자',
     thumbnail:
       'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTAzMjJfMjIz%2FMDAxNjE2Mzk1MzQ4MTg1.-mAg6CMxTlpXnz_xQNfV7x_m3jd23c-TAVrGRynjg-og.ap8kPNBzFnAPNp9XeRqVzFJG_xGjLCe-jCJyaiDijsIg.JPEG.ikozen%2F%25BC%25F6%25C1%25A4%25BD%25BA%25C6%25F7%25C3%25F7%25BC%25BE%25C5%25CD.jpg&type=ff332_332',
     isBookMarked: false,
@@ -27,7 +27,7 @@ const dummy = [
   {
     id: 4,
     name: '스포츠아일랜드 수영장',
-    address: '경기 수원시 팔달구 창룡대로210번길 41 ',
+    address: '경기도 수원시 팔달구 창룡대로210번길 41 ',
     thumbnail:
       'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20190620_135%2F1561017654985woPuG_PNG%2FrQIlb7N9ElFAqcdHVMLn6MyO.png',
     isBookMarked: false,
@@ -50,31 +50,43 @@ const dummy = [
   },
 ]
 
-export const searchHandler = [
+export const searchHandlers = [
   http.get('http://localhost:9999/api/v1/pools', ({ request }) => {
     const url = new URL(request.url)
 
-    const keyword = url.searchParams.get('keyword') || ''
-    const region = url.searchParams.get('region') || ''
+    const keyword = decodeURIComponent(url.searchParams.get('keyword') || 'all')
+    const region = decodeURIComponent(url.searchParams.get('region') || 'all')
+    const page = Number(url.searchParams.get('page')) || 1
+    const limit = Number(url.searchParams.get('limit')) || 10
 
-    let filteredPools = []
-    if (keyword === 'all') {
-      filteredPools = dummy.filter((pool) => pool.address.includes(region))
-    } else if (keyword !== 'all' && region === 'all') {
-      filteredPools = dummy.filter((pool) => pool.name.includes(keyword))
-    } else {
-      filteredPools = dummy.filter((pool) => {
-        pool.name.includes(keyword) && pool.address.includes(region)
-      })
+    console.log(keyword)
+    console.log(region)
+
+    let filteredPools = [...dummy]
+    // 검색 조건 적용
+    if (keyword !== 'all') {
+      filteredPools = filteredPools.filter((pool) =>
+        pool.name.toLowerCase().includes(keyword.toLowerCase()),
+      )
     }
+
+    if (region !== 'all') {
+      filteredPools = filteredPools.filter((pool) =>
+        pool.address.toLowerCase().includes(region.toLowerCase()),
+      )
+    }
+
+    // 페이징 처리
+    const startIndex = (page - 1) * limit
+    const paginatedPools = filteredPools.slice(startIndex, startIndex + limit)
 
     return HttpResponse.json({
       status: 'success',
       message: '지역별 수영장 목록 조회 성공',
       data: {
         total: filteredPools.length, // 전체 수영장 수
-        page: 1, // 현재 페이지 번호
-        limit: 10, // 페이지당 수영장 수
+        page,
+        limit,
         pools: filteredPools,
       },
     })
