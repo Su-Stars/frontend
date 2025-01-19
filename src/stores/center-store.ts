@@ -18,7 +18,10 @@ const initialState: Center = {
 
 const useCenterStore = create<CenterState>((set) => ({
   center: initialState,
-  setCenter: (newCenter: Center) => set({ center: newCenter }),
+  setCenter: (newCenter: Center) => {
+    console.log(newCenter)
+    set({ center: newCenter })
+  },
 }))
 
 export default useCenterStore
