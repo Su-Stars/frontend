@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw'
-import { dummy } from './search-handler'
+import { dummy } from '@/lib/dummy'
 
 // 두 지점 간의 거리를 계산하는 함수 (Haversine formula)
 const getDistanceFromLatLonInKm = (
