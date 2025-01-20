@@ -11,12 +11,12 @@ interface MotionButtonProps {
 
 export default function MotionTap({ children, className }: MotionButtonProps) {
   return (
-    <motion.button
+    <motion.div
       whileTap={{ scale: 0.98 }}
       whileHover={{ scale: 1.02 }}
       className={cn(className)}
     >
       {children}
-    </motion.button>
+    </motion.div>
   )
 }
