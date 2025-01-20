@@ -73,7 +73,7 @@ export default function ReviewForm({
     }
   }
   return (
-    <div className="mx-auto flex max-w-md flex-col bg-background font-sans">
+    <form className="mx-auto flex max-w-md flex-col bg-background font-sans">
       {/* Review Section */}
       <div className="space-y-6">
         <div>
@@ -81,7 +81,7 @@ export default function ReviewForm({
         </div>
 
         {/* Categories */}
-        <div className="flex space-x-4 overflow-x-scroll">
+        <div className="flex space-x-4 overflow-x-auto whitespace-nowrap">
           {REVIEW_KEYWORDS.map((group) => (
             <div key={group.category} className="flex flex-col">
               <span className="mb-2 font-medium text-blue-400">
@@ -139,6 +139,6 @@ export default function ReviewForm({
           완료하기
         </Button>
       </div>
-    </div>
+    </form>
   )
 }

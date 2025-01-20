@@ -23,7 +23,7 @@ export default function ReviewItem({
   onEdit,
 }: ReviewItemProps) {
   return (
-    <div className="flex flex-col space-y-4 p-1">
+    <div className="flex flex-col space-y-3 p-1">
       <div className="flex flex-wrap">
         {review.keywords.map((keyword) => (
           <span key={keyword} className="mr-2 rounded-md bg-gray-200 p-2">
@@ -34,11 +34,14 @@ export default function ReviewItem({
       <div>
         <p>{review.content}</p>
       </div>
-      <div>
-        <span>{review.nickname}</span>
-        <span>{dayjs(review.createdAt).fromNow()}</span>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2 text-base text-gray-700">
+          <span>{review.nickname}</span>
+          <span>{dayjs(review.createdAt).fromNow()}</span>
+        </div>
+
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
               className="h-8 w-8 rounded-full p-2 hover:bg-gray-200"

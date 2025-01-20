@@ -49,7 +49,8 @@ export default function ReviewsPage({
       <ResponsiveDialog
         isOpen={isWriteOpen}
         setIsOpen={setIsWriteOpen}
-        title={'리뷰 작성하기'}
+        title="수영장 리뷰를 남겨주세요"
+        description="여러분들의 소중한 리뷰는 다른 사용자들에게 큰 도움이 됩니다."
       >
         <ReviewForm
           poolId={poolId}
@@ -60,7 +61,8 @@ export default function ReviewsPage({
       <ResponsiveDialog
         isOpen={isEditOpen}
         setIsOpen={setIsEditOpen}
-        title="리뷰 작성하기"
+        title="리뷰 수정하기"
+        description="여러분들의 소중한 리뷰는 다른 사용자들에게 큰 도움이 됩니다."
       >
         <ReviewForm
           poolId={poolId}
@@ -99,12 +101,16 @@ export default function ReviewsPage({
             key={review.id}
             review={review}
             poolId={poolId}
-            deleteReview={() => console.log('Delete!')}
+            deleteReview={deleteReview}
             onEdit={handleEdit}
           />
         ))}
       </div>
-      {preview && <Link href={`/temp/${poolId}/reviews`}>리뷰 더보기</Link>}
+      {preview && (
+        <Link href={`/temp/${poolId}/reviews`} className="mx-auto">
+          <Button>리뷰 더보기</Button>
+        </Link>
+      )}
       {/* TODO : 프리뷰 상태가 아닌경우 무한스크롤을 활성화합니다. */}
     </section>
   )

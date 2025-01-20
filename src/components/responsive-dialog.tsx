@@ -38,7 +38,9 @@ export function ResponsiveDialog({
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{title}</DialogTitle>
+            <DialogTitle asChild>
+              <h2>{title}</h2>
+            </DialogTitle>
             {description && (
               <DialogDescription>{description}</DialogDescription>
             )}
