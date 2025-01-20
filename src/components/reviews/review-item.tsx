@@ -5,7 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-
+import { LuEllipsisVertical } from 'react-icons/lu'
 import { Button } from '@/components/ui/button'
 import ReviewUpdateButton from '@/components/reviews/review-update-button'
 
@@ -38,7 +38,14 @@ export default function ReviewItem({
         <span>{review.nickname}</span>
         <span>{review.createdAt}</span>
         <DropdownMenu>
-          <DropdownMenuTrigger>Open</DropdownMenuTrigger>
+          <DropdownMenuTrigger>
+            <Button
+              variant="ghost"
+              className="h-8 w-8 rounded-full p-2 hover:bg-gray-200"
+            >
+              <LuEllipsisVertical />
+            </Button>
+          </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
               <ReviewUpdateButton
@@ -48,7 +55,10 @@ export default function ReviewItem({
               />
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Button onClick={() => deleteReview(poolId, review.id)}>
+              <Button
+                onClick={() => deleteReview(poolId, review.id)}
+                variant="ghost"
+              >
                 삭제
               </Button>
             </DropdownMenuItem>

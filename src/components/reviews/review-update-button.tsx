@@ -38,9 +38,8 @@ export default function ReviewUpdateButton({
       {/* 데스크탑 환경에서 다이얼로그를 사용 */}
       <Dialog>
         <DialogTrigger asChild>
-          <Button className="hidden md:flex">
-            <LuPencil />
-            리뷰 수정하기
+          <Button className="hidden md:flex" variant="ghost">
+            수정하기
           </Button>
         </DialogTrigger>
         <DialogContent>
@@ -60,9 +59,8 @@ export default function ReviewUpdateButton({
       {/* 모바일 환경에서 드로워를 사용 */}
       <Drawer>
         <DrawerTrigger asChild>
-          <Button className="md:hidden">
-            <LuPencil />
-            리뷰 수정하기
+          <Button className="md:hidden" variant="ghost">
+            수정하기
           </Button>
         </DrawerTrigger>
         <DrawerContent>
