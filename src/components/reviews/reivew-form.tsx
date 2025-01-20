@@ -2,31 +2,9 @@
 
 import { Toggle } from '@/components/ui/toggle'
 import { Textarea } from '@/components/ui/textarea'
-import { Button } from '../ui/button'
+import { Button } from '@/components/ui/button'
 import { useState } from 'react'
-
-const REVIEW_KEYWORDS = [
-  {
-    category: '청결',
-    kewords: ['깨끗한 물', '청결한 샤워실'],
-  },
-  {
-    category: '서비스',
-    kewords: ['편리한 센터 이용', '충분한 레인', '적당한 물 온도'],
-  },
-  {
-    category: '가격',
-    kewords: ['합리적인 가격'],
-  },
-  {
-    category: '접근성',
-    kewords: ['편리한 대중 교통 이용', '넓은 주차 공간', '다양한 주변 맛집'],
-  },
-  {
-    category: '기타',
-    kewords: ['눈부신 채광', '오리발 사용 가능', '개인 기구 사용 가능'],
-  },
-]
+import { REVIEW_KEYWORDS } from '@/lib/constants'
 
 interface ReviewFormProps {
   poolId: string
@@ -62,8 +40,8 @@ export default function ReviewForm({
       keywords: revewKeywords,
       content: reviewContent,
     }
-    console.log('Submit', reviewForm)
-    // createReview(poolId, reviewForm)
+
+    // onSubmit(poolId, reviewForm)
   }
   return (
     <div className="mx-auto flex max-w-md flex-col bg-background font-sans">
@@ -82,7 +60,7 @@ export default function ReviewForm({
               </span>
 
               <div className="flex flex-col space-y-2 pb-2">
-                {group.kewords.map((keyword) => (
+                {group.keywords.map((keyword) => (
                   <Toggle
                     key={keyword}
                     variant="outline"
