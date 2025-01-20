@@ -1,8 +1,13 @@
 import { http, HttpResponse } from 'msw'
-import { dummy } from './search-handler'
+import { dummy } from '@/lib/dummy'
 
 // 두 지점 간의 거리를 계산하는 함수 (Haversine formula)
-const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
+const getDistanceFromLatLonInKm = (
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number,
+) => {
   const R = 6371 // 지구의 반경 (km)
   const dLat = deg2rad(lat2 - lat1)
   const dLon = deg2rad(lon2 - lon1)
@@ -17,7 +22,7 @@ const getDistanceFromLatLonInKm = (lat1, lon1, lat2, lon2) => {
   return d
 }
 
-const deg2rad = (deg) => {
+const deg2rad = (deg: number) => {
   return deg * (Math.PI / 180)
 }
 
