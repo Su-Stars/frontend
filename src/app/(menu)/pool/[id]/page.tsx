@@ -1,3 +1,5 @@
+import PoolPage from '@/components/pages/pool-page'
+
 export default function Pool() {
-  return '개별 수영장'
+  return <PoolPage />
 }
