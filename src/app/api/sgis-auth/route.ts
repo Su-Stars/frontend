@@ -5,7 +5,7 @@ const API_BASE_URL = 'https://sgisapi.kostat.go.kr/OpenAPI3'
 
 // accesstoken 만료가 4시간이므로 4시간 마다 토큰 갱신
 export const config = {
-  revalidate: 60 * 60 * 4, // 60초마다 재검증
+  revalidate: 14400, // 4시간마다 재검증
 }
 
 export async function GET() {
