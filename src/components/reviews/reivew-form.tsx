@@ -6,12 +6,17 @@ import { Button } from '@/components/ui/button'
 import { useState, Dispatch, SetStateAction } from 'react'
 import { REVIEW_KEYWORDS } from '@/lib/constants'
 import MotionTap from '@/components/motion/MotionTap'
+import { IReviewForm } from '@/types/reviews'
 
 interface ReviewFormProps {
   poolId: string
   onSubmit:
-    | ((poolId: string, reviewId: string) => void)
-    | ((poolId: string, reviewId: string, reviewForm: any) => void)
+    | ((poolId: string, reviewForm: IReviewForm) => Promise<void>)
+    | ((
+        poolId: string,
+        reviewId: string,
+        reviewForm: IReviewForm,
+      ) => Promise<void>)
   defaultValues?: {
     keywords: string[]
     content: string

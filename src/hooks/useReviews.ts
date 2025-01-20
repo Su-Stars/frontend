@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { IReview } from '@/types/reviews'
+import { IReview, IReviewForm } from '@/types/reviews'
 
 interface ReviewsResponse {
   total: number
@@ -41,14 +41,14 @@ export const useReviews = ({
     },
   })
 
-  const createReview = async (poolId: string, reviewForm: any) => {
+  const createReview = async (poolId: string, reviewForm: IReviewForm) => {
     console.log(poolId, reviewForm)
   }
 
   const updateReview = async (
     poolId: string,
     reviewId: string,
-    reviewForm: any,
+    reviewForm: IReviewForm,
   ) => {
     console.log(poolId, reviewId)
   }
