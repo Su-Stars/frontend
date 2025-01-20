@@ -30,12 +30,24 @@ const REVIEW_KEYWORDS = [
 
 interface ReviewFormProps {
   poolId: string
-  createReview: (poolId: string) => void
+  onSubmit: (poolId: string, reviewId: string) => void
+  defaultValues?: {
+    keywords: string[]
+    content: string
+  }
 }
 
-export default function ReviewForm({ poolId, createReview }: ReviewFormProps) {
-  const [revewKeywords, setReviewKeywords] = useState<string[]>([])
-  const [reviewContent, setReviewContent] = useState('')
+export default function ReviewForm({
+  poolId,
+  onSubmit,
+  defaultValues,
+}: ReviewFormProps) {
+  const [revewKeywords, setReviewKeywords] = useState<string[]>(
+    defaultValues?.keywords || [],
+  )
+  const [reviewContent, setReviewContent] = useState(
+    defaultValues?.content || '',
+  )
 
   const handleToggle = (keyword: string) => {
     setReviewKeywords((prev) =>
@@ -76,6 +88,7 @@ export default function ReviewForm({ poolId, createReview }: ReviewFormProps) {
                     variant="outline"
                     className="min-w-36"
                     onClick={() => handleToggle(keyword)}
+                    defaultPressed={revewKeywords.includes(keyword)}
                   >
                     {keyword}
                   </Toggle>
