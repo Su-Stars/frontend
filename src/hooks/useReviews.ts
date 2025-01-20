@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { IReview } from '@/types/reviews'
+import { IReview, IReviewForm } from '@/types/reviews'
 
 interface ReviewsResponse {
   total: number
@@ -41,7 +41,21 @@ export const useReviews = ({
     },
   })
 
-  //TODO : createReview, updateReview, deleteReview 함수를 추가합니다.
+  const createReview = async (poolId: string, reviewForm: IReviewForm) => {
+    console.log(poolId, reviewForm)
+  }
 
-  return { data, isLoading, isError }
+  const updateReview = async (
+    poolId: string,
+    reviewId: string,
+    reviewForm: IReviewForm,
+  ) => {
+    console.log(poolId, reviewId)
+  }
+
+  const deleteReview = async (poolId: string, reviewId: number) => {
+    console.log(poolId, reviewId)
+  }
+
+  return { data, isLoading, isError, createReview, updateReview, deleteReview }
 }
