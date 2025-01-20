@@ -12,6 +12,7 @@ import {
   DrawerClose,
   DrawerContent,
   DrawerDescription,
+  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -62,11 +63,13 @@ export default function ReviewWriteButton({
             <DrawerDescription>
               여러분의 소중한 리뷰는 다른 사용자들에게 큰 도움이 됩니다.
             </DrawerDescription>
-            <DrawerClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DrawerClose>
           </DrawerHeader>
           <ReviewForm poolId={poolId} onSubmit={createReview} />
+          <DrawerFooter>
+            <DrawerClose asChild>
+              <Button variant="outline">취소하기</Button>
+            </DrawerClose>
+          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </>

@@ -16,7 +16,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer'
-import { LuPencil } from 'react-icons/lu'
 import ReviewForm from '@/components/reviews/reivew-form'
 
 interface ReviewUpdateButtonProps {
@@ -70,7 +69,7 @@ export default function ReviewUpdateButton({
               여러분의 소중한 리뷰는 다른 사용자들에게 큰 도움이 됩니다.
             </DrawerDescription>
             <DrawerClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">취소하기</Button>
             </DrawerClose>
           </DrawerHeader>
           <ReviewForm
