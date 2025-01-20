@@ -85,7 +85,7 @@ export default function ReviewsPage({
 
         <Button
           variant="ghost"
-          onClick={() => setIsEditOpen(true)}
+          onClick={() => setIsWriteOpen(true)}
           className="rounded-full"
         >
           <PiPencilSimpleLineFill className="text-blue-500" />
