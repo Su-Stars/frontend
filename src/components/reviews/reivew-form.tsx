@@ -3,22 +3,26 @@
 import { Toggle } from '@/components/ui/toggle'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { useState } from 'react'
+import { useState, Dispatch, SetStateAction } from 'react'
 import { REVIEW_KEYWORDS } from '@/lib/constants'
 
 interface ReviewFormProps {
   poolId: string
-  onSubmit: (poolId: string, reviewId: string) => void
+  onSubmit:
+    | ((poolId: string, reviewId: string) => void)
+    | ((poolId: string, reviewId: string, reviewForm: any) => void)
   defaultValues?: {
     keywords: string[]
     content: string
   }
+  setIsOpen: Dispatch<SetStateAction<boolean>>
 }
 
 export default function ReviewForm({
   poolId,
   onSubmit,
   defaultValues,
+  setIsOpen,
 }: ReviewFormProps) {
   const [revewKeywords, setReviewKeywords] = useState<string[]>(
     defaultValues?.keywords || [],
@@ -52,6 +56,8 @@ export default function ReviewForm({
       keywords: revewKeywords,
       content: reviewContent,
     }
+
+    setIsOpen(false)
 
     try {
       setLoading(true)

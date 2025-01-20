@@ -3,8 +3,13 @@
 import Link from 'next/link'
 import { useReviews } from '@/hooks/useReviews'
 import { Separator } from '@/components/ui/separator'
-import ReviewWriteButton from '@/components/reviews/review-write-button'
 import ReviewItem from '@/components/reviews/review-item'
+import { ResponsiveDialog } from '@/components/responsive-dialog'
+import { useState } from 'react'
+import ReviewForm from '../reviews/reivew-form'
+import { Button } from '../ui/button'
+import { LuPencil } from 'react-icons/lu'
+import { IReview } from '@/types/reviews'
 
 interface ReviewsPageProps {
   preview?: boolean
@@ -15,7 +20,16 @@ export default function ReviewsPage({
   preview = false,
   poolId,
 }: ReviewsPageProps) {
-  const { data, isLoading, isError } = useReviews({ poolId })
+  const { data, isLoading, isError, createReview, updateReview, deleteReview } =
+    useReviews({ poolId })
+  const [isWriteOpen, setIsWriteOpen] = useState(false)
+  const [isEditOpen, setIsEditOpen] = useState(false)
+  const [selectedReview, setSelectedReview] = useState<IReview | null>(null)
+
+  const handleEdit = (review: IReview) => {
+    setSelectedReview(review)
+    setIsEditOpen(true)
+  }
 
   //TODO : 로딩중과 에러발생시 UI를 개선합니다.
   if (isLoading) {
@@ -32,14 +46,45 @@ export default function ReviewsPage({
 
   return (
     <section className="flex flex-col space-y-4">
+      <ResponsiveDialog
+        isOpen={isWriteOpen}
+        setIsOpen={setIsWriteOpen}
+        title={'리뷰 작성하기'}
+      >
+        <ReviewForm
+          poolId={poolId}
+          onSubmit={createReview}
+          setIsOpen={setIsWriteOpen}
+        />
+      </ResponsiveDialog>
+      <ResponsiveDialog
+        isOpen={isEditOpen}
+        setIsOpen={setIsEditOpen}
+        title="리뷰 작성하기"
+      >
+        <ReviewForm
+          poolId={poolId}
+          onSubmit={updateReview}
+          setIsOpen={setIsEditOpen}
+          defaultValues={
+            selectedReview
+              ? {
+                  keywords: selectedReview.keywords,
+                  content: selectedReview.content,
+                }
+              : undefined
+          }
+        />
+      </ResponsiveDialog>
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">
           수영장 리뷰<span className="ml-2 text-gray-500">{data.total}</span>
         </h2>
-        <ReviewWriteButton
-          poolId={poolId}
-          createReview={() => console.log('Create!')}
-        />
+
+        <Button onClick={() => setIsEditOpen(true)}>
+          <LuPencil />
+          리뷰 작성하기
+        </Button>
       </div>
       <Separator />
       {Object.entries(data.summary).map(([keyword, count]) => (
@@ -55,7 +100,7 @@ export default function ReviewsPage({
             review={review}
             poolId={poolId}
             deleteReview={() => console.log('Delete!')}
-            updateReview={() => console.log('Update!')}
+            onEdit={handleEdit}
           />
         ))}
       </div>

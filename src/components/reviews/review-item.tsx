@@ -7,20 +7,20 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { LuEllipsisVertical } from 'react-icons/lu'
 import { Button } from '@/components/ui/button'
-import ReviewUpdateButton from '@/components/reviews/review-update-button'
+import dayjs from '@/lib/dayjs'
 
 interface ReviewItemProps {
   review: IReview
   poolId: string
   deleteReview: (poolId: string, reviewId: number) => void
-  updateReview: (poolId: string, reviewId: string) => void
+  onEdit: (review: IReview) => void
 }
 
 export default function ReviewItem({
   review,
   poolId,
   deleteReview,
-  updateReview,
+  onEdit,
 }: ReviewItemProps) {
   return (
     <div className="flex flex-col space-y-4 p-1">
@@ -36,7 +36,7 @@ export default function ReviewItem({
       </div>
       <div>
         <span>{review.nickname}</span>
-        <span>{review.createdAt}</span>
+        <span>{dayjs(review.createdAt).fromNow()}</span>
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Button
@@ -47,20 +47,19 @@ export default function ReviewItem({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-              <ReviewUpdateButton
-                poolId={poolId}
-                updateReview={updateReview}
-                defaultValues={review}
-              />
+            <DropdownMenuItem
+              onSelect={() => {
+                onEdit(review)
+              }}
+            >
+              수정하기
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Button
-                onClick={() => deleteReview(poolId, review.id)}
-                variant="ghost"
-              >
-                삭제
-              </Button>
+            <DropdownMenuItem
+              onSelect={() => {
+                deleteReview(poolId, review.id)
+              }}
+            >
+              삭제하기
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
