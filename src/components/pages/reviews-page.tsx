@@ -6,9 +6,9 @@ import { Separator } from '@/components/ui/separator'
 import ReviewItem from '@/components/reviews/review-item'
 import { ResponsiveDialog } from '@/components/responsive-dialog'
 import { useState } from 'react'
-import ReviewForm from '../reviews/reivew-form'
-import { Button } from '../ui/button'
-import { LuPencil } from 'react-icons/lu'
+import ReviewForm from '@/components/reviews/reivew-form'
+import { Button } from '@/components/ui/button'
+import { PiPencilSimpleLineFill } from 'react-icons/pi'
 import { IReview } from '@/types/reviews'
 
 interface ReviewsPageProps {
@@ -83,8 +83,12 @@ export default function ReviewsPage({
           수영장 리뷰<span className="ml-2 text-gray-500">{data.total}</span>
         </h2>
 
-        <Button onClick={() => setIsEditOpen(true)}>
-          <LuPencil />
+        <Button
+          variant="ghost"
+          onClick={() => setIsEditOpen(true)}
+          className="rounded-full"
+        >
+          <PiPencilSimpleLineFill className="text-blue-500" />
           리뷰 작성하기
         </Button>
       </div>
@@ -108,7 +112,9 @@ export default function ReviewsPage({
       </div>
       {preview && (
         <Link href={`/temp/${poolId}/reviews`} className="mx-auto">
-          <Button>리뷰 더보기</Button>
+          <Button variant="primary" className="rounded-full">
+            리뷰 더보기
+          </Button>
         </Link>
       )}
       {/* TODO : 프리뷰 상태가 아닌경우 무한스크롤을 활성화합니다. */}

@@ -26,7 +26,10 @@ export default function ReviewItem({
     <div className="flex flex-col space-y-3 p-1">
       <div className="flex flex-wrap">
         {review.keywords.map((keyword) => (
-          <span key={keyword} className="mr-2 rounded-md bg-gray-200 p-2">
+          <span
+            key={keyword}
+            className="mr-2 rounded-md bg-gray-200 p-1 text-sm md:p-2 md:text-base"
+          >
             {keyword}
           </span>
         ))}
@@ -44,7 +47,7 @@ export default function ReviewItem({
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className="h-8 w-8 rounded-full p-2 hover:bg-gray-200"
+              className="h-10 w-10 rounded-full p-2 hover:bg-gray-200"
             >
               <LuEllipsisVertical />
             </Button>

@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { useState, Dispatch, SetStateAction } from 'react'
 import { REVIEW_KEYWORDS } from '@/lib/constants'
+import MotionTap from '@/components/motion/MotionTap'
 
 interface ReviewFormProps {
   poolId: string
@@ -92,7 +93,7 @@ export default function ReviewForm({
                 {group.keywords.map((keyword) => (
                   <Toggle
                     key={keyword}
-                    variant="outline"
+                    variant="primary"
                     className="min-w-36"
                     onClick={() => handleToggle(keyword)}
                     defaultPressed={revewKeywords.includes(keyword)}
@@ -130,14 +131,17 @@ export default function ReviewForm({
         </div>
 
         {/* Submit Button */}
-        <Button
-          className="w-full"
-          size="lg"
-          onClick={handleSubmit}
-          disabled={loading || reviewContent.length < 4}
-        >
-          완료하기
-        </Button>
+        <MotionTap className="w-full">
+          <Button
+            className="w-full"
+            size="lg"
+            onClick={handleSubmit}
+            disabled={loading || reviewContent.length < 4}
+            variant="primary"
+          >
+            완료하기
+          </Button>
+        </MotionTap>
       </div>
     </form>
   )
