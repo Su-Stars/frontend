@@ -6,10 +6,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
+import { Button } from '@/components/ui/button'
+import ReviewUpdateButton from '@/components/reviews/review-update-button'
+
 interface ReviewItemProps {
   review: IReview
   poolId: string
-  deleteReview: (poolId: string, reviewId: string) => void
+  deleteReview: (poolId: string, reviewId: number) => void
   updateReview: (poolId: string, reviewId: string) => void
 }
 
@@ -37,8 +40,18 @@ export default function ReviewItem({
         <DropdownMenu>
           <DropdownMenuTrigger>Open</DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem>수정하기</DropdownMenuItem>
-            <DropdownMenuItem>삭제하기</DropdownMenuItem>
+            <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+              <ReviewUpdateButton
+                poolId={poolId}
+                updateReview={updateReview}
+                defaultValues={review}
+              />
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Button onClick={() => deleteReview(poolId, review.id)}>
+                삭제
+              </Button>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

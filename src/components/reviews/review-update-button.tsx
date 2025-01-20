@@ -19,15 +19,20 @@ import {
 import { LuPencil } from 'react-icons/lu'
 import ReviewForm from '@/components/reviews/reivew-form'
 
-interface ReviewWriteButtonProps {
+interface ReviewUpdateButtonProps {
   poolId: string
-  createReview: (poolId: string) => void
+  updateReview: (poolId: string, reviewId: string) => void
+  defaultValues?: {
+    keywords: string[]
+    content: string
+  }
 }
 
-export default function ReviewWriteButton({
+export default function ReviewUpdateButton({
   poolId,
-  createReview,
-}: ReviewWriteButtonProps) {
+  updateReview,
+  defaultValues,
+}: ReviewUpdateButtonProps) {
   return (
     <>
       {/* 데스크탑 환경에서 다이얼로그를 사용 */}
@@ -35,7 +40,7 @@ export default function ReviewWriteButton({
         <DialogTrigger asChild>
           <Button className="hidden md:flex">
             <LuPencil />
-            리뷰 작성하기
+            리뷰 수정하기
           </Button>
         </DialogTrigger>
         <DialogContent>
@@ -45,7 +50,11 @@ export default function ReviewWriteButton({
               여러분의 소중한 리뷰는 다른 사용자들에게 큰 도움이 됩니다.
             </DialogDescription>
           </DialogHeader>
-          <ReviewForm poolId={poolId} onSubmit={createReview} />
+          <ReviewForm
+            poolId={poolId}
+            onSubmit={updateReview}
+            defaultValues={defaultValues}
+          />
         </DialogContent>
       </Dialog>
       {/* 모바일 환경에서 드로워를 사용 */}
@@ -53,7 +62,7 @@ export default function ReviewWriteButton({
         <DrawerTrigger asChild>
           <Button className="md:hidden">
             <LuPencil />
-            리뷰 작성하기
+            리뷰 수정하기
           </Button>
         </DrawerTrigger>
         <DrawerContent>
@@ -66,7 +75,11 @@ export default function ReviewWriteButton({
               <Button variant="outline">Cancel</Button>
             </DrawerClose>
           </DrawerHeader>
-          <ReviewForm poolId={poolId} onSubmit={createReview} />
+          <ReviewForm
+            poolId={poolId}
+            onSubmit={updateReview}
+            defaultValues={defaultValues}
+          />
         </DrawerContent>
       </Drawer>
     </>
