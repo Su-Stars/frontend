@@ -3,8 +3,10 @@ import { NextResponse } from 'next/server'
 
 const API_BASE_URL = 'https://sgisapi.kostat.go.kr/OpenAPI3'
 
-// accesstoken 만료가 4시간이므로 4시간이 되기 1분 전에 토큰 갱신
-export const revalidate = 4 * 60 * 60 - 1
+// accesstoken 만료가 4시간이므로 4시간 마다 토큰 갱신
+export const config = {
+  revalidate: 60 * 60 * 4, // 60초마다 재검증
+}
 
 export async function GET() {
   const cookieStore = await cookies()
