@@ -26,6 +26,8 @@ export default function ReviewForm({
   const [reviewContent, setReviewContent] = useState(
     defaultValues?.content || '',
   )
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleToggle = (keyword: string) => {
     setReviewKeywords((prev) =>
@@ -36,12 +38,33 @@ export default function ReviewForm({
   }
 
   const handleSubmit = () => {
+    if (!reviewContent.trim()) {
+      setError('리뷰 내용을 입력해주세요')
+      return
+    }
+
+    if (reviewContent.length < 4) {
+      setError('리뷰는 4글자 이상 입력해주세요')
+      return
+    }
+
     const reviewForm = {
       keywords: revewKeywords,
       content: reviewContent,
     }
 
-    // onSubmit(poolId, reviewForm)
+    try {
+      setLoading(true)
+      setTimeout(() => {
+        console.log(poolId, reviewForm)
+      }, 1000)
+
+      // onSubmit(poolId, reviewForm)
+    } catch (error) {
+      setError('리뷰 작성에 실패했습니다. 다시 시도해주세요.')
+    } finally {
+      setLoading(false)
+    }
   }
   return (
     <div className="mx-auto flex max-w-md flex-col bg-background font-sans">
@@ -85,17 +108,28 @@ export default function ReviewForm({
               className="min-h-[150px] resize-none"
               maxLength={350}
               value={reviewContent}
-              onChange={(e) => setReviewContent(e.target.value)}
+              onChange={(e) => {
+                setReviewContent(e.target.value)
+                setError('')
+              }}
+              required
             />
             <div className="absolute bottom-2 right-2 text-sm text-muted-foreground">
               {reviewContent.length} / 350
             </div>
+            {error && (
+              <span className="mt-1 text-sm text-red-500">{error}</span>
+            )}
           </div>
         </div>
 
         {/* Submit Button */}
-        {/* TODO : 로딩중 상태의 경우 버튼을 비활성화 합니다. */}
-        <Button className="w-full" size="lg" onClick={handleSubmit}>
+        <Button
+          className="w-full"
+          size="lg"
+          onClick={handleSubmit}
+          disabled={loading || reviewContent.length < 4}
+        >
           완료하기
         </Button>
       </div>
