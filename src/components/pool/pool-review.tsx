@@ -1,15 +1,15 @@
-import { ReviewsResponse } from '@/hooks/useReviews'
+import { ReviewsResponse, useReviews } from '@/hooks/useReviews'
 import { Button } from '../ui/button'
 import { LuHeart, LuPencil } from 'react-icons/lu'
 import Link from 'next/link'
 import dayjs from 'dayjs'
 
 interface PoolReviewProps {
-  poolReviews: ReviewsResponse
   poolId: string
 }
 
-export default function PoolReview({ poolReviews, poolId }: PoolReviewProps) {
+export default function PoolReview({ poolId }: PoolReviewProps) {
+  const { data: poolReviews, isLoading } = useReviews({ poolId })
   return (
     <section>
       <header className="flex items-center justify-between border-b border-gray-300 pb-4 text-lg font-semibold">
@@ -26,8 +26,11 @@ export default function PoolReview({ poolReviews, poolId }: PoolReviewProps) {
         </Button>
       </header>
       <main>
-        {poolReviews?.reviews.slice(0, 2).map((review) => (
-          <div className="flex flex-col border-b border-gray-300 py-4">
+        {poolReviews?.reviews.slice(0, 2).map((review, idx) => (
+          <div
+            className="flex flex-col border-b border-gray-300 py-4"
+            key={idx}
+          >
             <div className="flex items-center justify-between">
               <div className="grid w-fit grid-cols-2 gap-2">
                 {review.keywords.map((keyword, idx) => (
