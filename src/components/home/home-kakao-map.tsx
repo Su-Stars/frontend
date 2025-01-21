@@ -12,7 +12,7 @@ interface Coordinates {
   lng: number
 }
 
-function HomeKakaoMap() {
+export default function HomeKakaoMap() {
   const { setCenter, center } = useCenterStore()
   const mapRef = useRef<kakao.maps.Map>(null)
 
@@ -80,17 +80,3 @@ function HomeKakaoMap() {
     </div>
   )
 }
-
-const HomeMapWithSuspense = () => (
-  <Suspense
-    fallback={
-      <div className="flex h-[200px] w-full items-center justify-center bg-gray-100">
-        <LuLoaderCircle className="h-8 w-8 animate-spin text-gray-500" />
-      </div>
-    }
-  >
-    <HomeKakaoMap />
-  </Suspense>
-)
-
-export default HomeMapWithSuspense
