@@ -11,63 +11,14 @@ import { LuBookmark, LuLink } from 'react-icons/lu'
 import { Button } from '../ui/button'
 import Image from 'next/image'
 import { usePool } from '@/hooks/usePool'
+import NoImage from '../common/no-image'
+import { Pool } from '@/hooks/useSearch'
 
 interface PoolDetailProps {
-  poolId: string
+  pool: Pool
 }
 
-export default function PoolDetail({ poolId }: PoolDetailProps) {
-  const { pool, isLoading } = usePool({ poolId })
-
-  if (isLoading) {
-    ;<section className="flex flex-col gap-2">
-      <header className="flex w-full items-center gap-4 border-b-slate-200 bg-white">
-        <Button
-          size="icon"
-          variant="link"
-          className="bg-transparent bg-white text-black shadow-none hover:bg-gray-400"
-          asChild
-        >
-          <Link href="/" className="hover:bg-gray-400">
-            <LuChevronLeft />
-          </Link>
-        </Button>
-        <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
-      </header>
-      <figure>
-        <div className="flex h-14 w-full items-center bg-gray-400 text-center font-semibold"></div>
-      </figure>
-      <div className="flex flex-col gap-2 *:flex *:items-center *:gap-4">
-        <div className="justify-between text-xl font-semibold text-black">
-          <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
-        </div>
-        <div>
-          <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
-        </div>
-        <div className="justify-between">
-          <div className="flex items-center gap-4">
-            <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
-          </div>
-          <div>
-            {/*정보 수정 페이지 제작 필요 */}
-            <Link
-              href=""
-              className="flex items-center text-center text-sm text-gray-400 underline"
-            >
-              정보 수정 요청하기
-            </Link>
-          </div>
-        </div>
-        <div>
-          <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
-        </div>
-        <div>
-          <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
-        </div>
-      </div>
-    </section>
-  }
-
+export default function PoolDetail({ pool }: PoolDetailProps) {
   const clickBookmark = () => {
     if (pool?.isBookMarked) {
       // 북마크 추가
@@ -90,21 +41,18 @@ export default function PoolDetail({ poolId }: PoolDetailProps) {
         </Button>
         <h2 className="text-2xl font-bold">{pool?.name}</h2>
       </header>
-      <figure>
+      <div className="relative h-[200px] w-full">
         {pool?.images ? (
           <Image
             src={pool.images[0]}
-            width={100}
-            height={100}
-            className="w-full object-cover"
+            fill
+            className="object-fill"
             alt="수영장 이미지"
           />
         ) : (
-          <div className="flex h-14 w-full items-center bg-gray-400 text-center font-semibold">
-            이미지가 없습니다
-          </div>
+          <NoImage />
         )}
-      </figure>
+      </div>
       <div className="flex flex-col gap-2 *:flex *:items-center *:gap-4">
         <div className="justify-between text-xl font-semibold text-black">
           {pool?.name}
@@ -131,7 +79,7 @@ export default function PoolDetail({ poolId }: PoolDetailProps) {
             {/*정보 수정 페이지 제작 필요 */}
             <Link
               href=""
-              className="flex items-center text-center text-sm text-gray-400 underline"
+              className="flex items-center text-center text-sm text-gray-400 underline hover:text-blue-500"
             >
               정보 수정 요청하기
             </Link>
@@ -139,7 +87,18 @@ export default function PoolDetail({ poolId }: PoolDetailProps) {
         </div>
         <div>
           <FaPersonSwimming />
-          <dd> {pool?.laneInfo}</dd>
+          <dd>
+            {pool?.laneInfo ? (
+              pool!.laneInfo
+            ) : (
+              <Link
+                href=""
+                className="flex items-center text-center text-sm text-blue-500 underline"
+              >
+                레인 정보를 등록해주세요
+              </Link>
+            )}
+          </dd>
         </div>
         <div>
           <LuLink />

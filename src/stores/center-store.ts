@@ -19,7 +19,6 @@ const initialState: Center = {
 const useCenterStore = create<CenterState>((set) => ({
   center: initialState,
   setCenter: (newCenter: Center) => {
-    console.log(newCenter)
     set({ center: newCenter })
   },
 }))

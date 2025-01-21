@@ -1,4 +1,5 @@
 import { usePool } from '@/hooks/usePool'
+import { Pool } from '@/hooks/useSearch'
 import Link from 'next/link'
 import { LuLoaderCircle } from 'react-icons/lu'
 import {
@@ -7,55 +8,52 @@ import {
   MapMarker,
   useKakaoLoader,
 } from 'react-kakao-maps-sdk'
+import { useState } from 'react'
 
 interface PoolKaKaoMapParams {
-  poolId: string
+  pool: Pool
 }
-export default function PoolKaKaoMap({ poolId }: PoolKaKaoMapParams) {
-  const { pool, isLoading, isError } = usePool({ poolId })
 
+export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {
   const [loading, error] = useKakaoLoader({
     appkey: process.env.NEXT_PUBLIC_KAKAO_APP_KEY!,
   })
+  const [isMapReady, setIsMapReady] = useState(false)
 
-  if (loading || isLoading) {
+  if (loading) {
     return (
-      <div className="flex h-[300px] w-full items-center justify-center bg-gray-100">
+      <div className="flex h-[200px] w-full items-center justify-center bg-gray-100">
         <LuLoaderCircle className="h-8 w-8 animate-spin text-gray-500" />
       </div>
     )
   }
 
-  if (isError || error || !pool) {
-    return (
-      <div className="flex h-[300px] w-full items-center justify-center bg-gray-100">
-        <span className="text-gray-500">지도를 불러올 수 없습니다.</span>
-      </div>
-    )
+  const position = {
+    lat: pool.latitude,
+    lng: pool.longitude,
   }
 
   return (
-    <div className="relative h-[300px] w-full overflow-hidden rounded-lg">
+    <div className="relative h-[300px] w-full rounded-lg">
       <Map
-        center={{ lat: pool.latitude, lng: pool.longitude }}
+        center={position}
         style={{ width: '100%', height: '100%' }}
         level={3}
+        onCreate={() => setIsMapReady(true)}
       >
-        <MapMarker position={{ lat: pool.latitude, lng: pool.longitude }}>
-          <CustomOverlayMap
-            position={{ lat: pool.latitude, lng: pool.longitude }}
-            yAnchor={3}
-            xAnchor={0.5}
-          >
-            <Link
-              href={pool.website}
-              target="_blank"
-              className="text-center text-sm text-gray-900 hover:text-blue-500 hover:underline"
-            >
-              {pool.name}
-            </Link>
-          </CustomOverlayMap>
-        </MapMarker>
+        {isMapReady && (
+          <>
+            <MapMarker position={position} />
+            <CustomOverlayMap position={position} yAnchor={2.5}>
+              <Link
+                href={pool.website}
+                className="rounded bg-white px-2 py-1 shadow-md hover:text-blue-500 hover:underline"
+              >
+                {pool.name}
+              </Link>
+            </CustomOverlayMap>
+          </>
+        )}
       </Map>
     </div>
   )

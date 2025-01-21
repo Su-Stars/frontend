@@ -3,13 +3,17 @@ import { Button } from '../ui/button'
 import { LuHeart, LuPencil } from 'react-icons/lu'
 import Link from 'next/link'
 import dayjs from 'dayjs'
+import { Pool } from '@/hooks/useSearch'
 
 interface PoolReviewProps {
   poolId: string
 }
 
 export default function PoolReview({ poolId }: PoolReviewProps) {
-  const { data: poolReviews, isLoading } = useReviews({ poolId })
+  const { data: poolReviews, isLoading: poolReviewsLoading } = useReviews({
+    poolId,
+  })
+
   return (
     <section>
       <header className="flex items-center justify-between border-b border-gray-300 pb-4 text-lg font-semibold">
@@ -59,7 +63,7 @@ export default function PoolReview({ poolId }: PoolReviewProps) {
           variant="link"
           size="lg"
           asChild
-          className="w-full text-base font-semibold text-gray-500 hover:text-blue-500"
+          className="w-full text-base font-semibold text-gray-700 hover:text-blue-500"
         >
           <Link href={`/temp/${poolId}`}>
             <span>리뷰 더보기</span>
