@@ -12,7 +12,7 @@ interface Result {
   cd: string
 }
 
-interface DistrictResponse {
+export interface DistrictResponse {
   result: Result[]
 }
 
@@ -26,7 +26,11 @@ const defaultResponse: Result = {
 
 export const useRegions = ({ code }: useRegionsParams) => {
   // sgis accessToken 받아오기
-  const { data: accessToken } = useQuery({
+  const {
+    data: accessToken,
+    isError: isTokenError,
+    error: tokenError,
+  } = useQuery({
     queryKey: ['sgis-auth'],
     queryFn: async () => {
       try {
@@ -40,12 +44,18 @@ export const useRegions = ({ code }: useRegionsParams) => {
         return json.result.accessToken
       } catch (error) {
         console.log(error)
+        throw new Error('Failed to fetch sgis auth')
       }
     },
   })
 
   // 도 별로 지역구 검색
-  const { data: districts, isLoading } = useQuery<DistrictResponse>({
+  const {
+    data: districts,
+    isLoading: isRegionLoading,
+    isError,
+    error,
+  } = useQuery<DistrictResponse>({
     queryKey: ['sgis-district', code],
     queryFn: async () => {
       try {
@@ -66,5 +76,5 @@ export const useRegions = ({ code }: useRegionsParams) => {
     enabled: !!accessToken && !!code,
   })
 
-  return { districts, isLoading }
+  return { districts, isRegionLoading, isError, error }
 }
