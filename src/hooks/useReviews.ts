@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { IReview, IReviewForm } from '@/types/reviews'
 
-interface ReviewsResponse {
+export interface ReviewsResponse {
   total: number
   page: number
   limit: number

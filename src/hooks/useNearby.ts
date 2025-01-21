@@ -10,7 +10,6 @@ interface UseNearbyResponse {
 
 export const useNearby = () => {
   const { center } = useCenterStore()
-  console.log(center)
   const radius = 5
 
   const { data: nearbySwimmingPools, isLoading } = useQuery<UseNearbyResponse>({

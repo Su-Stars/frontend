@@ -3,8 +3,9 @@ import { http, HttpResponse } from 'msw'
 
 export const poolHandlers = [
   http.get('http://localhost:9999/api/v1/pools/:pool_id', ({ params }) => {
+    console.log(params.id)
     const pool = dummy.find((pool) => pool.id === Number(params.pool_id))
-
+    console.log(pool)
     if (!pool) {
       return new HttpResponse(
         JSON.stringify({
