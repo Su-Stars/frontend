@@ -26,7 +26,11 @@ const defaultResponse: Result = {
 
 export const useRegions = ({ code }: useRegionsParams) => {
   // sgis accessToken 받아오기
-  const { data: accessToken } = useQuery({
+  const {
+    data: accessToken,
+    isError: isTokenError,
+    error: tokenError,
+  } = useQuery({
     queryKey: ['sgis-auth'],
     queryFn: async () => {
       try {
@@ -40,6 +44,7 @@ export const useRegions = ({ code }: useRegionsParams) => {
         return json.result.accessToken
       } catch (error) {
         console.log(error)
+        throw new Error('Failed to fetch sgis auth')
       }
     },
   })

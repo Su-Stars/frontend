@@ -20,9 +20,9 @@ export const useNearby = ({
 }: UseNearbyParams) => {
   const {
     data: nearbySwimmingPools,
-    isLoading,
-    isError,
-    error,
+    isLoading: isNearbyLoading,
+    isError: isNearbyError,
+    error: nearbyError,
   } = useQuery<UseNearbyResponse>({
     queryKey: [latitude, longitude, radius],
     queryFn: async () => {
@@ -45,6 +45,6 @@ export const useNearby = ({
     enabled: !!latitude && !!longitude,
     staleTime: 5 * 60 * 1000, // 5분간 캐시 유지
   })
-  console.log(nearbySwimmingPools)
-  return { nearbySwimmingPools, isLoading, isError, error }
+  // console.log(nearbySwimmingPools)
+  return { nearbySwimmingPools, isNearbyLoading, isNearbyError, nearbyError }
 }
