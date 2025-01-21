@@ -47,8 +47,9 @@ export const useSearch = ({
   // useQuery는 항상 호출하되, enabled 옵션으로 실행 조건을 제어
   const {
     data: searchResults = defaultResponse,
-    isLoading,
-    isError,
+    isLoading: isSearchLoading,
+    isError: isSearchError,
+    error: searchError,
   } = useQuery<UseSearchResponse>({
     queryKey: ['search', region, keyword, page, limit],
     queryFn: async () => {
@@ -69,11 +70,11 @@ export const useSearch = ({
         }
 
         const json = await res.json()
-        console.log(json)
+
         return json.data
       } catch (error) {
         console.error('Search error:', error)
-        return defaultResponse
+        throw new Error('검색에 실패했습니다')
       }
     },
     enabled: !(region === 'all' && keyword === 'all'),
@@ -83,8 +84,9 @@ export const useSearch = ({
 
   return {
     searchResults,
-    isLoading,
-    isError,
+    isSearchLoading,
+    isSearchError,
+    searchError,
     total: searchResults.total,
   }
 }

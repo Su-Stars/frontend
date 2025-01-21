@@ -2,28 +2,15 @@
 
 import { useRegions } from '@/hooks/useRegions'
 import { Pool, useSearch } from '@/hooks/useSearch'
-import { REGION, Region } from '@/lib/constants'
+import { Region } from '@/lib/constants'
 import { useState } from 'react'
-import { Button } from '../ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogClose,
-} from '@/components/ui/dialog'
-import {
-  LuMapPin,
-  LuChevronDown,
-  LuChevronLeft,
-  LuLoader,
-} from 'react-icons/lu'
-import { Input } from '../ui/input'
+import { Button } from '@/components/ui/button'
+import { LuLoader } from 'react-icons/lu'
+import { Input } from '@/components/ui/input'
 import useCenterStore from '@/stores/center-store'
 import { useNearby } from '@/hooks/useNearby'
-import PoolCard from './home-pool-card'
+import PoolCard from '@/components/home/home-pool-card'
+import RegionFilter from '@/components/home/region-filter'
 
 export default function HomeSearch() {
   const [address, setAddress] = useState('전국')
@@ -31,17 +18,23 @@ export default function HomeSearch() {
   const [finalRegion, setFinalRegion] = useState<string>('all')
   const [value, setValue] = useState<string>('')
   const [keyword, setKeyword] = useState<string>('all')
+  const { center } = useCenterStore()
 
-  const { districts } = useRegions({
+  const { districts, isRegionLoading } = useRegions({
     code: selectedRegion?.code || '',
   })
 
-  const { nearbySwimmingPools } = useNearby()
+  const { nearbySwimmingPools, isNearbyLoading, isNearbyError, nearbyError } =
+    useNearby({
+      latitude: center.lat,
+      longitude: center.lng,
+    })
 
-  const { searchResults, isError } = useSearch({
-    region: finalRegion,
-    keyword,
-  })
+  const { searchResults, isSearchLoading, isSearchError, searchError } =
+    useSearch({
+      region: finalRegion,
+      keyword,
+    })
 
   // 검색 기능 수행
   const handleSubmit = (e: React.FormEvent) => {
@@ -110,97 +103,18 @@ export default function HomeSearch() {
   return (
     <>
       {/*지역구 선택 */}
-      <Dialog>
-        <DialogTrigger asChild>
-          <div>
-            <Button className="w-fit">
-              <LuMapPin />
-              {address}
-              <LuChevronDown />
-            </Button>
-          </div>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader className="flex flex-col gap-2">
-            <DialogTitle>지역으로 검색</DialogTitle>
-            <h3 className="font-semibold text-theme">
-              {selectedRegion?.name ? (
-                <span className="flex items-center gap-4">
-                  <Button
-                    className="bg-white text-black hover:text-white"
-                    size="icon"
-                    onClick={clickBack}
-                  >
-                    <LuChevronLeft />
-                  </Button>
-                  {selectedRegion.name}
-                </span>
-              ) : (
-                '지역을 선택해주세요'
-              )}
-            </h3>
-            <DialogDescription className="grid h-[370px] grid-cols-2 gap-0 overflow-y-auto">
-              {selectedRegion ? (
-                <>
-                  <DialogClose asChild>
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="text-black"
-                      onClick={() => clickAllDistrict(selectedRegion.name)}
-                    >
-                      <span className="text-md font-semibold">전체</span>
-                    </Button>
-                  </DialogClose>
-                  {districts?.result.map((district) => (
-                    <DialogClose asChild key={district.cd}>
-                      <Button
-                        size="lg"
-                        variant="outline"
-                        className="w-full text-black"
-                        onClick={() => clickDistrict(district.full_addr)}
-                      >
-                        <span className="text-md font-semibold">
-                          {parseDistrict(district.full_addr)}
-                        </span>
-                      </Button>
-                    </DialogClose>
-                  ))}
-                </>
-              ) : (
-                REGION.map((region) =>
-                  region.name === '전국' ? (
-                    <DialogClose asChild key={region.code}>
-                      <Button
-                        size="lg"
-                        variant="outline"
-                        className="text-black"
-                        onClick={clickAllRegion}
-                      >
-                        <span className="text-md font-semibold">
-                          {region.name}
-                        </span>
-                      </Button>
-                    </DialogClose>
-                  ) : (
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="text-black"
-                      onClick={() => setSelectedRegion(region)}
-                      key={region.code}
-                    >
-                      <span className="text-md font-semibold">
-                        {region.name}
-                      </span>
-                    </Button>
-                  ),
-                )
-              )}
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
+      <RegionFilter
+        address={address}
+        selectedRegion={selectedRegion}
+        setSelectedRegion={setSelectedRegion}
+        clickBack={clickBack}
+        clickAllDistrict={clickAllDistrict}
+        clickDistrict={clickDistrict}
+        clickAllRegion={clickAllRegion}
+        parseDistrict={parseDistrict}
+        districts={districts || { result: [] }}
+        isRegionLoading={isRegionLoading}
+      />
 
       {/*검색어 입력 */}
       <form onSubmit={handleSubmit} className="flex space-x-2">
@@ -214,22 +128,24 @@ export default function HomeSearch() {
       </form>
 
       {/*결과 출력*/}
-      {/*초기에는 nearbySwimmingPools를 사용 */}
-      {/*검색을 하면 searchResults를 사용*/}
-      <h2 className="text-2xl font-bold">
-        {keyword === 'all' && finalRegion === 'all'
-          ? '주변 수영장'
-          : '검색 결과'}{' '}
-        <span className="text-theme">
-          {keyword === 'all' && finalRegion === 'all'
-            ? nearbySwimmingPools?.pools.length || 0
-            : searchResults?.total || 0}{' '}
-        </span>
-        개
-      </h2>
-      {isError ? (
-        <LuLoader />
-      ) : keyword === 'all' && finalRegion === 'all' ? (
+      {/*초기에는 nearbySwimmingPools를 사용하여 주변 수영장 1개와 같이 표시합니다 */}
+      {/* 키워드나 지역구가 변경되어 검색을 하면 searchResults를 사용 해당 결과를 출력 기존에는 근처 수영장 갯수를 보여줍니다 */}
+      <SearchHeader
+        keyword={keyword}
+        finalRegion={finalRegion}
+        nearbySwimmingPools={nearbySwimmingPools}
+        searchResults={searchResults}
+      />
+
+      {/*로딩 상태일 때 로딩 아이콘 표시*/}
+      {isSearchLoading || (isNearbyLoading && <LuLoader />)}
+
+      {/*에러 상태일 때 로딩 아이콘 표시*/}
+      {isSearchError || (isNearbyError && <div>에러가 발생했습니다.</div>)}
+
+      {/*검색 결과표시*/}
+
+      {keyword === 'all' && finalRegion === 'all' ? (
         // 초기 상태: 주변 수영장 표시
         nearbySwimmingPools?.pools.length === 0 ? (
           <h1>주변 수영장이 없습니다</h1>
@@ -247,5 +163,31 @@ export default function HomeSearch() {
         ))
       )}
     </>
+  )
+}
+
+interface SearchHeaderProps {
+  keyword: string
+  finalRegion: string
+  nearbySwimmingPools: { pools: Pool[] } | undefined
+  searchResults: { total: number; pools: Pool[] } | undefined
+}
+
+function SearchHeader({
+  keyword,
+  finalRegion,
+  nearbySwimmingPools,
+  searchResults,
+}: SearchHeaderProps) {
+  return (
+    <h2 className="text-2xl font-bold">
+      {keyword === 'all' && finalRegion === 'all' ? '주변 수영장' : '검색 결과'}{' '}
+      <span className="text-theme">
+        {keyword === 'all' && finalRegion === 'all'
+          ? nearbySwimmingPools?.pools.length || 0
+          : searchResults?.total || 0}{' '}
+      </span>
+      개
+    </h2>
   )
 }

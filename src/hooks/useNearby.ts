@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 import { Pool } from './useSearch'
-import useCenterStore from '@/stores/center-store'
 
 interface UseNearbyResponse {
   status: string
@@ -8,16 +7,28 @@ interface UseNearbyResponse {
   pools: Pool[]
 }
 
-export const useNearby = () => {
-  const { center } = useCenterStore()
-  const radius = 5
+interface UseNearbyParams {
+  latitude: number
+  longitude: number
+  radius?: number
+}
 
-  const { data: nearbySwimmingPools, isLoading } = useQuery<UseNearbyResponse>({
-    queryKey: [center.lat, center.lng, radius],
+export const useNearby = ({
+  latitude,
+  longitude,
+  radius = 5,
+}: UseNearbyParams) => {
+  const {
+    data: nearbySwimmingPools,
+    isLoading: isNearbyLoading,
+    isError: isNearbyError,
+    error: nearbyError,
+  } = useQuery<UseNearbyResponse>({
+    queryKey: [latitude, longitude, radius],
     queryFn: async () => {
       const params = new URLSearchParams({
-        latitude: center.lat.toString(),
-        longitude: center.lng.toString(),
+        latitude: latitude.toString(),
+        longitude: longitude.toString(),
         radius: radius.toString(),
       })
 
@@ -28,13 +39,12 @@ export const useNearby = () => {
         const json = await res.json()
         return json.data
       } catch (error) {
-        console.log(error)
-        return []
+        throw new Error('Failed to fetch nearby swimming pools')
       }
     },
-    enabled: !!center.lat && !!center.lng,
+    enabled: !!latitude && !!longitude,
     staleTime: 5 * 60 * 1000, // 5분간 캐시 유지
   })
-  console.log(nearbySwimmingPools)
-  return { nearbySwimmingPools, isLoading }
+  // console.log(nearbySwimmingPools)
+  return { nearbySwimmingPools, isNearbyLoading, isNearbyError, nearbyError }
 }
