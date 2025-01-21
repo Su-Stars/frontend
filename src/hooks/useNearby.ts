@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 import { Pool } from './useSearch'
-import useCenterStore from '@/stores/center-store'
 
 interface UseNearbyResponse {
   status: string

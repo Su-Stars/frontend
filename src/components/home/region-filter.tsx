@@ -22,6 +22,7 @@ interface RegionFilterProps {
   clickAllRegion: () => void
   parseDistrict: (fullAddr: string) => string
   districts: DistrictResponse
+  isRegionLoading: boolean
 }
 
 export default function RegionFilter({
@@ -34,6 +35,7 @@ export default function RegionFilter({
   clickAllRegion,
   parseDistrict,
   districts,
+  isRegionLoading,
 }: RegionFilterProps) {
   return (
     <Dialog>
@@ -46,7 +48,7 @@ export default function RegionFilter({
           </Button>
         </div>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="h-96 w-96 overflow-y-auto rounded-2xl md:h-[30rem] md:w-[30rem]">
         <DialogHeader className="flex flex-col gap-2">
           <DialogTitle>지역으로 검색</DialogTitle>
           <h3 className="font-semibold text-theme">
@@ -65,14 +67,14 @@ export default function RegionFilter({
               '지역을 선택해주세요'
             )}
           </h3>
-          <DialogDescription className="grid h-[370px] grid-cols-2 gap-0 overflow-y-auto">
+          <DialogDescription className="flex flex-wrap">
             {selectedRegion ? (
               <>
                 <DialogClose asChild>
                   <Button
                     size="lg"
                     variant="outline"
-                    className="text-black"
+                    className="w-1/2 text-black"
                     onClick={() => clickAllDistrict(selectedRegion.name)}
                   >
                     <span className="text-md font-semibold">전체</span>
@@ -83,7 +85,7 @@ export default function RegionFilter({
                     <Button
                       size="lg"
                       variant="outline"
-                      className="w-full text-black"
+                      className="w-1/2 text-black"
                       onClick={() => clickDistrict(district.full_addr)}
                     >
                       <span className="text-md font-semibold">
@@ -100,7 +102,7 @@ export default function RegionFilter({
                     <Button
                       size="lg"
                       variant="outline"
-                      className="text-black"
+                      className="w-1/2 text-black"
                       onClick={clickAllRegion}
                     >
                       <span className="text-md font-semibold">
@@ -112,7 +114,7 @@ export default function RegionFilter({
                   <Button
                     size="lg"
                     variant="outline"
-                    className="text-black"
+                    className="w-1/2 text-black"
                     onClick={() => setSelectedRegion(region)}
                     key={region.code}
                   >
@@ -120,6 +122,21 @@ export default function RegionFilter({
                   </Button>
                 ),
               )
+            )}
+            {/* 지역 로딩 상태 중 스켈레톤 표시*/}
+            {isRegionLoading && (
+              <>
+                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
+                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
+                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
+                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
+                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
+                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
+                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
+                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
+                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
+                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
+              </>
             )}
           </DialogDescription>
         </DialogHeader>

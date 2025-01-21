@@ -47,7 +47,7 @@ export const useRegions = ({ code }: useRegionsParams) => {
   // 도 별로 지역구 검색
   const {
     data: districts,
-    isLoading,
+    isLoading: isRegionLoading,
     isError,
     error,
   } = useQuery<DistrictResponse>({
@@ -71,5 +71,5 @@ export const useRegions = ({ code }: useRegionsParams) => {
     enabled: !!accessToken && !!code,
   })
 
-  return { districts, isLoading, isError, error }
+  return { districts, isRegionLoading, isError, error }
 }

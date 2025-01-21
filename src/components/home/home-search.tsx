@@ -2,28 +2,14 @@
 
 import { useRegions } from '@/hooks/useRegions'
 import { Pool, useSearch } from '@/hooks/useSearch'
-import { REGION, Region } from '@/lib/constants'
+import { Region } from '@/lib/constants'
 import { useState } from 'react'
-import { Button } from '../ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-  DialogClose,
-} from '@/components/ui/dialog'
-import {
-  LuMapPin,
-  LuChevronDown,
-  LuChevronLeft,
-  LuLoader,
-} from 'react-icons/lu'
-import { Input } from '../ui/input'
+import { Button } from '@/components/ui/button'
+import { LuLoader } from 'react-icons/lu'
+import { Input } from '@/components/ui/input'
 import useCenterStore from '@/stores/center-store'
 import { useNearby } from '@/hooks/useNearby'
-import PoolCard from './home-pool-card'
+import PoolCard from '@/components/home/home-pool-card'
 import RegionFilter from '@/components/home/region-filter'
 
 export default function HomeSearch() {
@@ -34,7 +20,7 @@ export default function HomeSearch() {
   const [keyword, setKeyword] = useState<string>('all')
   const { center } = useCenterStore()
 
-  const { districts, isLoading } = useRegions({
+  const { districts, isRegionLoading } = useRegions({
     code: selectedRegion?.code || '',
   })
 
@@ -125,6 +111,7 @@ export default function HomeSearch() {
         clickAllRegion={clickAllRegion}
         parseDistrict={parseDistrict}
         districts={districts || { result: [] }}
+        isRegionLoading={isRegionLoading}
       />
 
       {/*검색어 입력 */}
