@@ -24,6 +24,7 @@ import { Input } from '../ui/input'
 import useCenterStore from '@/stores/center-store'
 import { useNearby } from '@/hooks/useNearby'
 import PoolCard from './home-pool-card'
+import RegionFilter from '@/components/home/region-filter'
 
 export default function HomeSearch() {
   const [address, setAddress] = useState('전국')
@@ -33,7 +34,7 @@ export default function HomeSearch() {
   const [keyword, setKeyword] = useState<string>('all')
   const { center } = useCenterStore()
 
-  const { districts } = useRegions({
+  const { districts, isLoading } = useRegions({
     code: selectedRegion?.code || '',
   })
 
@@ -114,97 +115,17 @@ export default function HomeSearch() {
   return (
     <>
       {/*지역구 선택 */}
-      <Dialog>
-        <DialogTrigger asChild>
-          <div>
-            <Button className="w-fit">
-              <LuMapPin />
-              {address}
-              <LuChevronDown />
-            </Button>
-          </div>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader className="flex flex-col gap-2">
-            <DialogTitle>지역으로 검색</DialogTitle>
-            <h3 className="font-semibold text-theme">
-              {selectedRegion?.name ? (
-                <span className="flex items-center gap-4">
-                  <Button
-                    className="bg-white text-black hover:text-white"
-                    size="icon"
-                    onClick={clickBack}
-                  >
-                    <LuChevronLeft />
-                  </Button>
-                  {selectedRegion.name}
-                </span>
-              ) : (
-                '지역을 선택해주세요'
-              )}
-            </h3>
-            <DialogDescription className="grid h-[370px] grid-cols-2 gap-0 overflow-y-auto">
-              {selectedRegion ? (
-                <>
-                  <DialogClose asChild>
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="text-black"
-                      onClick={() => clickAllDistrict(selectedRegion.name)}
-                    >
-                      <span className="text-md font-semibold">전체</span>
-                    </Button>
-                  </DialogClose>
-                  {districts?.result.map((district) => (
-                    <DialogClose asChild key={district.cd}>
-                      <Button
-                        size="lg"
-                        variant="outline"
-                        className="w-full text-black"
-                        onClick={() => clickDistrict(district.full_addr)}
-                      >
-                        <span className="text-md font-semibold">
-                          {parseDistrict(district.full_addr)}
-                        </span>
-                      </Button>
-                    </DialogClose>
-                  ))}
-                </>
-              ) : (
-                REGION.map((region) =>
-                  region.name === '전국' ? (
-                    <DialogClose asChild key={region.code}>
-                      <Button
-                        size="lg"
-                        variant="outline"
-                        className="text-black"
-                        onClick={clickAllRegion}
-                      >
-                        <span className="text-md font-semibold">
-                          {region.name}
-                        </span>
-                      </Button>
-                    </DialogClose>
-                  ) : (
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="text-black"
-                      onClick={() => setSelectedRegion(region)}
-                      key={region.code}
-                    >
-                      <span className="text-md font-semibold">
-                        {region.name}
-                      </span>
-                    </Button>
-                  ),
-                )
-              )}
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
+      <RegionFilter
+        address={address}
+        selectedRegion={selectedRegion}
+        setSelectedRegion={setSelectedRegion}
+        clickBack={clickBack}
+        clickAllDistrict={clickAllDistrict}
+        clickDistrict={clickDistrict}
+        clickAllRegion={clickAllRegion}
+        parseDistrict={parseDistrict}
+        districts={districts || { result: [] }}
+      />
 
       {/*검색어 입력 */}
       <form onSubmit={handleSubmit} className="flex space-x-2">

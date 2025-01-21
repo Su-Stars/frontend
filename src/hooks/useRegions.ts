@@ -12,7 +12,7 @@ interface Result {
   cd: string
 }
 
-interface DistrictResponse {
+export interface DistrictResponse {
   result: Result[]
 }
 
@@ -45,7 +45,12 @@ export const useRegions = ({ code }: useRegionsParams) => {
   })
 
   // 도 별로 지역구 검색
-  const { data: districts, isLoading } = useQuery<DistrictResponse>({
+  const {
+    data: districts,
+    isLoading,
+    isError,
+    error,
+  } = useQuery<DistrictResponse>({
     queryKey: ['sgis-district', code],
     queryFn: async () => {
       try {
@@ -66,5 +71,5 @@ export const useRegions = ({ code }: useRegionsParams) => {
     enabled: !!accessToken && !!code,
   })
 
-  return { districts, isLoading }
+  return { districts, isLoading, isError, error }
 }
