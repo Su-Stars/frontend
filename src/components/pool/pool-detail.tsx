@@ -1,7 +1,13 @@
 import Link from 'next/link'
-import { FaBookmark, FaMapMarkerAlt, FaPhone } from 'react-icons/fa'
+import {
+  FaBookmark,
+  FaChevronLeft,
+  FaMapMarkerAlt,
+  FaPhone,
+} from 'react-icons/fa'
 import { FaPersonSwimming } from 'react-icons/fa6'
-import { LuBookmark, LuChevronLeft, LuLink } from 'react-icons/lu'
+import { LuBookmark, LuLink } from 'react-icons/lu'
+
 import { Button } from '../ui/button'
 import Image from 'next/image'
 import { usePool } from '@/hooks/usePool'
@@ -18,10 +24,11 @@ export default function PoolDetail({ poolId }: PoolDetailProps) {
       <header className="flex w-full items-center gap-4 border-b-slate-200 bg-white">
         <Button
           size="icon"
-          className="bg-transparent text-black shadow-none"
+          variant="link"
+          className="bg-transparent bg-white text-black shadow-none hover:bg-gray-400"
           asChild
         >
-          <Link href="/">
+          <Link href="/" className="hover:bg-gray-400">
             <LuChevronLeft />
           </Link>
         </Button>
@@ -61,16 +68,24 @@ export default function PoolDetail({ poolId }: PoolDetailProps) {
     </section>
   }
 
+  const clickBookmark = () => {
+    if (pool?.isBookMarked) {
+      // 북마크 추가
+    } else {
+      // 북마크 취소
+    }
+  }
+
   return (
     <section className="flex flex-col gap-2">
       <header className="flex w-full items-center gap-4 border-b-slate-200 bg-white">
         <Button
           size="icon"
-          className="bg-transparent text-black shadow-none"
+          className="bg-transparent text-black hover:bg-gray-400"
           asChild
         >
           <Link href="/">
-            <LuChevronLeft />
+            <FaChevronLeft />
           </Link>
         </Button>
         <h2 className="text-2xl font-bold">{pool?.name}</h2>
@@ -96,6 +111,7 @@ export default function PoolDetail({ poolId }: PoolDetailProps) {
 
           {/*북마크 기능 추가해야함 */}
           <Button
+            onClick={clickBookmark}
             size="icon"
             className="bg-transparent text-black hover:bg-gray-400"
           >

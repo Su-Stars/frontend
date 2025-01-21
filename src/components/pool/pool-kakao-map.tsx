@@ -44,11 +44,13 @@ export default function PoolKaKaoMap({ poolId }: PoolKaKaoMapParams) {
         <MapMarker position={{ lat: pool.latitude, lng: pool.longitude }}>
           <CustomOverlayMap
             position={{ lat: pool.latitude, lng: pool.longitude }}
+            yAnchor={3}
+            xAnchor={0.5}
           >
             <Link
-              href=""
+              href={pool.website}
               target="_blank"
-              className="text-center text-sm text-gray-900"
+              className="text-center text-sm text-gray-900 hover:text-blue-500 hover:underline"
             >
               {pool.name}
             </Link>
