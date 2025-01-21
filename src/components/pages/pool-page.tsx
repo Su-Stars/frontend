@@ -4,9 +4,7 @@ import PoolDetail from '../pool/pool-detail'
 import PoolReview from '../pool/pool-review'
 import PoolKaKaoMap from '../pool/pool-kakao-map'
 import { usePool } from '@/hooks/usePool'
-import { useReviews } from '@/hooks/useReviews'
 import { Skeleton } from '../ui/skeleton'
-import Error from 'next/error'
 
 interface PoolPageParams {
   poolId: string
@@ -15,7 +13,7 @@ interface PoolPageParams {
 export default function PoolPage({ poolId }: PoolPageParams) {
   const { pool, isLoading, isError } = usePool({ poolId })
 
-  if (isError) {
+  if (isError || !pool) {
     return <div>데이터를 불러오는 중 오류가 발생했습니다.</div>
   }
 
