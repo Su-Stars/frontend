@@ -16,11 +16,12 @@ if (typeof window === 'undefined') {
 
 export default async function Pool({ params }: { params: { id: string } }) {
   const { id } = params
+  console.log(id)
   const queryClient = new QueryClient()
 
   try {
     await queryClient.prefetchQuery<IPool>({
-      queryKey: ['posts'],
+      queryKey: ['pool', id],
       queryFn: () => getPool(id),
     })
   } catch (error) {

@@ -1,18 +1,45 @@
-import { ReviewsResponse, useReviews } from '@/hooks/useReviews'
+import { useReviews } from '@/hooks/useReviews'
 import { Button } from '../ui/button'
 import { LuHeart, LuPencil } from 'react-icons/lu'
 import Link from 'next/link'
 import dayjs from 'dayjs'
-import { Pool } from '@/hooks/useSearch'
+import { Skeleton } from '../ui/skeleton'
 
 interface PoolReviewProps {
   poolId: string
 }
 
 export default function PoolReview({ poolId }: PoolReviewProps) {
-  const { data: poolReviews, isLoading: poolReviewsLoading } = useReviews({
+  const { data: poolReviews, isLoading } = useReviews({
     poolId,
   })
+
+  if (isLoading) {
+    return (
+      <section>
+        <header className="flex items-center justify-between border-b border-gray-300 pb-4 text-lg font-semibold">
+          <span>리뷰 </span>
+        </header>
+        <main>
+          <div className="flex flex-col border-b border-gray-300 py-4">
+            <div className="flex items-center justify-between">
+              <div className="grid w-fit grid-cols-2 gap-2">
+                <Skeleton className="h-4 w-[100px]" />
+                <Skeleton className="h-4 w-[100px]" />
+              </div>
+
+              <Skeleton className="h-4 w-[100px]" />
+            </div>
+            <Skeleton className="h-4 w-[250px]" />
+            <div className="flex items-center gap-2 font-semibold">
+              <Skeleton className="h-4 w-[200px]" />
+              <Skeleton className="h-4 w-[200px]" />
+            </div>
+          </div>
+        </main>
+      </section>
+    )
+  }
 
   return (
     <section>

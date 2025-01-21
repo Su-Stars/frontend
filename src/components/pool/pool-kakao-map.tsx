@@ -22,10 +22,16 @@ export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {
 
   if (loading) {
     return (
-      <div className="flex h-[200px] w-full items-center justify-center bg-gray-100">
+      <div className="flex h-[300px] w-full items-center justify-center bg-gray-100">
         <LuLoaderCircle className="h-8 w-8 animate-spin text-gray-500" />
       </div>
     )
+  }
+
+  if (error) {
+    ;<div className="flex h-[300px] w-full items-center justify-center bg-gray-100">
+      <div>지도를 불러오는 데 실패했습니다</div>
+    </div>
   }
 
   const position = {
