@@ -1,4 +1,3 @@
-import { on } from 'events'
 import type { Config } from 'tailwindcss'
 
 export default {
@@ -11,6 +10,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        theme: '#3874C9',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {

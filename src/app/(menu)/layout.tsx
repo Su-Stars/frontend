@@ -1,5 +1,5 @@
-import DesktopHeader from '@/components/desktop-header'
-import MobileHeader from '@/components/mobile-header'
+import DesktopHeader from '@/components/common/desktop-header'
+import MobileHeader from '@/components/common/mobile-header'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       {/* 메인 컨텐츠 영역 */}
       <main className="flex h-full min-h-screen w-full items-center justify-center bg-[rgb(247,247,247)]">
-        <div className="min-h-screen w-[640px] bg-white px-6 shadow-sm">
+        <div className="min-h-screen w-[640px] bg-white px-6 pb-6 pt-2 shadow-sm">
           {children}
         </div>
       </main>

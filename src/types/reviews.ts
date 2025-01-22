@@ -9,3 +9,8 @@ export interface IReview {
   createdAt: string
   updatedAt: string
 }
+
+export interface IReviewForm {
+  keywords: string[]
+  content: string
+}
