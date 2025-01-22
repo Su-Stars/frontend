@@ -9,7 +9,7 @@ interface PoolCardProps {
 export default function PoolCard({ pool }: PoolCardProps) {
   return (
     <div>
-      <Link className="flex gap-4" href={`/pool/${pool.id}`}>
+      <Link className="flex gap-4" href={`/pools/${pool.id}`}>
         <Image src={pool.thumbnail} alt="이미지" width={70} height={70} />
         <div className="flex-col gap-4">
           <div className="text-lg font-semibold">{pool.name}</div>

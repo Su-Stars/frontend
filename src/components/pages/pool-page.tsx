@@ -1,10 +1,10 @@
 'use client'
 
 import PoolDetail from '../pool/pool-detail'
-import PoolReview from '../pool/pool-review'
 import PoolKaKaoMap from '../pool/pool-kakao-map'
 import { usePool } from '@/hooks/usePool'
 import { Skeleton } from '../ui/skeleton'
+import ReviewsPage from '@/components/pages/reviews-page'
 
 interface PoolPageParams {
   poolId: string
@@ -40,7 +40,7 @@ export default function PoolPage({ poolId }: PoolPageParams) {
   return (
     <div className="flex flex-col space-y-10">
       <PoolDetail pool={pool} />
-      <PoolReview poolId={poolId} />
+      <ReviewsPage preview poolId={poolId} />
       <PoolKaKaoMap pool={pool} />
     </div>
   )

@@ -44,6 +44,8 @@ export default function ReviewsPage({
     return <div>데이터가 없습니다.</div>
   }
 
+  console.log(preview)
+
   return (
     <section className="flex flex-col space-y-4">
       <ResponsiveDialog
@@ -110,8 +112,9 @@ export default function ReviewsPage({
           />
         ))}
       </div>
+
       {preview && (
-        <Link href={`/temp/${poolId}/reviews`} className="mx-auto">
+        <Link href={`/pools/${poolId}/reviews`} className="mx-auto">
           <Button variant="primary" className="rounded-full">
             리뷰 더보기
           </Button>
