@@ -1,14 +1,47 @@
-import {
-  dehydrate,
-  HydrationBoundary,
-  QueryClient,
-  useQuery,
-} from '@tanstack/react-query'
+'use client'
 
-export default function PoolPage() {
+import PoolDetail from '../pool/pool-detail'
+import PoolReview from '../pool/pool-review'
+import PoolKaKaoMap from '../pool/pool-kakao-map'
+import { usePool } from '@/hooks/usePool'
+import { Skeleton } from '../ui/skeleton'
+
+interface PoolPageParams {
+  poolId: string
+}
+
+export default function PoolPage({ poolId }: PoolPageParams) {
+  const { pool, isLoading, isError } = usePool({ poolId })
+
+  if (isError || !pool) {
+    return <div>데이터를 불러오는 중 오류가 발생했습니다.</div>
+  }
+
+  if (isLoading) {
+    return (
+      <section className="flex flex-col gap-2">
+        <header className="flex w-full items-center gap-4 border-b-slate-200 bg-white">
+          <Skeleton className="h-4 w-full" />
+          <h2 className="text-2xl font-bold">{pool?.name}</h2>
+        </header>
+        <div className="relative h-[200px] w-full">
+          <Skeleton className="h-full w-full" />
+        </div>
+        <div className="flex flex-col gap-2 *:flex *:items-center *:gap-4">
+          <Skeleton className="h-4 w-[250px]" />
+          <Skeleton className="h-4 w-[200px]" />
+          <Skeleton className="h-4 w-[200px]" />
+          <Skeleton className="h-4 w-[200px]" />
+          <Skeleton className="h-4 w-[200px]" />
+        </div>
+      </section>
+    )
+  }
   return (
-    <div className="flex flex-col space-y-4">
-      <h2 className="text-2xl font-bold">수영장 상세</h2>
+    <div className="flex flex-col space-y-10">
+      <PoolDetail pool={pool} />
+      <PoolReview poolId={poolId} />
+      <PoolKaKaoMap pool={pool} />
     </div>
   )
 }

@@ -1,5 +1,40 @@
-import PoolPage from '@/components/pages/pool-page'
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from '@tanstack/react-query'
 
-export default function Pool() {
-  return <PoolPage />
+import PoolPage from '@/components/pages/pool-page'
+import { getPool } from '@/action/get-pool'
+import { Pool as IPool } from '@/hooks/useSearch'
+import { server } from '@/mocks/node'
+
+// 서버 사이드에서 msw 서버 시작
+if (typeof window === 'undefined') {
+  server.listen()
+}
+
+export default async function Pool({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const id = (await params).id
+  const queryClient = new QueryClient()
+
+  try {
+    await queryClient.prefetchQuery<IPool>({
+      queryKey: ['pool', id],
+      queryFn: () => getPool(id),
+    })
+  } catch (error) {
+    console.log(error)
+    return <div>에러 발생</div>
+  }
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <PoolPage poolId={id} />
+    </HydrationBoundary>
+  )
 }

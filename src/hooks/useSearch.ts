@@ -8,12 +8,20 @@ interface UseSearchParams {
 }
 
 export interface Pool {
-  id: 1
+  id: number
   name: string
   address: string
   thumbnail: string
   distance?: number
   isBookMarked: boolean
+  website?: string
+  freeSwimLink?: string
+  swimLessonLink?: string
+  images?: string[]
+  laneInfo?: string
+  latitude: number
+  longitude: number
+  phone?: string
 }
 
 interface UseSearchResponse {
