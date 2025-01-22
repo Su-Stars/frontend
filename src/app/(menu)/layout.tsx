@@ -1,5 +1,5 @@
-import DesktopHeader from '@/components/desktop-header'
-import MobileHeader from '@/components/mobile-header'
+import DesktopHeader from '@/components/common/desktop-header'
+import MobileHeader from '@/components/common/mobile-header'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
