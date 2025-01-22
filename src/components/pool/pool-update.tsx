@@ -94,24 +94,33 @@ export default function PoolUpdate({ triggerTitle, poolId }: PoolUpdateParams) {
     }
   }
 
+  const handleClose = () => {
+    reset()
+    setPreviewImage(null)
+    setIsPoolEditOpen(false)
+  }
+
   return (
     <>
       <Button
         variant="link"
-        className="text-sm text-gray-400 underline hover:text-blue-500"
+        className="p-0 text-sm text-gray-400 underline hover:text-blue-500"
         onClick={() => setIsPoolEditOpen(true)}
       >
         {triggerTitle}
       </Button>
       <ResponsiveDialog
         isOpen={isPoolEditOpen}
-        setIsOpen={setIsPoolEditOpen}
+        setIsOpen={handleClose}
         title="수영장 정보 수정/등록 요청"
       >
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="mt-4 flex flex-col gap-8"
+        >
           <label
             htmlFor="pool-image"
-            className="relative h-[250px] w-[400px] cursor-pointer overflow-hidden rounded-md"
+            className="relative h-[250px] w-full cursor-pointer overflow-hidden rounded-md"
           >
             <input
               {...register('image')}
