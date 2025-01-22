@@ -98,7 +98,7 @@ export default function PoolUpdate({ triggerTitle, poolId }: PoolUpdateParams) {
       >
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="mt-4 flex flex-col gap-8"
+          className="mt-4 flex flex-col gap-8 px-4"
         >
           <label
             htmlFor="pool-image"
