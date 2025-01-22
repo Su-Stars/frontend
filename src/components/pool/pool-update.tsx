@@ -6,26 +6,8 @@ import { FaPersonSwimming } from 'react-icons/fa6'
 import { LuLink } from 'react-icons/lu'
 import { Button } from '../ui/button'
 import { useForm } from 'react-hook-form'
-
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-
-import {
-  Drawer,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from '@/components/ui/drawer'
-
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
-import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { ResponsiveDialog } from '../responsive-dialog'
 
 interface PoolUpdateParams {
