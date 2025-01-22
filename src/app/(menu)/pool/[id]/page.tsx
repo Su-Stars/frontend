@@ -14,9 +14,12 @@ if (typeof window === 'undefined') {
   server.listen()
 }
 
-export default async function Pool({ params }: { params: { id: string } }) {
-  const { id } = params
-  console.log(id)
+export default async function Pool({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const id = (await params).id
   const queryClient = new QueryClient()
 
   try {
@@ -25,6 +28,7 @@ export default async function Pool({ params }: { params: { id: string } }) {
       queryFn: () => getPool(id),
     })
   } catch (error) {
+    console.log(error)
     return <div>에러 발생</div>
   }
 

@@ -1,4 +1,3 @@
-import { usePool } from '@/hooks/usePool'
 import { Pool } from '@/hooks/useSearch'
 import Link from 'next/link'
 import { LuLoaderCircle } from 'react-icons/lu'
@@ -52,7 +51,7 @@ export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {
             <MapMarker position={position} />
             <CustomOverlayMap position={position} yAnchor={2.5}>
               <Link
-                href={pool.website}
+                href={pool.website ? pool.website : ''}
                 className="rounded bg-white px-2 py-1 shadow-md hover:text-blue-500 hover:underline"
               >
                 {pool.name}

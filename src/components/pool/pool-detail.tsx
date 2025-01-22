@@ -10,7 +10,6 @@ import { LuBookmark, LuLink } from 'react-icons/lu'
 
 import { Button } from '../ui/button'
 import Image from 'next/image'
-import { usePool } from '@/hooks/usePool'
 import NoImage from '../common/no-image'
 import { Pool } from '@/hooks/useSearch'
 
