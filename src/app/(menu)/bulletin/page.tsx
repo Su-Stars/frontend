@@ -1,3 +1,3 @@
 export default function Bulletin() {
-  return '오수완'
+  return <div>오수완</div>
 }

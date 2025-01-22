@@ -1,3 +1,5 @@
+import DiaryPage from '@/components/pages/diary-page'
+
 export default function Diary() {
-  return '기록일지'
+  return <DiaryPage />
 }
