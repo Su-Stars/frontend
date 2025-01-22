@@ -8,7 +8,7 @@ import { SwimRecord } from '@/types/swim-logs'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import clsx from 'clsx'
-import { isToday, format, startOfWeek, endOfWeek } from 'date-fns'
+import { isToday, isAfter } from 'date-fns'
 import Link from 'next/link'
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
@@ -119,12 +119,16 @@ function CustomDay({ swimLogs, ...props }: CustomDayProps) {
         {props.date.getDate()}
       </span>
       {/* TODO : 수영 기록이 있을 경우 표시 */}
-      {logsForDay ? (
+      {isAfter(props.date, new Date()) ? (
+        <div className="h-10 w-10 rounded bg-gray-100"></div>
+      ) : logsForDay ? (
+        <Link href={`/diary/${dayString}`}>
+          <div className="h-10 w-10 rounded bg-green-300"></div>
+        </Link>
+      ) : (
         <Link href={`/diary/${dayString}`}>
           <div className="h-10 w-10 rounded bg-gray-300"></div>
         </Link>
-      ) : (
-        <div className="h-10 w-10 rounded bg-gray-300"></div>
       )}
     </button>
   )
