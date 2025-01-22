@@ -14,8 +14,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+
+import {
+  Drawer,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from '@/components/ui/drawer'
+
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import { useMediaQuery } from '@/hooks/useMediaQuery'
+import { ResponsiveDialog } from '../responsive-dialog'
 
 interface PoolUpdateParams {
   triggerTitle: string
@@ -32,6 +43,7 @@ interface FormData {
 
 export default function PoolUpdate({ triggerTitle, poolId }: PoolUpdateParams) {
   const [previewImage, setPreviewImage] = useState<string | null>(null)
+  const [isPoolEditOpen, setIsPoolEditOpen] = useState(false)
   const [isFormValid, setIsFormValid] = useState(false)
   const { register, handleSubmit, watch, reset } = useForm()
   const formValues = watch()
@@ -61,6 +73,7 @@ export default function PoolUpdate({ triggerTitle, poolId }: PoolUpdateParams) {
 
   useEffect(() => {
     const hasValues = Object.values(formValues).some((value) => value)
+
     setIsFormValid(hasValues)
   }, [formValues])
 
@@ -81,24 +94,20 @@ export default function PoolUpdate({ triggerTitle, poolId }: PoolUpdateParams) {
     }
   }
 
-  const handleClose = () => {
-    reset()
-    setPreviewImage(null)
-    setIsFormValid(false)
-  }
-
   return (
-    <Dialog onOpenChange={(isOpen) => !isOpen && handleClose()}>
-      <DialogTrigger className="text-sm text-gray-400 underline hover:text-blue-500">
+    <>
+      <Button
+        variant="link"
+        className="text-sm text-gray-400 underline hover:text-blue-500"
+        onClick={() => setIsPoolEditOpen(true)}
+      >
         {triggerTitle}
-      </DialogTrigger>
-      <DialogContent className="w-fit">
-        <DialogHeader>
-          <DialogTitle className="text-lg font-semibold">
-            수영장 정보 수정/등록 요청
-          </DialogTitle>
-        </DialogHeader>
-
+      </Button>
+      <ResponsiveDialog
+        isOpen={isPoolEditOpen}
+        setIsOpen={setIsPoolEditOpen}
+        title="수영장 정보 수정/등록 요청"
+      >
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
           <label
             htmlFor="pool-image"
@@ -154,7 +163,7 @@ export default function PoolUpdate({ triggerTitle, poolId }: PoolUpdateParams) {
             수정 요청
           </Button>
         </form>
-      </DialogContent>
-    </Dialog>
+      </ResponsiveDialog>
+    </>
   )
 }
