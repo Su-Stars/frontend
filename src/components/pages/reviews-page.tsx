@@ -110,8 +110,9 @@ export default function ReviewsPage({
           />
         ))}
       </div>
+
       {preview && (
-        <Link href={`/temp/${poolId}/reviews`} className="mx-auto">
+        <Link href={`/pools/${poolId}/reviews`} className="mx-auto">
           <Button variant="primary" className="rounded-full">
             리뷰 더보기
           </Button>

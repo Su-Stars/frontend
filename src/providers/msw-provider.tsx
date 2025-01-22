@@ -1,10 +1,8 @@
 'use client'
 
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useEffect } from 'react'
 
 export function MSWProvider({ children }: { children: ReactNode }) {
-  const [isReady, setIsReady] = useState(false)
-
   useEffect(() => {
     async function enableMocking() {
       if (
@@ -16,10 +14,8 @@ export function MSWProvider({ children }: { children: ReactNode }) {
       }
     }
 
-    enableMocking().then(() => setIsReady(true))
+    enableMocking()
   }, [])
-
-  if (!isReady) return null
 
   return <>{children}</>
 }
