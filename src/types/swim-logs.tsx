@@ -1,4 +1,5 @@
-export interface SwimLog {
+export interface SwimLogs {
+  date: string
   logId: number
   startTime: string
   endTime: string
@@ -7,21 +8,8 @@ export interface SwimLog {
   note: string
 }
 
-export interface SwimRecord {
-  date: string
-  logs: SwimLog[]
-}
-
-export interface SwimLogsData {
-  year: number
-  month: number
-  totalDays: number
-  totalLength: number
-  records: SwimRecord[]
-}
-
 export interface SwimLogsResponse {
   status: 'success'
   message: string
-  data: SwimLogsData
+  data: SwimLogs[]
 }

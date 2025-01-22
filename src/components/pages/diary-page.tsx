@@ -3,10 +3,10 @@
 import { useState } from 'react'
 import { Calendar } from '@/components/ui/calendar'
 import { Button } from '@/components/ui/button'
-import { useSwimLogs } from '@/hooks/userSwimLogs'
+import { useSwimLogs } from '@/hooks/useSwimLogs'
 import { format } from 'date-fns'
 
-//TODO : HOC로 감싸서 로그인하지 않은 유저를 걸러냅니다.
+//TODO : 미들웨어를 사용하여 로그인하지 않은 유저를 걸러냅니다.
 export default function DiaryPage() {
   const [currentDate, setCurrentDate] = useState(format(new Date(), 'yyyy-MM'))
 
@@ -22,23 +22,19 @@ export default function DiaryPage() {
   if (isError)
     return <p>Error: {error ? error.message : 'An unknown error occurred'}</p>
 
-  console.log(data)
-
   return (
     <div className="flex flex-col space-y-2">
-      {/*TODO : Add a button to navigate to today*/}
-      <Button>오늘</Button>
       {/*TODO : 유저정보에 따라 닉네임을 보여주고, 다른 리포트내용은 수영기록 데이터에 따라 렌더링 합니다*/}
       <div className="flex flex-col space-y-2 rounded-md bg-white p-4 shadow-md">
         <h2>{currentDate.split('-')[1]}월 평형좌님의 수영분석</h2>
         <div className="grid grid-cols-3 gap-2">
           <div className="flex flex-col">
             <span>총 수영거리</span>
-            <span>{data?.totalLength}</span>
+            <span>1000m</span>
           </div>
           <div className="flex flex-col">
             <span>총 수영횟수</span>
-            <span>{data?.records.length}</span>
+            <span>5회</span>
           </div>
           <div className="flex flex-col">
             <span>총 수영시간</span>
@@ -54,8 +50,9 @@ export default function DiaryPage() {
         onMonthChange={(month) => {
           setCurrentDate(format(month, 'yyyy-MM'))
         }}
-        swimLogs={data?.records}
+        swimLogs={data}
       />
+      {/* TODO : 수영기록 추가 버튼을 오늘날짜 페이지로 이동합니다. */}
       <Button>수영 기록 추가</Button>
     </div>
   )
