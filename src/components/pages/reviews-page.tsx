@@ -44,8 +44,6 @@ export default function ReviewsPage({
     return <div>데이터가 없습니다.</div>
   }
 
-  console.log(preview)
-
   return (
     <section className="flex flex-col space-y-4">
       <ResponsiveDialog
