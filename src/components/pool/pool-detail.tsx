@@ -15,7 +15,7 @@ import Image from 'next/image'
 import NoImage from '../common/no-image'
 import { Pool } from '@/hooks/useSearch'
 import PoolUpdate from './pool-update'
-import PoolDetailItem from './pool-detail-itme'
+import PoolDetailItem from './pool-detail-item'
 
 interface PoolDetailProps {
   pool: Pool
