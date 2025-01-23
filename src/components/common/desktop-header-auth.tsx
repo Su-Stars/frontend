@@ -27,16 +27,16 @@ export default function DesktopHeaderAuth() {
         credentials: 'include',
       })
 
-      // if (!response.ok) {
-      //   const errorMessages: Record<number, string> = {
-      //     401: '인증이 필요합니다.',
-      //     500: '서버 오류가 발생했습니다.',
-      //   }
+      if (!response.ok) {
+        const errorMessages: Record<number, string> = {
+          401: '인증이 필요합니다.',
+          500: '서버 오류가 발생했습니다.',
+        }
 
-      //   const message =
-      //     errorMessages[response.status] || '로그아웃에 실패했습니다.'
-      //   throw new Error(message)
-      // }
+        const message =
+          errorMessages[response.status] || '로그아웃에 실패했습니다.'
+        throw new Error(message)
+      }
 
       clearUser()
       toast({
