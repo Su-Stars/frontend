@@ -17,6 +17,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useUserStore } from '@/providers/user-store-provider'
 import { useToast } from '@/hooks/use-toast'
+import { useState } from 'react'
+import { navigateToHome } from '@/actions/actions'
 
 const formSchema = z.object({
   email: z.string().email('이메일 형식이 아닙니다.'),
@@ -26,6 +28,7 @@ const formSchema = z.object({
 export default function LoginPage() {
   const { setUser } = useUserStore((state) => state)
   const { toast } = useToast()
+  const [loading, setLoading] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -37,6 +40,7 @@ export default function LoginPage() {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true)
     try {
       const response = await fetch('https://nest-aws.site/api/v1/auth/login', {
         method: 'POST',
@@ -59,16 +63,20 @@ export default function LoginPage() {
         throw new Error(message)
       }
 
+      // 3. Update the user store with the user data.
       setUser({
         id: data.id,
         email: data.email,
         nickname: data.nickname,
         role: data.role,
       })
+
+      // 4. Show a success toast message and navigate to the home page.
       toast({
         title: '로그인 성공',
         description: '환영합니다!',
       })
+      navigateToHome()
     } catch (error) {
       console.error(error)
       toast({
@@ -77,8 +85,11 @@ export default function LoginPage() {
         description:
           error instanceof Error ? error.message : '로그인에 실패했습니다.',
       })
+    } finally {
+      setLoading(false)
     }
   }
+
   return (
     <div className="flex flex-col justify-center">
       <div>
@@ -117,7 +128,12 @@ export default function LoginPage() {
           <Link href="/find-password" className="text-blue-500 hover:underline">
             비밀번호를 잊으셨나요?
           </Link>
-          <Button type="submit" variant="primary" className="w-full">
+          <Button
+            type="submit"
+            variant="primary"
+            className="w-full"
+            disabled={loading}
+          >
             로그인
           </Button>
         </form>
