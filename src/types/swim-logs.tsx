@@ -1,23 +1,22 @@
 export interface SwimLog {
   logId: number
-  startTime: string
-  endTime: string
-  laneLength: number
-  totalSwimLength: number
-  note: string
-}
-
-export interface SwimRecord {
-  date: string
-  logs: SwimLog[]
+  startTime: string | null
+  endTime: string | null
+  laneLength: number | null
+  swimCategory: string
+  swimLength: number
+  note: string | null
+  created_at: string
 }
 
 export interface SwimLogsData {
-  year: number
-  month: number
-  totalDays: number
-  totalLength: number
-  records: SwimRecord[]
+  year: string
+  month: string
+  day?: string
+  totalSwimLength: number
+  records: {
+    [date: string]: SwimLog[]
+  }
 }
 
 export interface SwimLogsResponse {
