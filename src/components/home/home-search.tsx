@@ -20,21 +20,19 @@ export default function HomeSearch() {
   const [keyword, setKeyword] = useState<string>('all')
   const { center } = useCenterStore()
 
-  const { districts, isRegionLoading } = useRegions({
-    code: selectedRegion?.code || '',
+  const { districts } = useRegions({
+    regionName: selectedRegion?.name || '',
   })
 
-  const { nearbySwimmingPools, isNearbyLoading, isNearbyError, nearbyError } =
-    useNearby({
-      latitude: center.lat,
-      longitude: center.lng,
-    })
+  const { nearbySwimmingPools, isNearbyLoading, isNearbyError } = useNearby({
+    latitude: center.lat,
+    longitude: center.lng,
+  })
 
-  const { searchResults, isSearchLoading, isSearchError, searchError } =
-    useSearch({
-      region: finalRegion,
-      keyword,
-    })
+  const { searchResults, isSearchLoading, isSearchError } = useSearch({
+    region: finalRegion,
+    keyword,
+  })
 
   // 검색 기능 수행
   const handleSubmit = (e: React.FormEvent) => {
@@ -70,7 +68,7 @@ export default function HomeSearch() {
     setSelectedRegion(null) // 필터의 검색 지역 초기화
   }
 
-  // 지역구의 전체 버튼 클릭 시
+  // 지역 전체 버튼 클릭 시
   // ex) 경기도 전체에 대해 검색을 실행
   const clickAllDistrict = (region: string) => {
     setAddress(`${region} 전체`) // 해당 지역으로 표시
@@ -113,7 +111,6 @@ export default function HomeSearch() {
         clickAllRegion={clickAllRegion}
         parseDistrict={parseDistrict}
         districts={districts || { result: [] }}
-        isRegionLoading={isRegionLoading}
       />
 
       {/*검색어 입력 */}
