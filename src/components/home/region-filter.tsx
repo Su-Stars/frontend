@@ -87,55 +87,13 @@ export default function RegionFilter({
                       onClick={() => clickDistrict(district.full_addr)}
                     >
                       <span className="text-md font-semibold">
-                        {parseDistrict(district.full_addr)}
+                        {district.addr_name}
                       </span>
                     </Button>
                   </DialogClose>
                 ))}
               </>
-            ) : (
-              REGION.map((region) =>
-                region.name === '전국' ? (
-                  <DialogClose asChild key={region.code}>
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="w-1/2 text-black"
-                      onClick={clickAllRegion}
-                    >
-                      <span className="text-md font-semibold">
-                        {region.name}
-                      </span>
-                    </Button>
-                  </DialogClose>
-                ) : (
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="w-1/2 text-black"
-                    onClick={() => setSelectedRegion(region)}
-                    key={region.code}
-                  >
-                    <span className="text-md font-semibold">{region.name}</span>
-                  </Button>
-                ),
-              )
-            )}
-            {/* 지역 로딩 상태 중 스켈레톤 표시*/}
-            {/* {isRegionLoading && (
-              <>
-                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
-                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
-                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
-                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
-                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
-                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
-                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
-                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
-                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
-                <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
-              </>
-            )} */}
+            ) : null}
           </DialogDescription>
         </DialogHeader>
       </DialogContent>
