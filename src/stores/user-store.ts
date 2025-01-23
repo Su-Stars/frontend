@@ -1,4 +1,5 @@
 import { createStore } from 'zustand/vanilla'
+import { persist } from 'zustand/middleware'
 
 export type User = {
   id: number
@@ -27,9 +28,18 @@ export const defaultInitState: UserState = {
 }
 
 export const createUserStore = (initState: UserState = defaultInitState) => {
-  return createStore<UserStore>()((set) => ({
-    ...initState,
-    setUser: (user) => set({ user }),
-    clearUser: () => set({ user: null }),
-  }))
+  return createStore<UserStore>()(
+    persist(
+      (set) => ({
+        ...initState,
+        setUser: (user) => set({ user }),
+        clearUser: () => set({ user: null }),
+      }),
+      {
+        name: 'user-storage',
+        // 선택적: 특정 필드만 저장
+        // partialize: (state) => ({ user: state.user })
+      },
+    ),
+  )
 }
