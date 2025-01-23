@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Pool } from './useSearch'
-import { getPool } from '@/action/get-pool'
+import { getPool } from '@/actions/get-pool'
 
 interface usePoolParams {
   poolId: string

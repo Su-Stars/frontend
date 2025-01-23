@@ -5,7 +5,7 @@ import {
 } from '@tanstack/react-query'
 
 import PoolPage from '@/components/pages/pool-page'
-import { getPool } from '@/action/get-pool'
+import { getPool } from '@/actions/get-pool'
 import { Pool as IPool } from '@/hooks/useSearch'
 
 export default async function Pool({
