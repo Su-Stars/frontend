@@ -44,6 +44,7 @@ export default function LoginPage() {
     try {
       const response = await fetch('https://nest-aws.site/api/v1/auth/login', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
