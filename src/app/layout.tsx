@@ -4,6 +4,7 @@ import { server } from '@/mocks/node'
 import GlobalProvider from '@/providers/global-provider'
 import localFont from 'next/font/local'
 import { GoogleAnalytics } from '@next/third-parties/google'
+import { Toaster } from '@/components/ui/toaster'
 
 // 개발 환경에서만 MSW 서버를 시작합니다.
 if (process.env.NODE_ENV === 'development') {
@@ -61,6 +62,7 @@ export default function RootLayout({
       >
         <GoogleAnalytics gaId={GA_ID} />
         <GlobalProvider>{children}</GlobalProvider>
+        <Toaster />
       </body>
     </html>
   )
