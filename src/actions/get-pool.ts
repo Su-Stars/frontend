@@ -1,6 +1,8 @@
 export const getPool = async (poolId: string) => {
   try {
-    const response = await fetch(`http://localhost:9999/api/v1/pools/${poolId}`)
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/pools/${poolId}`,
+    )
     const json = await response.json()
 
     // API 응답 구조에 맞춰 처리

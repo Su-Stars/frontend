@@ -93,7 +93,34 @@ export default function RegionFilter({
                   </DialogClose>
                 ))}
               </>
-            ) : null}
+            ) : (
+              REGION.map((region) =>
+                region.name === '전국' ? (
+                  <DialogClose asChild key={region.name}>
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="w-1/2 text-black"
+                      onClick={clickAllRegion}
+                    >
+                      <span className="text-md font-semibold">
+                        {region.name}
+                      </span>
+                    </Button>
+                  </DialogClose>
+                ) : (
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="w-1/2 text-black"
+                    onClick={() => setSelectedRegion(region)}
+                    key={region.name}
+                  >
+                    <span className="text-md font-semibold">{region.name}</span>
+                  </Button>
+                ),
+              )
+            )}
           </DialogDescription>
         </DialogHeader>
       </DialogContent>
