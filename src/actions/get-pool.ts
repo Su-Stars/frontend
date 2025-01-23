@@ -10,9 +10,9 @@ export const getPool = async (poolId: string) => {
       throw new Error(json.message)
     }
 
-    return json.data
+    return json.data[0]
   } catch (error) {
     console.log(error)
-    throw error
+    return []
   }
 }

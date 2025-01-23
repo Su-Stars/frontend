@@ -14,6 +14,10 @@ interface PoolKaKaoMapParams {
 }
 
 export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {
+  const [center, setCenter] = useState({
+    lat: pool.latitude,
+    lng: pool.longitude,
+  })
   const [loading, error] = useKakaoLoader({
     appkey: process.env.NEXT_PUBLIC_KAKAO_APP_KEY!,
   })

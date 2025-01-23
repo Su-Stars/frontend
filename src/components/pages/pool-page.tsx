@@ -25,7 +25,6 @@ export default function PoolPage({ poolId }: PoolPageParams) {
       <section className="flex flex-col gap-2">
         <header className="flex w-full items-center gap-4 border-b-slate-200 bg-white">
           <Skeleton className="h-4 w-full" />
-          <h2 className="text-2xl font-bold">{pool?.name}</h2>
         </header>
         <div className="relative h-[200px] w-full">
           <Skeleton className="h-full w-full" />

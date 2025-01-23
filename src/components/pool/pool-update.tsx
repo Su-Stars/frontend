@@ -86,7 +86,7 @@ export default function PoolUpdate({ triggerTitle, poolId }: PoolUpdateParams) {
     <>
       <Button
         variant="link"
-        className="p-0 text-sm text-gray-400 underline hover:text-blue-500"
+        className="text-md m-0 p-0 text-gray-400 underline hover:text-blue-500"
         onClick={() => setIsPoolEditOpen(true)}
       >
         {triggerTitle}
