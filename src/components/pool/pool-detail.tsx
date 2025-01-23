@@ -12,6 +12,7 @@ import { Button } from '../ui/button'
 import Image from 'next/image'
 import NoImage from '../common/no-image'
 import { Pool } from '@/hooks/useSearch'
+import PoolUpdate from './pool-update'
 
 interface PoolDetailProps {
   pool: Pool
@@ -75,13 +76,7 @@ export default function PoolDetail({ pool }: PoolDetailProps) {
             <dd>{pool?.phone}</dd>
           </div>
           <div>
-            {/*정보 수정 페이지 제작 필요 */}
-            <Link
-              href=""
-              className="flex items-center text-center text-sm text-gray-400 underline hover:text-blue-500"
-            >
-              정보 수정 요청하기
-            </Link>
+            <PoolUpdate triggerTitle="정보 수정 요청하기" poolId={pool.id} />
           </div>
         </div>
         <div>
@@ -90,12 +85,10 @@ export default function PoolDetail({ pool }: PoolDetailProps) {
             {pool?.laneInfo ? (
               pool!.laneInfo
             ) : (
-              <Link
-                href=""
-                className="flex items-center text-center text-sm text-blue-500 underline"
-              >
-                레인 정보를 등록해주세요
-              </Link>
+              <PoolUpdate
+                triggerTitle="레인 정보 수정 등록하기"
+                poolId={pool.id}
+              />
             )}
           </dd>
         </div>
