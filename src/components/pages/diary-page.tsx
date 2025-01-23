@@ -22,6 +22,8 @@ export default function DiaryPage() {
   if (isError)
     return <p>Error: {error ? error.message : 'An unknown error occurred'}</p>
 
+  console.log(data)
+
   return (
     <div className="flex flex-col space-y-2">
       {/*TODO : 유저정보에 따라 닉네임을 보여주고, 다른 리포트내용은 수영기록 데이터에 따라 렌더링 합니다*/}
@@ -30,7 +32,7 @@ export default function DiaryPage() {
         <div className="grid grid-cols-3 gap-2">
           <div className="flex flex-col">
             <span>총 수영거리</span>
-            <span>1000m</span>
+            <span></span>
           </div>
           <div className="flex flex-col">
             <span>총 수영횟수</span>
@@ -50,7 +52,7 @@ export default function DiaryPage() {
         onMonthChange={(month) => {
           setCurrentDate(format(month, 'yyyy-MM'))
         }}
-        swimLogs={data}
+        records={data?.records}
       />
       {/* TODO : 수영기록 추가 버튼을 오늘날짜 페이지로 이동합니다. */}
       <Button>수영 기록 추가</Button>

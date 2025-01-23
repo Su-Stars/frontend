@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { SwimLogs, SwimLogsResponse } from '@/types/swim-logs'
+import { SwimLogsData, SwimLogsResponse } from '@/types/swim-logs'
 
 interface useSwimlogsParams {
   year: number
@@ -8,7 +8,7 @@ interface useSwimlogsParams {
 }
 
 export const useSwimLogs = ({ year, month, date }: useSwimlogsParams) => {
-  const { data, isPending, isError, error } = useQuery<SwimLogs[]>({
+  const { data, isPending, isError, error } = useQuery<SwimLogsData>({
     queryKey: ['swimLogs', year, month, ...(date ? [date] : [])],
     queryFn: async () => {
       try {

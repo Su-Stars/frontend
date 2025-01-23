@@ -4,7 +4,7 @@ import * as React from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { DayPicker, DayProps, useDayRender } from 'react-day-picker'
 import { ko } from 'date-fns/locale'
-import { SwimLogs } from '@/types/swim-logs'
+import { SwimLog } from '@/types/swim-logs'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import clsx from 'clsx'
@@ -12,11 +12,13 @@ import { isToday, isAfter } from 'date-fns'
 import Link from 'next/link'
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
-  swimLogs?: SwimLogs[]
+  records?: {
+    [date: string]: SwimLog[]
+  }
 }
 
 function Calendar({
-  swimLogs,
+  records,
   className,
   classNames,
   showOutsideDays = true,
@@ -73,7 +75,7 @@ function Calendar({
         IconRight: ({ className, ...props }) => (
           <ChevronRight className={cn('h-12 w-12', className)} {...props} />
         ),
-        Day: (dayProps) => <CustomDay {...dayProps} swimLogs={swimLogs} />,
+        Day: (dayProps) => <CustomDay {...dayProps} records={records} />,
       }}
       locale={ko}
       {...props}
@@ -85,17 +87,28 @@ Calendar.displayName = 'Calendar'
 export { Calendar }
 
 interface CustomDayProps extends DayProps {
-  swimLogs?: SwimLogs[]
+  records?: {
+    [date: string]: SwimLog[]
+  }
 }
 
-function CustomDay({ swimLogs, ...props }: CustomDayProps) {
+function CustomDay({ records, ...props }: CustomDayProps) {
   const buttonRef = React.useRef<HTMLButtonElement>(null!)
   const dayRender = useDayRender(props.date, props.displayMonth, buttonRef)
 
   // 날짜를 'YYYY-MM-DD' 형식으로 변환
-  const dayString = props.date.toISOString().split('T')[0]
+  const dayString = props.date
+    .toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      timeZone: 'Asia/Seoul',
+    })
+    .split('. ')
+    .join('-')
+    .slice(0, -1)
   // 해당 날짜의 수영 기록 찾기
-  const logsForDay = swimLogs?.find((log) => log.date === dayString)
+  const logsForDay = records?.[dayString]
 
   if (dayRender.isHidden) {
     return <div role="gridcell" />
