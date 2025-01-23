@@ -10,7 +10,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { LuMapPin, LuChevronDown, LuChevronLeft } from 'react-icons/lu'
 import { REGION, Region } from '@/lib/constants'
-import { DistrictResponse } from '@/hooks/useRegions'
+import { District } from '@/hooks/useRegions'
 
 interface RegionFilterProps {
   address: string
@@ -21,8 +21,7 @@ interface RegionFilterProps {
   clickDistrict: (fullAddr: string) => void
   clickAllRegion: () => void
   parseDistrict: (fullAddr: string) => string
-  districts: DistrictResponse
-  isRegionLoading: boolean
+  districts: District[]
 }
 
 export default function RegionFilter({
@@ -35,7 +34,6 @@ export default function RegionFilter({
   clickAllRegion,
   parseDistrict,
   districts,
-  isRegionLoading,
 }: RegionFilterProps) {
   return (
     <Dialog>
@@ -80,7 +78,7 @@ export default function RegionFilter({
                     <span className="text-md font-semibold">전체</span>
                   </Button>
                 </DialogClose>
-                {districts?.result.map((district) => (
+                {districts?.map((district) => (
                   <DialogClose asChild key={district.cd}>
                     <Button
                       size="lg"
@@ -124,7 +122,7 @@ export default function RegionFilter({
               )
             )}
             {/* 지역 로딩 상태 중 스켈레톤 표시*/}
-            {isRegionLoading && (
+            {/* {isRegionLoading && (
               <>
                 <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
                 <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
@@ -137,7 +135,7 @@ export default function RegionFilter({
                 <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
                 <span className="h-10 w-1/2 animate-pulse rounded-md border border-input shadow-sm" />
               </>
-            )}
+            )} */}
           </DialogDescription>
         </DialogHeader>
       </DialogContent>
