@@ -13,7 +13,7 @@ export const dummy: Pool[] = [
     images: ['https://www.suwonudc.co.kr/upload/edit/2016_02_24_094316.jpg'],
     laneInfo: '25m * 6',
     latitude: 37.2945,
-    longitude: 127.0094,
+    longtitude: 127.0094,
     phone: '010-1111-1111',
   },
   {
@@ -30,7 +30,7 @@ export const dummy: Pool[] = [
       'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTAzMjJfMjIz%2FMDAxNjE2Mzk1MzQ4MTg1.-mAg6CMxTlpXnz_xQNfV7x_m3jd23c-TAVrGRynjg-og.ap8kPNBzFnAPNp9XeRqVzFJG_xGjLCe-jCJyaiDijsIg.JPEG.ikozen%2F%25BC%25F6%25C1%25A4%25BD%25BA%25C6%25F7%25C3%25F7%25BC%25BE%25C5%25CD.jpg&type=ff332_332',
     ],
     latitude: 37.2935,
-    longitude: 127.0105,
+    longtitude: 127.0105,
     phone: '010-1111-1111',
   },
   {
@@ -47,7 +47,7 @@ export const dummy: Pool[] = [
       'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20220411_13%2F1649668383280Cg0tf_JPEG%2FKakaoTalk_20220411_175434662_04.jpg',
     ],
     latitude: 37.5505,
-    longitude: 126.953,
+    longtitude: 126.953,
     phone: '010-1111-1111',
   },
   {
@@ -64,7 +64,7 @@ export const dummy: Pool[] = [
       'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20190620_135%2F1561017654985woPuG_PNG%2FrQIlb7N9ElFAqcdHVMLn6MyO.png',
     ],
     latitude: 37.5101,
-    longitude: 127.0668,
+    longtitude: 127.0668,
     phone: '010-1111-1111',
   },
   {
@@ -81,7 +81,7 @@ export const dummy: Pool[] = [
       'https://search.pstatic.net/common/?src=https%3A%2F%2Fnaverbooking-phinf.pstatic.net%2F20230911_240%2F1694416081518p78wY_JPEG%2FKakaoTalk_20230911_160209165_01.jpg',
     ],
     latitude: 37.5384,
-    longitude: 127.1238,
+    longtitude: 127.1238,
     phone: '010-1111-1111',
   },
   {
@@ -98,7 +98,7 @@ export const dummy: Pool[] = [
       'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTAzMjJfMjIz%2FMDAxNjE2Mzk1MzQ4MTg1.-mAg6CMxTlpXnz_xQNfV7x_m3jd23c-TAVrGRynjg-og.ap8kPNBzFnAPNp9XeRqVzFJG_xGjLCe-jCJyaiDijsIg.JPEG.ikozen%2F%25BC%25F6%25C1%25A4%25BD%25BA%25C6%25F7%25C3%25F7%25BC%25BE%25C5%25CD.jpg&type=ff332_332',
     ],
     latitude: 37.5304,
-    longitude: 126.8753,
+    longtitude: 126.8753,
     phone: '010-1111-1111',
   },
 ]
