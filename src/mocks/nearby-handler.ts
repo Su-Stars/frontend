@@ -31,15 +31,15 @@ export const nearbyHandlers = [
     const url = new URL(request.url)
 
     const latitude = Number(url.searchParams.get('latitude'))
-    const longitude = Number(url.searchParams.get('longitude'))
+    const longtitude = Number(url.searchParams.get('longtitude'))
     const radius = Number(url.searchParams.get('radius')) || 5
 
     const filteredPools = dummy.filter((pool) => {
       const distance = getDistanceFromLatLonInKm(
         latitude,
-        longitude,
+        longtitude,
         pool.latitude,
-        pool.longitude,
+        pool.longtitude,
       )
       return distance <= radius
     })
