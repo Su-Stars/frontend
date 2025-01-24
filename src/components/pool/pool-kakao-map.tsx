@@ -14,6 +14,8 @@ interface PoolKaKaoMapParams {
 }
 
 export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {
+  const position = { lat: pool.latitude, lng: pool.longtitude }
+
   const [loading, error] = useKakaoLoader({
     appkey: process.env.NEXT_PUBLIC_KAKAO_APP_KEY!,
   })
@@ -28,14 +30,11 @@ export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {
   }
 
   if (error) {
-    ;<div className="flex h-[300px] w-full items-center justify-center bg-gray-100">
-      <div>지도를 불러오는 데 실패했습니다</div>
-    </div>
-  }
-
-  const position = {
-    lat: pool.latitude,
-    lng: pool.longitude,
+    return (
+      <div className="flex h-[300px] w-full items-center justify-center bg-gray-100">
+        <div>지도를 불러오는 데 실패했습니다</div>
+      </div>
+    )
   }
 
   return (
@@ -49,7 +48,7 @@ export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {
         {isMapReady && (
           <>
             <MapMarker position={position} />
-            <CustomOverlayMap position={position} yAnchor={2.5}>
+            <CustomOverlayMap position={position} yAnchor={2.9}>
               <Link
                 href={pool.website ? pool.website : ''}
                 className="rounded bg-white px-2 py-1 shadow-md hover:text-blue-500 hover:underline"

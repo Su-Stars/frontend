@@ -36,7 +36,7 @@ export default function PoolUpdate({ triggerTitle, poolId }: PoolUpdateParams) {
   const onSubmit = async (data: FormData) => {
     try {
       const res = await fetch(
-        `나중에 실제 server URL 추가/api/v1/pools/${poolId}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/api/v1/pools/${poolId}`,
         {
           method: 'PATCH',
           headers: {
@@ -86,7 +86,7 @@ export default function PoolUpdate({ triggerTitle, poolId }: PoolUpdateParams) {
     <>
       <Button
         variant="link"
-        className="p-0 text-sm text-gray-400 underline hover:text-blue-500"
+        className="text-md m-0 p-0 text-gray-400 underline hover:text-blue-500"
         onClick={() => setIsPoolEditOpen(true)}
       >
         {triggerTitle}

@@ -20,8 +20,15 @@ export interface Pool {
   images?: string[]
   laneInfo?: string
   latitude: number
-  longitude: number
+  longtitude: number
   phone?: string
+  isDivingAllowed?: boolean
+  isFinsAllowed?: boolean
+  isKickboardAllowed?: boolean
+  isKickboardRental?: boolean
+  isPhotoAllowed?: boolean
+  isSoapProvided?: boolean
+  isTowelProvided?: boolean
 }
 
 interface UseSearchResponse {
@@ -44,7 +51,6 @@ export const useSearch = ({
   page = 1,
   limit = 10,
 }: UseSearchParams) => {
-  // useQuery는 항상 호출하되, enabled 옵션으로 실행 조건을 제어
   const {
     data: searchResults = defaultResponse,
     isLoading: isSearchLoading,
@@ -54,7 +60,7 @@ export const useSearch = ({
     queryKey: ['search', region, keyword, page, limit],
     queryFn: async () => {
       try {
-        const url = new URL('http://localhost:9999/api/v1/pools')
+        const url = new URL(`${process.env.NEXT_PUBLIC_SERVER_URL}/pools`)
         url.search = new URLSearchParams({
           region,
           keyword,
