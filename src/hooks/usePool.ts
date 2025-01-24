@@ -11,10 +11,11 @@ export const usePool = ({ poolId }: usePoolParams) => {
     data: pool,
     isLoading,
     isError,
+    error,
   } = useQuery<Pool>({
     queryKey: ['pool', poolId],
     queryFn: () => getPool(poolId),
   })
 
-  return { pool, isLoading, isError }
+  return { pool, isLoading, isError, error }
 }

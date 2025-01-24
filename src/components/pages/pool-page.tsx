@@ -13,10 +13,10 @@ interface PoolPageParams {
 }
 
 export default function PoolPage({ poolId }: PoolPageParams) {
-  const { pool, isError } = usePool({ poolId })
+  const { pool, isError, error } = usePool({ poolId })
 
   if (isError || !pool) {
-    return <div>데이터를 불러오는 중 오류가 발생했습니다.</div>
+    return <div>데이터를 불러오는 중 오류가 발생했습니다.{error?.message}</div>
   }
 
   return (

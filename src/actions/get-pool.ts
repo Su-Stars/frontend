@@ -3,16 +3,22 @@ export const getPool = async (poolId: string) => {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/pools/${poolId}`,
     )
-    const json = await response.json()
+    if (!response.ok) {
+      const errorMessages: Record<number, string> = {
+        400: '잘못된 요청입니다.',
+        404: '수영장을 찾을 수 없습니다.',
+        500: '서버 오류가 발생했습니다.',
+      }
 
-    // API 응답 구조에 맞춰 처리
-    if (json.status === 'error') {
-      throw new Error(json.message)
+      const message =
+        errorMessages[response.status] || '수영장을 찾을 수 없습니다.'
+
+      throw new Error(message)
     }
+    const json = await response.json()
 
     return json.data[0]
   } catch (error) {
-    console.log(error)
-    return []
+    throw error
   }
 }
