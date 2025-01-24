@@ -20,18 +20,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useState } from 'react'
+import { useToast } from '@/hooks/use-toast'
+import { SwimLogPayload, useAddSwimLog } from '@/hooks/useAddSwimLogs'
 
 interface SwimLogsFormProps {
   date: string
+  setIsOpen: (isOpen: boolean) => void
 }
 
 const formSchema = z
   .object({
-    startTime: z.string().optional(),
-    endTime: z.string().optional(),
-    swimCategory: z.string().optional(),
-    laneLength: z.string().optional(),
-    totalSwimLength: z
+    start_time: z.string().optional(),
+    end_time: z.string().optional(),
+    swim_category: z.string().optional(),
+    lane_length: z.string().regex(/^\d+$/, '숫자만 입력해주세요').optional(),
+    swim_length: z
       .string({
         message: '총 수영 거리를 입력해주세요',
       })
@@ -43,8 +47,8 @@ const formSchema = z
   })
   .refine(
     (data) => {
-      if (!data.startTime || !data.endTime) return true
-      return data.startTime < data.endTime
+      if (!data.start_time || !data.end_time) return true
+      return data.start_time < data.end_time
     },
     {
       message: '종료 시간은 시작 시간보다 늦어야 합니다',
@@ -52,18 +56,62 @@ const formSchema = z
     },
   )
 
-export default function SwimLogsForm({ date }: SwimLogsFormProps) {
+export default function SwimLogsForm({ date, setIsOpen }: SwimLogsFormProps) {
+  const [loading, setLoading] = useState(false)
+  const { toast } = useToast()
+  const [year, month, day] = date.split('-').map(Number)
+
+  const addSwimLog = useAddSwimLog({
+    year,
+    month,
+    day,
+  })
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      note: '',
+      swim_length: '',
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const numberFields = ['lane_length', 'swim_length']
+
+    const formPayload = Object.entries(values).reduce(
+      (acc, [key, value]) => {
+        if (value !== undefined) {
+          // 숫자로 변환이 필요한 필드인 경우
+          if (numberFields.includes(key)) {
+            acc[key] = Number(value)
+          } else {
+            acc[key] = value
+          }
+        }
+        return acc
+      },
+      {} as Record<string, any>,
+    )
+
+    // date 추가
+    formPayload.swim_date = date
+
+    setLoading(true)
+    try {
+      await addSwimLog.mutateAsync(formPayload as SwimLogPayload)
+
+      setIsOpen(false)
+      toast({
+        title: '수영 기록 추가 성공',
+        description: '수영 기록이 추가되었습니다.',
+      })
+    } catch (error: any) {
+      toast({
+        title: '수영 기록 추가 실패',
+        description: error.message,
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -75,7 +123,7 @@ export default function SwimLogsForm({ date }: SwimLogsFormProps) {
             <div className="flex items-center gap-1">
               <FormField
                 control={form.control}
-                name="startTime"
+                name="start_time"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -88,7 +136,7 @@ export default function SwimLogsForm({ date }: SwimLogsFormProps) {
               <div className="text-center">~</div>
               <FormField
                 control={form.control}
-                name="endTime"
+                name="end_time"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -105,7 +153,7 @@ export default function SwimLogsForm({ date }: SwimLogsFormProps) {
           <FormLabel>영법</FormLabel>
           <FormField
             control={form.control}
-            name="swimCategory"
+            name="swim_category"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -135,7 +183,7 @@ export default function SwimLogsForm({ date }: SwimLogsFormProps) {
           <FormLabel>레인 길이</FormLabel>
           <FormField
             control={form.control}
-            name="laneLength"
+            name="lane_length"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -150,7 +198,7 @@ export default function SwimLogsForm({ date }: SwimLogsFormProps) {
           <FormLabel>총 거리*</FormLabel>
           <FormField
             control={form.control}
-            name="totalSwimLength"
+            name="swim_length"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -176,9 +224,13 @@ export default function SwimLogsForm({ date }: SwimLogsFormProps) {
             )}
           />
         </div>
-        {/* TODO : 필수값이 입력되지 않은 경우 버튼을 비활성화합니다
-        TODO : 로딩중 버튼을 비활성화합니다. */}
-        <Button className="w-full" variant="primary" type="submit">
+        {/* TODO : 로딩중 버튼을 비활성화합니다. */}
+        <Button
+          className="w-full"
+          variant="primary"
+          type="submit"
+          disabled={loading}
+        >
           추가하기
         </Button>
       </form>
