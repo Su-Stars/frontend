@@ -7,14 +7,14 @@ import {
   MapMarker,
   useKakaoLoader,
 } from 'react-kakao-maps-sdk'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface PoolKaKaoMapParams {
   pool: Pool
 }
 
 export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {
-  const [center, setCenter] = useState({
+  const [position, setPosition] = useState({
     lat: pool.latitude,
     lng: pool.longitude,
   })
@@ -22,6 +22,13 @@ export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {
     appkey: process.env.NEXT_PUBLIC_KAKAO_APP_KEY!,
   })
   const [isMapReady, setIsMapReady] = useState(false)
+
+  useEffect(() => {
+    setPosition({
+      lat: pool.latitude,
+      lng: pool.longitude,
+    })
+  }, [loading])
 
   if (loading) {
     return (
@@ -35,11 +42,6 @@ export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {
     ;<div className="flex h-[300px] w-full items-center justify-center bg-gray-100">
       <div>지도를 불러오는 데 실패했습니다</div>
     </div>
-  }
-
-  const position = {
-    lat: pool.latitude,
-    lng: pool.longitude,
   }
 
   return (

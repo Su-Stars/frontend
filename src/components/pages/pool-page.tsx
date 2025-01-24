@@ -14,31 +14,12 @@ interface PoolPageParams {
 }
 
 export default function PoolPage({ poolId }: PoolPageParams) {
-  const { pool, isLoading, isError } = usePool({ poolId })
+  const { pool, isError } = usePool({ poolId })
 
   if (isError || !pool) {
     return <div>데이터를 불러오는 중 오류가 발생했습니다.</div>
   }
 
-  if (isLoading) {
-    return (
-      <section className="flex flex-col gap-2">
-        <header className="flex w-full items-center gap-4 border-b-slate-200 bg-white">
-          <Skeleton className="h-4 w-full" />
-        </header>
-        <div className="relative h-[200px] w-full">
-          <Skeleton className="h-full w-full" />
-        </div>
-        <div className="flex flex-col gap-2 *:flex *:items-center *:gap-4">
-          <Skeleton className="h-4 w-[250px]" />
-          <Skeleton className="h-4 w-[200px]" />
-          <Skeleton className="h-4 w-[200px]" />
-          <Skeleton className="h-4 w-[200px]" />
-          <Skeleton className="h-4 w-[200px]" />
-        </div>
-      </section>
-    )
-  }
   return (
     <div className="flex flex-col space-y-10">
       <PoolDetail pool={pool} />
