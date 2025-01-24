@@ -7,18 +7,15 @@ import {
   MapMarker,
   useKakaoLoader,
 } from 'react-kakao-maps-sdk'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 interface PoolKaKaoMapParams {
   pool: Pool
 }
 
 export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {
-  console.log(pool)
-  const [position, setPosition] = useState({
-    lat: pool.latitude,
-    lng: pool.longtitude,
-  })
+  const position = { lat: pool.latitude, lng: pool.longtitude }
+
   const [loading, error] = useKakaoLoader({
     appkey: process.env.NEXT_PUBLIC_KAKAO_APP_KEY!,
   })

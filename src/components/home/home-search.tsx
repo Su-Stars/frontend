@@ -26,7 +26,7 @@ export default function HomeSearch() {
 
   const { nearbySwimmingPools, isNearbyLoading, isNearbyError } = useNearby({
     latitude: center.lat,
-    longitude: center.lng,
+    longtitude: center.lng,
   })
 
   const { searchResults, isSearchLoading, isSearchError } = useSearch({
