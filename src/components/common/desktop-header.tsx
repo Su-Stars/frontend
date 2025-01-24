@@ -8,7 +8,9 @@ export default function DesktopHeader() {
     <header className="sticky left-0 right-0 top-0 z-50 hidden w-full items-center justify-center gap-40 bg-white shadow-sm md:flex">
       <Link href="/" className="flex items-center justify-center gap-1">
         <Image src="/logo_image.svg" width={55} height={55} alt="logo" />
-        <h1 className="font-bagle-fat-one text-5xl text-blue-500">어푸!</h1>
+        <h1 className="font-pretendard text-5xl font-bold text-blue-500">
+          어푸!
+        </h1>
       </Link>
       <DesktopHeaderNav />
       <DesktopHeaderAuth />

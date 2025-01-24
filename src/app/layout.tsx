@@ -40,13 +40,6 @@ const pretendard = localFont({
   adjustFontFallback: 'Arial', // 폰트 메트릭 조정을 위한 기준 폰트(디폴트 Arial)
 })
 
-// TODO : BagelFatOne 폰트를 로고에서만 사용한다면 리소스 낭비임으로 로고를 이미지로 교체 후 폰트를 삭제할수도 있음.
-const bagelFatOne = localFont({
-  src: '../static/fonts/BagelFatOne-Regular.ttf',
-  variable: '--font-bagel-fat-one',
-  weight: '400',
-})
-
 // Google Analytics ID
 const GA_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || ''
 
@@ -58,7 +51,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${pretendard.variable} ${bagelFatOne.variable} font-pretendard antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${pretendard.variable} font-pretendard antialiased`}
       >
         <GoogleAnalytics gaId={GA_ID} />
         <GlobalProvider>{children}</GlobalProvider>
