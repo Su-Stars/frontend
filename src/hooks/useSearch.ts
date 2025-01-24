@@ -20,7 +20,7 @@ export interface Pool {
   images?: string[]
   laneInfo?: string
   latitude: number
-  longitude: number
+  longtitude: number
   phone?: string
   isDivingAllowed?: boolean
   isFinsAllowed?: boolean

@@ -9,13 +9,13 @@ interface UseNearbyResponse {
 
 interface UseNearbyParams {
   latitude: number
-  longitude: number
+  longtitude: number
   radius?: number
 }
 
 export const useNearby = ({
   latitude,
-  longitude,
+  longtitude,
   radius = 5,
 }: UseNearbyParams) => {
   const {
@@ -24,11 +24,11 @@ export const useNearby = ({
     isError: isNearbyError,
     error: nearbyError,
   } = useQuery<UseNearbyResponse>({
-    queryKey: [latitude, longitude, radius],
+    queryKey: [latitude, longtitude, radius],
     queryFn: async () => {
       const params = new URLSearchParams({
         latitude: latitude.toString(),
-        longitude: longitude.toString(),
+        longitude: longtitude.toString(),
         radius: radius.toString(),
       })
 
@@ -42,7 +42,7 @@ export const useNearby = ({
         throw new Error('Failed to fetch nearby swimming pools')
       }
     },
-    enabled: !!latitude && !!longitude,
+    enabled: !!latitude && !!longtitude,
     staleTime: 5 * 60 * 1000, // 5분간 캐시 유지
   })
   // console.log(nearbySwimmingPools)

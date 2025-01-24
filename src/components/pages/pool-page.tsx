@@ -3,7 +3,6 @@
 import PoolDetail from '../pool/pool-detail'
 import PoolKaKaoMap from '../pool/pool-kakao-map'
 import { usePool } from '@/hooks/usePool'
-import { Skeleton } from '../ui/skeleton'
 import { Suspense, lazy } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 
