@@ -105,6 +105,7 @@ export default function SwimLogsForm({ date, setIsOpen }: SwimLogsFormProps) {
         description: '수영 기록이 추가되었습니다.',
       })
     } catch (error: any) {
+      console.error(error)
       toast({
         title: '수영 기록 추가 실패',
         description: error.message,
