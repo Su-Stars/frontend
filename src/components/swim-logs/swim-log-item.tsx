@@ -61,12 +61,12 @@ export default function SwimLogItem({
           size="sm"
           onClick={handleDelete}
           disabled={deleteSwimLog.isPending}
-          className="rounded-full text-red-500 hover:text-red-500"
+          className="flex items-center justify-between rounded-full text-red-500 hover:text-red-500"
         >
           <LuTrash2 />
         </Button>
       </div>
-      <div className="flex flex-col space-y-2 rounded-md border border-black bg-white p-4">
+      <div className="flex flex-col space-y-2 rounded-md border border-gray-300 bg-white p-4">
         <div className="flex flex-col">
           <div className="text-sm text-gray-500">
             {/* 생성일 포맷팅 */}
@@ -94,7 +94,9 @@ export default function SwimLogItem({
             <span className="text-green-500">m</span>
           </div>
         </div>
-        <div>{log.note}</div>
+      </div>
+      <div className="rounded-md border border-gray-200 bg-gray-200 p-4 text-sm">
+        {log.note}
       </div>
     </div>
   )

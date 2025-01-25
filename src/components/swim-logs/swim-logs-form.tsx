@@ -23,6 +23,7 @@ import {
 import { useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
 import { SwimLogPayload, useAddSwimLog } from '@/hooks/useAddSwimLogs'
+import { Textarea } from '@/components/ui/textarea'
 
 interface SwimLogsFormProps {
   date: string
@@ -39,7 +40,8 @@ const formSchema = z
       .string({
         message: '총 수영 거리를 입력해주세요',
       })
-      .regex(/^\d+$/, '숫자만 입력해주세요'),
+      .regex(/^\d+$/, '숫자만 입력해주세요')
+      .min(1, '총 수영 거리를 입력해주세요'),
     note: z
       .string()
       .max(200, '메모는 최대 200자까지 입력 가능합니다')
@@ -51,7 +53,7 @@ const formSchema = z
       return data.start_time < data.end_time
     },
     {
-      message: '종료 시간은 시작 시간보다 늦어야 합니다',
+      message: '종료 시간은 시작 시간 이후여야 합니다.',
       path: ['endTime'],
     },
   )
@@ -117,20 +119,23 @@ export default function SwimLogsForm({ date, setIsOpen }: SwimLogsFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col p-4 md:p-0"
+      >
+        <div className="flex flex-col">
+          <div className="flex justify-between">
             <FormLabel>수영 시간</FormLabel>
             <div className="flex items-center gap-1">
               <FormField
                 control={form.control}
                 name="start_time"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="h-[70px]">
                     <FormControl>
                       <Input placeholder="shadcn" type="time" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-sm" />
                   </FormItem>
                 )}
               />
@@ -139,24 +144,24 @@ export default function SwimLogsForm({ date, setIsOpen }: SwimLogsFormProps) {
                 control={form.control}
                 name="end_time"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="h-[70px]">
                     <FormControl>
                       <Input placeholder="shadcn" type="time" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-sm" />
                   </FormItem>
                 )}
               />
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex justify-between">
           <FormLabel>영법</FormLabel>
           <FormField
             control={form.control}
             name="swim_category"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="h-[70px]">
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
@@ -175,37 +180,37 @@ export default function SwimLogsForm({ date, setIsOpen }: SwimLogsFormProps) {
                     </SelectContent>
                   </Select>
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-sm" />
               </FormItem>
             )}
           />
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex justify-between">
           <FormLabel>레인 길이</FormLabel>
           <FormField
             control={form.control}
             name="lane_length"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="h-[70px]">
                 <FormControl>
                   <Input {...field} placeholder="25m" />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-sm" />
               </FormItem>
             )}
           />
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex justify-between">
           <FormLabel>총 거리*</FormLabel>
           <FormField
             control={form.control}
             name="swim_length"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="h-[70px]">
                 <FormControl>
                   <Input {...field} placeholder="1000m" />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-sm" />
               </FormItem>
             )}
           />
@@ -216,16 +221,20 @@ export default function SwimLogsForm({ date, setIsOpen }: SwimLogsFormProps) {
             control={form.control}
             name="note"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="h-[70px]">
                 <FormControl>
-                  <Input {...field} />
+                  <Textarea
+                    {...field}
+                    placeholder="수영기록을 남겨주세요"
+                    className="resize-none"
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-sm" />
               </FormItem>
             )}
           />
         </div>
-        {/* TODO : 로딩중 버튼을 비활성화합니다. */}
+
         <Button
           className="w-full"
           variant="primary"
