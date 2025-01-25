@@ -32,18 +32,17 @@ function Calendar({
         months: 'flex flex-col mx-auto  space-y-4 sm:space-x-4 sm:space-y-0',
         month: 'space-y-4',
         caption: 'flex justify-center pt-1 relative items-center',
-        caption_label: 'text- font-medium',
+        caption_label: 'text-xl font-medium',
         nav: 'space-x-1 flex items-center',
         nav_button: cn(
-          buttonVariants({ variant: 'outline' }),
-          'h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100',
+          buttonVariants({ variant: 'ghost' }),
+          'h-10 w-10 p-0 bg-gray-100 rounded-full shadow',
         ),
         nav_button_previous: 'absolute left-1',
         nav_button_next: 'absolute right-1',
         table: 'w-full border-collapse space-y-1',
         head_row: 'flex w-full justify-between',
-        head_cell:
-          'text-muted-foreground rounded-md w-12 font-normal text-[0.8rem]',
+        head_cell: 'text-muted-foreground rounded-md w-12 font-normal text-md',
         row: 'flex w-full mt-2 justify-between',
         cell: cn(
           'relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected].day-range-end)]:rounded-r-md',
@@ -70,10 +69,10 @@ function Calendar({
       }}
       components={{
         IconLeft: ({ className, ...props }) => (
-          <ChevronLeft className={cn('h-12 w-12', className)} {...props} />
+          <ChevronLeft className={cn('h-20 w-20', className)} {...props} />
         ),
         IconRight: ({ className, ...props }) => (
-          <ChevronRight className={cn('h-12 w-12', className)} {...props} />
+          <ChevronRight className={cn('h-20 w-20', className)} {...props} />
         ),
         Day: (dayProps) => <CustomDay {...dayProps} records={records} />,
       }}
@@ -131,16 +130,19 @@ function CustomDay({ records, ...props }: CustomDayProps) {
       >
         {props.date.getDate()}
       </span>
-      {/* TODO : 수영 기록이 있을 경우 표시 */}
+
+      {/* 오늘 이후의 날짜인 경우 */}
       {isAfter(props.date, new Date()) ? (
-        <div className="h-10 w-10 rounded bg-gray-100"></div>
+        <div className="h-10 w-10 cursor-default rounded-lg bg-gray-100 shadow hover:shadow-md"></div>
       ) : logsForDay ? (
+        // 수영 기록이 있는 경우
         <Link href={`/diary/${dayString}`}>
-          <div className="h-10 w-10 rounded bg-green-300"></div>
+          <div className="h-10 w-10 rounded-lg bg-green-300 shadow transition hover:shadow-md"></div>
         </Link>
       ) : (
+        // 수영 기록이 없는 경우
         <Link href={`/diary/${dayString}`}>
-          <div className="h-10 w-10 rounded bg-gray-300"></div>
+          <div className="h-10 w-10 rounded-lg bg-gray-300 shadow"></div>
         </Link>
       )}
     </button>
