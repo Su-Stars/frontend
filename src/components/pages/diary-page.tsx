@@ -16,6 +16,7 @@ export default function DiaryPage() {
   const { data, isPending, isError, error } = useSwimLogs({
     year: Number(currentDate.split('-')[0]),
     month: Number(currentDate.split('-')[1]),
+    user: !!user,
   })
 
   /*TODO : 유저정보를 윺저스토어에서 가져옵니다*/
@@ -49,7 +50,7 @@ export default function DiaryPage() {
       </div> */}
       <Calendar
         mode="single"
-        onSelect={(date) => console.log(date)}
+        // onSelect={(date) => console.log(date)}
         className="mx-auto w-full"
         defaultMonth={new Date()}
         onMonthChange={(month) => {
@@ -57,12 +58,18 @@ export default function DiaryPage() {
         }}
         records={data?.records}
       />
-      {/* TODO : 수영기록 추가 버튼을 오늘날짜 페이지로 이동합니다. */}
-      <Link href={`/diary/${format(new Date(), 'yyyy-MM-dd')}`}>
-        <Button className="w-full" variant="primary">
-          수영 기록 추가
+
+      {user ? (
+        <Link href={`/diary/${format(new Date(), 'yyyy-MM-dd')}`}>
+          <Button className="w-full" variant="primary">
+            수영 기록 추가
+          </Button>
+        </Link>
+      ) : (
+        <Button className="w-full" variant="primary" asChild>
+          <Link href="/login">로그인이 필요합니다</Link>
         </Button>
-      </Link>
+      )}
     </div>
   )
 }

@@ -8,16 +8,19 @@ import SwimLogsForm from '@/components/swim-logs/swim-logs-form'
 import SwimLogItem from '@/components/swim-logs/swim-log-item'
 import Link from 'next/link'
 import { LuArrowLeft } from 'react-icons/lu'
+import { useUserStore } from '@/providers/user-store-provider'
 
 interface DiaryDetailPageProps {
   date: string
 }
 
 export default function DiaryDetailPage({ date }: DiaryDetailPageProps) {
-  const { data, isPending, isError, error } = useSwimLogs({
+  const { user } = useUserStore((state) => state)
+  const { data, isError, error } = useSwimLogs({
     year: Number(date.split('-')[0]),
     month: Number(date.split('-')[1]),
     day: Number(date.split('-')[2]),
+    user: !!user,
   })
   const [isWriteOpen, setIsWriteOpen] = useState(false)
 
@@ -37,7 +40,6 @@ export default function DiaryDetailPage({ date }: DiaryDetailPageProps) {
         <h2 className="mx-auto text-xl font-semibold">{date}</h2>
       </div>
 
-      {isPending && <p>Loading...</p>}
       {isError && (
         <p>Error: {error ? error.message : 'An unknown error occurred'}</p>
       )}
@@ -51,8 +53,12 @@ export default function DiaryDetailPage({ date }: DiaryDetailPageProps) {
             onClick={() => {}}
           />
         ))) || <p>기록이 없습니다.</p>}
-      <Button variant="primary" onClick={() => setIsWriteOpen(true)}>
-        기록 작성
+      <Button
+        variant="primary"
+        onClick={() => setIsWriteOpen(true)}
+        disabled={!user}
+      >
+        {user ? '수영기록 작성' : '로그인이 필요합니다'}
       </Button>
       <ResponsiveDialog
         isOpen={isWriteOpen}

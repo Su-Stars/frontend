@@ -38,6 +38,7 @@ export default function SwimLogItem({
         description: '수영 기록이 삭제되었습니다.',
       })
     } catch (error) {
+      console.error(error)
       toast({
         variant: 'destructive',
         title: '삭제 실패',
@@ -50,7 +51,7 @@ export default function SwimLogItem({
   }
 
   return (
-    <div key={log.logId} className="flex flex-col space-y-2">
+    <div className="flex flex-col space-y-2">
       <div className="flex items-center justify-between">
         <h3 className="font-pretendard text-xl font-semibold">
           {index + 1}번째 수영 기록
