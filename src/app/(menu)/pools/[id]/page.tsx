@@ -7,6 +7,7 @@ import PoolPage from '@/components/pages/pool-page'
 import { getPool } from '@/actions/get-pool'
 import { Pool as IPool } from '@/hooks/useSearch'
 import type { Metadata, ResolvingMetadata } from 'next'
+import { notFound } from 'next/navigation'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -17,28 +18,41 @@ export async function generateMetadata(
   { params, searchParams }: Props,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  // read route params
-  const id = (await params).id
+  try {
+    const id = (await params).id
+    const response = await fetch(`https://nest-aws.site/api/v1/pools/${id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    })
 
-  // fetch data
-  const response = await fetch(`https://nest-aws.site/api/v1/pools/${id}`, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-  }).then((res) => res.json())
+    if (!response.ok) {
+      if (response.status === 404) {
+        notFound()
+      }
+    }
 
-  const pool = response.data[0]
+    const data = await response.json()
+    const pool = data.data?.[0]
 
-  // optionally access and extend (rather than replace) parent metadata
-  const previousImages = (await parent).openGraph?.images || []
+    if (!pool) {
+      notFound()
+    }
 
-  return {
-    title: pool.name,
-    //TODO 후에 이미지를 추가합니다.
-    openGraph: {
-      images: [...previousImages],
-    },
+    const previousImages = (await parent).openGraph?.images || []
+
+    return {
+      title: pool.name,
+      description: pool.description || '수영장 상세 정보',
+      openGraph: {
+        images: [...previousImages],
+        title: pool.name,
+        description: pool.description || '수영장 상세 정보',
+      },
+    }
+  } catch (error) {
+    throw error
   }
 }
 
