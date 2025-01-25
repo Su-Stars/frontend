@@ -25,26 +25,30 @@ export function useAddSwimLog({
 
   return useMutation({
     mutationFn: async (newLog: SwimLogPayload) => {
-      const response = await fetch('https://nest-aws.site/api/v1/logs', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(newLog),
-      })
-      if (!response.ok) {
-        const errorMessages: Record<number, string> = {
-          400: '잘못된 요청입니다.',
-          401: '인증이 필요합니다.',
-          500: '서버 오류가 발생했습니다.',
+      try {
+        const response = await fetch('https://nest-aws.site/api/v1/logs', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify(newLog),
+        })
+
+        const data = await response.json()
+
+        if (!response.ok) {
+          const code = response.status
+          const message = data.message || '수영 기록 추가에 실패했습니다.'
+
+          throw new Error(`[${code} 에러] ${message}`)
         }
 
-        const message =
-          errorMessages[response.status] || '로그인에 실패했습니다.'
-        throw new Error(message)
+        return data.data
+      } catch (error) {
+        console.error(error)
+        throw error
       }
-      return response.json()
     },
     onMutate: async (newLog) => {
       // 현재 날짜의 쿼리키로 취소
@@ -85,6 +89,9 @@ export function useAddSwimLog({
     onSettled: () => {
       queryClient.invalidateQueries({
         queryKey: createSwimLogsQueryKey({ year, month, day }),
+      })
+      queryClient.invalidateQueries({
+        queryKey: createSwimLogsQueryKey({ year, month }),
       })
     },
   })

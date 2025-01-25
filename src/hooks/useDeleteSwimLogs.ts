@@ -24,19 +24,16 @@ export function useDeleteSwimLog({ year, month, day }: DeleteSwimLogsParams) {
         },
       )
 
+      const data = await response.json()
+
       if (!response.ok) {
-        const errorMessages: Record<number, string> = {
-          400: '잘못된 요청입니다.',
-          401: '인증이 필요합니다.',
-          403: '권한이 없습니다.',
-          404: '수영 기록을 찾을 수 없습니다.',
-          500: '서버 오류가 발생했습니다.',
-        }
-        const message = errorMessages[response.status] || '삭제에 실패했습니다.'
-        throw new Error(message)
+        const code = response.status
+        const message = data.message || '로그 삭제에 실패했습니다.'
+
+        throw new Error(`[${code} 에러] ${message}`)
       }
 
-      return response.json()
+      return data
     },
 
     onMutate: async (deletedLogId) => {
