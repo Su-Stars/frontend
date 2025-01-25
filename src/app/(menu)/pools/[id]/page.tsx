@@ -6,7 +6,31 @@ import {
 
 import PoolPage from '@/components/pages/pool-page'
 import { getPool } from '@/actions/get-pool'
-import { Pool as IPool } from '@/hooks/useSearch'
+import { getBookmark } from '@/actions/get-bookmark'
+
+interface PrefetchDataProps {
+  queryClient: QueryClient
+  id: string
+  queryKey: string
+  queryFn: (id: string) => void
+}
+
+async function prefetchData({
+  queryClient,
+  id,
+  queryKey,
+  queryFn,
+}: PrefetchDataProps) {
+  try {
+    await queryClient.prefetchQuery({
+      queryKey: [queryKey, id],
+      queryFn: () => queryFn(id),
+    })
+  } catch (error) {
+    console.log(error)
+    return <div>에러 발생</div>
+  }
+}
 
 export default async function Pool({
   params,
@@ -16,15 +40,16 @@ export default async function Pool({
   const id = (await params).id
   const queryClient = new QueryClient()
 
-  try {
-    await queryClient.prefetchQuery<IPool>({
-      queryKey: ['pool', id],
-      queryFn: () => getPool(id),
-    })
-  } catch (error) {
-    console.log(error)
-    return <div>에러 발생</div>
-  }
+  // 상세 정보 프리패칭
+  await prefetchData({ queryClient, id, queryKey: 'pool', queryFn: getPool })
+
+  // 북마크 정보 프리패칭
+  await prefetchData({
+    queryClient,
+    id,
+    queryKey: 'bookmark',
+    queryFn: getBookmark,
+  })
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
