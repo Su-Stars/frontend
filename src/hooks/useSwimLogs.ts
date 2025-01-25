@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import { SwimLogsData, SwimLogsResponse } from '@/types/swim-logs'
+import { SwimLogsData } from '@/types/swim-logs'
 
 interface useSwimlogsParams {
   year: number
   month: number
   day?: number
+  user: boolean
 }
 
 type SwimLogsQueryKey = [
@@ -24,8 +25,8 @@ export const createSwimLogsQueryKey = (params: {
   return ['swimLogs', params]
 }
 
-export const useSwimLogs = ({ year, month, day }: useSwimlogsParams) => {
-  const { data, isPending, isError, error } = useQuery<SwimLogsData>({
+export const useSwimLogs = ({ year, month, day, user }: useSwimlogsParams) => {
+  const { data, isPending, isError, error } = useQuery({
     queryKey: createSwimLogsQueryKey({ year, month, day }),
     queryFn: async () => {
       try {
@@ -39,18 +40,20 @@ export const useSwimLogs = ({ year, month, day }: useSwimlogsParams) => {
             credentials: 'include',
           },
         )
+
+        const data = await response.json()
         if (!response.ok) {
-          throw new Error('Network response was not ok')
+          throw new Error(data.message)
         }
 
-        const result: SwimLogsResponse = await response.json()
-        return result.data
+        return data.data as SwimLogsData
       } catch (error) {
         throw error
       }
     },
     staleTime: 1000 * 60 * 10,
     placeholderData: (prev) => prev ?? undefined,
+    enabled: user,
   })
 
   return { data, isPending, isError, error }
