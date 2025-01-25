@@ -69,9 +69,9 @@ export default function SwimLogsForm({ date, setIsOpen }: SwimLogsFormProps) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      swim_length: '',
-    },
+    // defaultValues: {
+    //   swim_length: '',
+    // },
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
