@@ -31,7 +31,6 @@ export default function HomeKakaoMap() {
           }
           setCenter(newCenter)
         },
-
         // 유저 위치 정보 획득 실패 시 수원역으로 설정
         (error) => {
           console.log(error)
