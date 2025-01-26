@@ -7,7 +7,7 @@ export interface SwimLogPayload {
   start_time?: string
   end_time?: string
   swim_category?: string
-  lane_length?: number
+  lane_length: number
   swim_length: number
   note?: string
 }
