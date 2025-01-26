@@ -18,7 +18,7 @@ import Image from 'next/image'
 import { useUserStore } from '@/providers/user-store-provider'
 import { useToast } from '@/hooks/use-toast'
 import { useState } from 'react'
-import { navigateToHome } from '@/actions/actions'
+import { navigateToHome } from '@/actions/redirects'
 
 const formSchema = z.object({
   email: z.string().email('이메일 형식이 아닙니다.'),
@@ -53,15 +53,9 @@ export default function LoginPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        const errorMessages: Record<number, string> = {
-          400: '잘못된 요청입니다.',
-          401: '이메일 또는 비밀번호가 일치하지 않습니다.',
-          500: '서버 오류가 발생했습니다.',
-        }
-
-        const message =
-          errorMessages[response.status] || '로그인에 실패했습니다.'
-        throw new Error(message)
+        const status = response.status
+        const message = data.message || '로그인에 실패했습니다.'
+        throw new Error(`[${status} 에러] ${message}`)
       }
 
       // 3. Update the user store with the user data.

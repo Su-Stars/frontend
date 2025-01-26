@@ -20,22 +20,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useState } from 'react'
+import { useToast } from '@/hooks/use-toast'
+import { SwimLogPayload, useAddSwimLog } from '@/hooks/useAddSwimLogs'
+import { Textarea } from '@/components/ui/textarea'
 
 interface SwimLogsFormProps {
   date: string
+  setIsOpen: (isOpen: boolean) => void
 }
 
 const formSchema = z
   .object({
-    startTime: z.string().optional(),
-    endTime: z.string().optional(),
-    swimCategory: z.string().optional(),
-    laneLength: z.string().optional(),
-    totalSwimLength: z
+    start_time: z.string().optional(),
+    end_time: z.string().optional(),
+    swim_category: z.string().optional(),
+    lane_length: z.string().regex(/^\d+$/, '레인 길이를 입력해주세요'),
+    swim_length: z
       .string({
-        message: '총 수영 거리를 입력해주세요',
+        message: '수영 거리를 입력해주세요',
       })
-      .regex(/^\d+$/, '숫자만 입력해주세요'),
+      .regex(/^\d+$/, '수영거리를 입력해주세요')
+      .min(1, '수영 거리를 입력해주세요'),
     note: z
       .string()
       .max(200, '메모는 최대 200자까지 입력 가능합니다')
@@ -43,71 +49,124 @@ const formSchema = z
   })
   .refine(
     (data) => {
-      if (!data.startTime || !data.endTime) return true
-      return data.startTime < data.endTime
+      if (!data.start_time || !data.end_time) return true
+      return data.start_time < data.end_time
     },
     {
-      message: '종료 시간은 시작 시간보다 늦어야 합니다',
+      message: '종료 시간은 시작 시간 이후여야 합니다.',
       path: ['endTime'],
     },
   )
 
-export default function SwimLogsForm({ date }: SwimLogsFormProps) {
+export default function SwimLogsForm({ date, setIsOpen }: SwimLogsFormProps) {
+  const [loading, setLoading] = useState(false)
+  const { toast } = useToast()
+  const [year, month, day] = date.split('-').map(Number)
+
+  const addSwimLog = useAddSwimLog({
+    year,
+    month,
+    day,
+  })
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      start_time: '',
+      end_time: '',
+      swim_category: '',
+      lane_length: '',
+      swim_length: '',
       note: '',
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const numberFields = ['lane_length', 'swim_length']
+
+    const formPayload = Object.entries(values).reduce(
+      (acc, [key, value]) => {
+        if (value !== undefined && value !== '') {
+          // 숫자로 변환이 필요한 필드인 경우
+          if (numberFields.includes(key)) {
+            acc[key] = Number(value)
+          } else {
+            acc[key] = value
+          }
+        }
+        return acc
+      },
+      {} as Record<string, any>,
+    )
+
+    // date 추가
+    formPayload.swim_date = date
+
+    setLoading(true)
+    try {
+      await addSwimLog.mutateAsync(formPayload as SwimLogPayload)
+
+      setIsOpen(false)
+      toast({
+        title: '수영 기록 추가 성공',
+        description: '수영 기록이 추가되었습니다.',
+      })
+    } catch (error: any) {
+      console.error(error)
+      toast({
+        title: '수영 기록 추가 실패',
+        description: error.message,
+      })
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col p-4 md:p-0"
+      >
+        <div className="flex flex-col">
+          <div className="flex justify-between">
             <FormLabel>수영 시간</FormLabel>
             <div className="flex items-center gap-1">
               <FormField
                 control={form.control}
-                name="startTime"
+                name="start_time"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="h-[70px]">
                     <FormControl>
                       <Input placeholder="shadcn" type="time" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-sm" />
                   </FormItem>
                 )}
               />
               <div className="text-center">~</div>
               <FormField
                 control={form.control}
-                name="endTime"
+                name="end_time"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="h-[70px]">
                     <FormControl>
                       <Input placeholder="shadcn" type="time" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-sm" />
                   </FormItem>
                 )}
               />
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-between">
+        <div className="flex justify-between">
           <FormLabel>영법</FormLabel>
           <FormField
             control={form.control}
-            name="swimCategory"
+            name="swim_category"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="h-[70px]">
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
@@ -126,37 +185,41 @@ export default function SwimLogsForm({ date }: SwimLogsFormProps) {
                     </SelectContent>
                   </Select>
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-sm" />
               </FormItem>
             )}
           />
         </div>
-        <div className="flex items-center justify-between">
-          <FormLabel>레인 길이</FormLabel>
+        <div className="flex justify-between">
+          <FormLabel>
+            레인 길이<span className="ml-1 text-blue-500">*</span>
+          </FormLabel>
           <FormField
             control={form.control}
-            name="laneLength"
+            name="lane_length"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="h-[70px]">
                 <FormControl>
                   <Input {...field} placeholder="25m" />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-sm" />
               </FormItem>
             )}
           />
         </div>
-        <div className="flex items-center justify-between">
-          <FormLabel>총 거리*</FormLabel>
+        <div className="flex justify-between">
+          <FormLabel>
+            수영 거리<span className="ml-1 text-blue-500">*</span>
+          </FormLabel>
           <FormField
             control={form.control}
-            name="totalSwimLength"
+            name="swim_length"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="h-[70px]">
                 <FormControl>
                   <Input {...field} placeholder="1000m" />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-sm" />
               </FormItem>
             )}
           />
@@ -167,18 +230,26 @@ export default function SwimLogsForm({ date }: SwimLogsFormProps) {
             control={form.control}
             name="note"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="h-[70px]">
                 <FormControl>
-                  <Input {...field} />
+                  <Textarea
+                    {...field}
+                    placeholder="수영기록을 남겨주세요"
+                    className="resize-none"
+                  />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-sm" />
               </FormItem>
             )}
           />
         </div>
-        {/* TODO : 필수값이 입력되지 않은 경우 버튼을 비활성화합니다
-        TODO : 로딩중 버튼을 비활성화합니다. */}
-        <Button className="w-full" variant="primary" type="submit">
+
+        <Button
+          className="w-full"
+          variant="primary"
+          type="submit"
+          disabled={loading}
+        >
           추가하기
         </Button>
       </form>

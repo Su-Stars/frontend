@@ -18,9 +18,3 @@ export interface SwimLogsData {
     [date: string]: SwimLog[]
   }
 }
-
-export interface SwimLogsResponse {
-  status: 'success'
-  message: string
-  data: SwimLogsData
-}

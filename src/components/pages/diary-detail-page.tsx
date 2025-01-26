@@ -5,55 +5,75 @@ import { ResponsiveDialog } from '@/components/responsive-dialog'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import SwimLogsForm from '@/components/swim-logs/swim-logs-form'
+import SwimLogItem from '@/components/swim-logs/swim-log-item'
+import Link from 'next/link'
+import { LuArrowLeft } from 'react-icons/lu'
+import { useUserStore } from '@/providers/user-store-provider'
 
 interface DiaryDetailPageProps {
   date: string
 }
 
 export default function DiaryDetailPage({ date }: DiaryDetailPageProps) {
-  const { data, isPending, isError, error } = useSwimLogs({
+  const { user } = useUserStore((state) => state)
+  const { data, isError, error } = useSwimLogs({
     year: Number(date.split('-')[0]),
     month: Number(date.split('-')[1]),
-    date: date.split('-')[2],
+    day: Number(date.split('-')[2]),
+    user: !!user,
   })
   const [isWriteOpen, setIsWriteOpen] = useState(false)
 
   return (
     <div className="flex flex-col space-y-2">
-      <h2 className="mx-auto text-xl font-semibold">{date}</h2>
-      {isPending && <p>Loading...</p>}
+      <div className="relative flex w-full items-center justify-center border-b-slate-200 bg-white p-4">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute left-4 rounded-md bg-transparent text-black hover:bg-accent"
+          asChild
+        >
+          <Link href="/diary">
+            <LuArrowLeft />
+          </Link>
+        </Button>
+        <h2 className="text-xl font-semibold">{date}</h2>
+      </div>
+
       {isError && (
         <p>Error: {error ? error.message : 'An unknown error occurred'}</p>
       )}
-      {data &&
+      {data?.records[date] ? (
         data.records[date].map((log, index) => (
-          <div key={log.logId} className="flex flex-col space-y-2">
-            <h3 className="font-pretendard text-xl font-semibold">
-              {index + 1}번째 수영 기록
-            </h3>
-            <div className="flex flex-col space-y-2 rounded-md border border-black bg-white p-4">
-              <div className="flex flex-col">
-                <div className="font-semibold text-gray-500">
-                  {log.created_at} {log.startTime} {log.endTime}{' '}
-                  {log.swimCategory}
-                </div>
-                <div className="flex gap-1 text-3xl font-bold">
-                  <span className="">{log.swimLength}</span>
-                  <span className="text-green-500">m</span>
-                </div>
-              </div>
-              <div>{log.note}</div>
-            </div>
+          <div key={log.logId}>
+            <SwimLogItem
+              key={log.logId}
+              date={date}
+              log={log}
+              index={index}
+              onClick={() => {}}
+            />
           </div>
-        ))}
-      <Button onClick={() => setIsWriteOpen(true)}>기록 작성</Button>
+        ))
+      ) : (
+        <p>기록이 없습니다.</p>
+      )}
+      <Button
+        variant="primary"
+        onClick={() => setIsWriteOpen(true)}
+        disabled={!user}
+        className="w-full"
+      >
+        {user ? '수영기록 작성' : '로그인이 필요합니다'}
+      </Button>
+
       <ResponsiveDialog
         isOpen={isWriteOpen}
         setIsOpen={setIsWriteOpen}
-        title="수영기록 작성"
-        description="수영 기록을 작성해주세요"
+        title="수영기록 추가"
+        description="수영 기록을 남겨주세요"
       >
-        <SwimLogsForm date={date} />
+        <SwimLogsForm date={date} setIsOpen={setIsWriteOpen} />
       </ResponsiveDialog>
     </div>
   )

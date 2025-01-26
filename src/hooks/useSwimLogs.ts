@@ -1,33 +1,59 @@
 import { useQuery } from '@tanstack/react-query'
-import { SwimLogsData, SwimLogsResponse } from '@/types/swim-logs'
+import { SwimLogsData } from '@/types/swim-logs'
 
 interface useSwimlogsParams {
   year: number
   month: number
-  date?: string
+  day?: number
+  user: boolean
 }
 
-export const useSwimLogs = ({ year, month, date }: useSwimlogsParams) => {
-  const { data, isPending, isError, error } = useQuery<SwimLogsData>({
-    queryKey: ['swimLogs', year, month, ...(date ? [date] : [])],
+type SwimLogsQueryKey = [
+  'swimLogs',
+  {
+    year: number
+    month: number
+    day?: number
+  },
+]
+
+export const createSwimLogsQueryKey = (params: {
+  year: number
+  month: number
+  day?: number
+}): SwimLogsQueryKey => {
+  return ['swimLogs', params]
+}
+
+export const useSwimLogs = ({ year, month, day, user }: useSwimlogsParams) => {
+  const { data, isPending, isError, error } = useQuery({
+    queryKey: createSwimLogsQueryKey({ year, month, day }),
     queryFn: async () => {
       try {
         const response = await fetch(
-          `http://localhost:9999/api/logs?year=${year}&month=${month}${date ? `&date=${date}` : ''}`,
+          `https://nest-aws.site/api/v1/logs?year=${year}&month=${month}${day ? `&day=${day}` : ''}`,
+          {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+          },
         )
+
+        const data = await response.json()
         if (!response.ok) {
-          throw new Error('Network response was not ok')
+          throw new Error(data.message)
         }
 
-        const result: SwimLogsResponse = await response.json()
-        return result.data
+        return data.data as SwimLogsData
       } catch (error) {
-        console.error('Fetch error:', error)
         throw error
       }
     },
     staleTime: 1000 * 60 * 10,
     placeholderData: (prev) => prev ?? undefined,
+    enabled: user,
   })
 
   return { data, isPending, isError, error }
