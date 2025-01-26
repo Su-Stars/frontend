@@ -35,13 +35,13 @@ const formSchema = z
     start_time: z.string().optional(),
     end_time: z.string().optional(),
     swim_category: z.string().optional(),
-    lane_length: z.string().regex(/^\d+$/, '숫자만 입력해주세요').optional(),
+    lane_length: z.string().regex(/^\d+$/, '레인 길이를 입력해주세요'),
     swim_length: z
       .string({
-        message: '총 수영 거리를 입력해주세요',
+        message: '수영 거리를 입력해주세요',
       })
-      .regex(/^\d+$/, '숫자만 입력해주세요')
-      .min(1, '총 수영 거리를 입력해주세요'),
+      .regex(/^\d+$/, '수영거리를 입력해주세요')
+      .min(1, '수영 거리를 입력해주세요'),
     note: z
       .string()
       .max(200, '메모는 최대 200자까지 입력 가능합니다')
@@ -71,9 +71,14 @@ export default function SwimLogsForm({ date, setIsOpen }: SwimLogsFormProps) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    // defaultValues: {
-    //   swim_length: '',
-    // },
+    defaultValues: {
+      start_time: '',
+      end_time: '',
+      swim_category: '',
+      lane_length: '',
+      swim_length: '',
+      note: '',
+    },
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -81,7 +86,7 @@ export default function SwimLogsForm({ date, setIsOpen }: SwimLogsFormProps) {
 
     const formPayload = Object.entries(values).reduce(
       (acc, [key, value]) => {
-        if (value !== undefined) {
+        if (value !== undefined && value !== '') {
           // 숫자로 변환이 필요한 필드인 경우
           if (numberFields.includes(key)) {
             acc[key] = Number(value)
@@ -186,7 +191,9 @@ export default function SwimLogsForm({ date, setIsOpen }: SwimLogsFormProps) {
           />
         </div>
         <div className="flex justify-between">
-          <FormLabel>레인 길이</FormLabel>
+          <FormLabel>
+            레인 길이<span className="ml-1 text-blue-500">*</span>
+          </FormLabel>
           <FormField
             control={form.control}
             name="lane_length"
@@ -201,7 +208,9 @@ export default function SwimLogsForm({ date, setIsOpen }: SwimLogsFormProps) {
           />
         </div>
         <div className="flex justify-between">
-          <FormLabel>총 거리*</FormLabel>
+          <FormLabel>
+            수영 거리<span className="ml-1 text-blue-500">*</span>
+          </FormLabel>
           <FormField
             control={form.control}
             name="swim_length"
