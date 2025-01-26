@@ -21,7 +21,7 @@ export default function PoolPage({ poolId }: PoolPageParams) {
 
   return (
     <div className="flex flex-col space-y-10">
-      <PoolDetail pool={pool} />
+      <PoolDetail pool={pool} poolId={poolId} />
       <ErrorBoundary fallback={<div>Something went wrong</div>}>
         <Suspense
           fallback={<div className="flex flex-col gap-2">리뷰 로딩</div>}

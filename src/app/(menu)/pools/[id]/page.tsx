@@ -5,6 +5,7 @@ import {
 } from '@tanstack/react-query'
 import PoolPage from '@/components/pages/pool-page'
 import { getPool } from '@/actions/get-pool'
+import { getBookmark } from '@/actions/get-bookmark'
 import { Pool as IPool } from '@/hooks/useSearch'
 import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound } from 'next/navigation'
@@ -53,6 +54,31 @@ export async function generateMetadata(
     }
   } catch (error) {
     throw error
+
+
+
+interface PrefetchDataProps {
+  queryClient: QueryClient
+  id: string
+  queryKey: string
+  queryFn: (id: string) => void
+}
+
+async function prefetchData({
+  queryClient,
+  id,
+  queryKey,
+  queryFn,
+}: PrefetchDataProps) {
+  try {
+    await queryClient.prefetchQuery({
+      queryKey: [queryKey, id],
+      queryFn: () => queryFn(id),
+    })
+  } catch (error) {
+    console.log(error)
+    return <div>에러 발생</div>
+
   }
 }
 
@@ -63,20 +89,21 @@ export default async function Pool({
 }) {
   const id = (await params).id
 
-  try {
-    const queryClient = new QueryClient()
 
-    await queryClient.prefetchQuery<IPool>({
-      queryKey: ['pool', id],
-      queryFn: () => getPool(id),
-    })
+  // 상세 정보 프리패칭
+  await prefetchData({ queryClient, id, queryKey: 'pool', queryFn: getPool })
 
-    return (
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <PoolPage poolId={id} />
-      </HydrationBoundary>
-    )
-  } catch (error) {
-    console.error(error)
-  }
+  // 북마크 정보 프리패칭
+  await prefetchData({
+    queryClient,
+    id,
+    queryKey: 'bookmark',
+    queryFn: getBookmark,
+  })
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <PoolPage poolId={id} />
+    </HydrationBoundary>
+  )
 }

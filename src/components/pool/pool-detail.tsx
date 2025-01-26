@@ -16,20 +16,14 @@ import NoImage from '../common/no-image'
 import { Pool } from '@/hooks/useSearch'
 import PoolUpdate from './pool-update'
 import PoolDetailItem from './pool-detail-item'
+import PoolBookmark from './pool-bookmark'
 
 interface PoolDetailProps {
   pool: Pool
+  poolId: string
 }
 
-export default function PoolDetail({ pool }: PoolDetailProps) {
-  const clickBookmark = () => {
-    if (pool?.isBookMarked) {
-      // 북마크 추가
-    } else {
-      // 북마크 취소
-    }
-  }
-
+export default function PoolDetail({ pool, poolId }: PoolDetailProps) {
   const generatePoolAdditionalInfo = (pool: Pool): string | React.ReactNode => {
     const infoItems = [
       {
@@ -96,15 +90,7 @@ export default function PoolDetail({ pool }: PoolDetailProps) {
         <div className="justify-between text-xl font-semibold text-black">
           {pool?.name}
 
-          {/*북마크 기능 추가해야함 */}
-          <Button
-            variant="ghost"
-            onClick={clickBookmark}
-            size="icon"
-            className="rounded-md bg-transparent text-black hover:bg-accent"
-          >
-            {pool?.isBookMarked ? <FaBookmark /> : <LuBookmark />}
-          </Button>
+          <PoolBookmark poolId={poolId} />
         </div>
 
         <PoolDetailItem
