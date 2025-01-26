@@ -26,18 +26,18 @@ export default function DiaryDetailPage({ date }: DiaryDetailPageProps) {
 
   return (
     <div className="flex flex-col space-y-2">
-      <div className="flex w-full items-center gap-4 border-b-slate-200 bg-white">
+      <div className="relative flex w-full items-center justify-center border-b-slate-200 bg-white p-4">
         <Button
           variant="ghost"
           size="icon"
-          className="rounded-md bg-transparent text-black hover:bg-accent"
+          className="absolute left-4 rounded-md bg-transparent text-black hover:bg-accent"
           asChild
         >
           <Link href="/diary">
             <LuArrowLeft />
           </Link>
         </Button>
-        <h2 className="mx-auto text-xl font-semibold">{date}</h2>
+        <h2 className="text-xl font-semibold">{date}</h2>
       </div>
 
       {isError && (

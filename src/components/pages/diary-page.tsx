@@ -27,7 +27,7 @@ export default function DiaryPage() {
     return <p>Error: {error ? error.message : 'An unknown error occurred'}</p>
 
   return (
-    <div className="flex flex-col space-y-2">
+    <div className="flex min-h-[calc(100vh-64px)] flex-col space-y-2">
       {/*TODO : 유저정보에 따라 닉네임을 보여주고, 다른 리포트내용은 수영기록 데이터에 따라 렌더링 합니다*/}
       {/* <div className="flex flex-col space-y-2 rounded-md bg-white p-4 shadow-md">
         <h2>
@@ -60,14 +60,14 @@ export default function DiaryPage() {
       />
 
       {user ? (
-        <Link href={`/diary/${format(new Date(), 'yyyy-MM-dd')}`}>
-          <Button className="w-full" variant="primary">
-            수영 기록 추가
-          </Button>
-        </Link>
+        <Button className="w-full" variant="primary" asChild>
+          <Link href={`/diary/${format(new Date(), 'yyyy-MM-dd')}`}>
+            오늘의 수영 기록 남기기
+          </Link>
+        </Button>
       ) : (
         <Button className="w-full" variant="primary" asChild>
-          <Link href="/login">로그인이 필요합니다</Link>
+          <Link href="/login">오늘의 수영 기록 남기기</Link>
         </Button>
       )}
     </div>
