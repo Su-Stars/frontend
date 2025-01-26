@@ -43,28 +43,35 @@ export default function DiaryDetailPage({ date }: DiaryDetailPageProps) {
       {isError && (
         <p>Error: {error ? error.message : 'An unknown error occurred'}</p>
       )}
-      {(data?.records[date] &&
+      {data?.records[date] ? (
         data.records[date].map((log, index) => (
-          <SwimLogItem
-            date={date}
-            key={log.logId}
-            log={log}
-            index={index}
-            onClick={() => {}}
-          />
-        ))) || <p>기록이 없습니다.</p>}
+          <div key={log.logId}>
+            <SwimLogItem
+              key={log.logId}
+              date={date}
+              log={log}
+              index={index}
+              onClick={() => {}}
+            />
+          </div>
+        ))
+      ) : (
+        <p>기록이 없습니다.</p>
+      )}
       <Button
         variant="primary"
         onClick={() => setIsWriteOpen(true)}
         disabled={!user}
+        className="w-full"
       >
         {user ? '수영기록 작성' : '로그인이 필요합니다'}
       </Button>
+
       <ResponsiveDialog
         isOpen={isWriteOpen}
         setIsOpen={setIsWriteOpen}
-        title="수영기록 작성"
-        description="수영 기록을 작성해주세요"
+        title="수영기록 추가"
+        description="수영 기록을 남겨주세요"
       >
         <SwimLogsForm date={date} setIsOpen={setIsWriteOpen} />
       </ResponsiveDialog>
