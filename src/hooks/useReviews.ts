@@ -10,7 +10,7 @@ export interface ReviewsResponse {
 }
 
 interface userRevidwsParams {
-  poolId: string
+  poolId: number
   page?: number
   limit?: number
 }

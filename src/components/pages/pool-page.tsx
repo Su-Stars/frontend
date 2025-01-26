@@ -9,7 +9,7 @@ import { ErrorBoundary } from 'react-error-boundary'
 const ReviewsPage = lazy(() => import('@/components/pages/reviews-page'))
 
 interface PoolPageParams {
-  poolId: string
+  poolId: number
 }
 
 export default function PoolPage({ poolId }: PoolPageParams) {
@@ -21,7 +21,7 @@ export default function PoolPage({ poolId }: PoolPageParams) {
 
   return (
     <div className="flex flex-col space-y-10">
-      <PoolDetail pool={pool} poolId={poolId} />
+      <PoolDetail pool={pool} />
       <ErrorBoundary fallback={<div>Something went wrong</div>}>
         <Suspense
           fallback={<div className="flex flex-col gap-2">리뷰 로딩</div>}

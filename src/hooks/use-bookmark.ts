@@ -1,55 +1,64 @@
 'use client'
 
-import { addBookmark, getBookmark } from '@/actions/get-bookmark'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { postBookmark, deleteBookmark, getBookmark } from '@/actions/bookmark'
+import { QueryClient, useMutation, useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
 
 interface useBookmarkProps {
-  poolId: string
+  poolId: number
 }
 
-export function useBookmark({ poolId }: useBookmarkProps) {
-  const queryClient = useQueryClient()
+const queryClient = new QueryClient()
 
-  // 초기 북마크 상태
-  const { data: bookmarked = false } = useQuery({
+export function useBookmark({ poolId }: useBookmarkProps) {
+  const [bookmarked, setBookmarked] = useState(false)
+
+  useQuery({
     queryKey: ['bookmark', poolId],
-    queryFn: async () => getBookmark(poolId),
+    queryFn: async () => {
+      const res = await getBookmark(poolId)
+      if (res.status === 'success') {
+        setBookmarked(true)
+        return true
+      } else {
+        setBookmarked(false)
+        return false
+      }
+    },
   })
 
-  // 낙관적 업데이트 적용
   const { mutate: addBookmarkMutation } = useMutation({
-    mutationFn: async (poolId: string) => {
-      return addBookmark(poolId)
+    mutationFn: async (poolId: number) => {
+      return postBookmark(poolId)
     },
-    onMutate: async (poolId: string) => {
+    onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ['bookmark', poolId] })
       const previousBookmark = queryClient.getQueryData(['bookmark', poolId])
-      queryClient.setQueryData(['bookmark', poolId], true) // 일단 true로 만들고 본다
+      setBookmarked(true)
       return { previousBookmark }
     },
     onError: () => {
       queryClient.setQueryData(['bookmark', poolId], false)
     },
-    onSettled: (poolId) => {
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['bookmark', poolId] })
     },
   })
 
-  // 낙관적 업데이트 적용
   const { mutate: deleteBookmarkMutation } = useMutation({
-    mutationFn: async (poolId: string) => {
-      return addBookmark(poolId)
+    mutationFn: async (poolId: number) => {
+      return deleteBookmark(poolId)
     },
-    onMutate: async (poolId: string) => {
+    onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ['bookmark', poolId] })
       const previousBookmark = queryClient.getQueryData(['bookmark', poolId])
-      queryClient.setQueryData(['bookmark', poolId], false) // 일단 false로 만들고 본다
+      setBookmarked(false)
       return { previousBookmark }
     },
     onError: () => {
       queryClient.setQueryData(['bookmark', poolId], true)
     },
-    onSettled: (poolId) => {
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['bookmark', poolId] })
     },
   })
