@@ -76,7 +76,7 @@ export default async function Pool({
         <PoolPage poolId={id} />
       </HydrationBoundary>
     )
-  } catch (error: any) {
+  } catch (error) {
     console.error(error)
   }
 }
