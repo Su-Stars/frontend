@@ -11,8 +11,8 @@ import dayjs from '@/lib/dayjs'
 
 interface ReviewItemProps {
   review: IReview
-  poolId: string
-  deleteReview: (poolId: string, reviewId: number) => void
+  poolId: number
+  deleteReview: (poolId: number, reviewId: number) => void
   onEdit: (review: IReview) => void
 }
 
