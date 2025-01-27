@@ -13,7 +13,7 @@ import { IReview } from '@/types/reviews'
 
 interface ReviewsPageProps {
   preview?: boolean
-  poolId: string
+  poolId: number
 }
 
 export default function ReviewsPage({

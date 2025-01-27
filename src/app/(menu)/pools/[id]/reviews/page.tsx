@@ -5,7 +5,7 @@ export default async function Page({
 }: {
   params: Promise<{ id: string }>
 }) {
-  const poolId = (await params).id
+  const poolId = Number((await params).id)
 
   return (
     <>

@@ -6,19 +6,18 @@ import { Button } from '../ui/button'
 import { useBookmark } from '@/hooks/use-bookmark'
 
 interface PoolBookmarkProps {
-  poolId: string
+  poolId: number
 }
 
 export default function PoolBookmark({ poolId }: PoolBookmarkProps) {
   const { bookmarked, addBookmarkMutation, deleteBookmarkMutation } =
     useBookmark({ poolId })
 
-  console.log(bookmarked)
   const clickBookmark = () => {
     if (bookmarked) {
-      addBookmarkMutation(poolId)
-    } else {
       deleteBookmarkMutation(poolId)
+    } else {
+      addBookmarkMutation(poolId)
     }
   }
 
@@ -26,7 +25,6 @@ export default function PoolBookmark({ poolId }: PoolBookmarkProps) {
     <Button
       variant="ghost"
       onClick={clickBookmark}
-      size="icon"
       className="rounded-md bg-transparent text-black hover:bg-accent"
     >
       {bookmarked ? <FaBookmark /> : <LuBookmark />}

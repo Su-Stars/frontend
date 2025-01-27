@@ -1,4 +1,4 @@
-export const getPool = async (poolId: string) => {
+export const getPool = async (poolId: number) => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/pools/${poolId}`,

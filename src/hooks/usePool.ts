@@ -3,7 +3,7 @@ import { Pool } from './useSearch'
 import { getPool } from '@/actions/get-pool'
 
 interface usePoolParams {
-  poolId: string
+  poolId: number
 }
 
 export const usePool = ({ poolId }: usePoolParams) => {

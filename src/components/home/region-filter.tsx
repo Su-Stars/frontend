@@ -32,7 +32,6 @@ export default function RegionFilter({
   clickAllDistrict,
   clickDistrict,
   clickAllRegion,
-  parseDistrict,
   districts,
 }: RegionFilterProps) {
   return (

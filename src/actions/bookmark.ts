@@ -1,69 +1,65 @@
-// Todo : 쿠키 값 추가해서 api 요청해야 함
-
-// 개별 수영장 북마크 여부
-export const getBookmark = async (poolId: string) => {
+export const getBookmark = async (poolId: number) => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/pools/${poolId}/bookmarked`,
+      {
+        credentials: 'include',
+        method: 'GET',
+      },
     )
     const json = await response.json()
 
-    // API 응답 구조에 맞춰 처리
-    if (json.status !== 'success') {
-      throw new Error(json.message)
-    }
-    console.log(json)
-
-    return json.data
+    return json
   } catch (error) {
     console.log(error)
     return false
   }
 }
 
-export const addBookmark = async (poolId: string) => {
+export const postBookmark = async (poolId: number) => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/bookmarks`,
       {
+        credentials: 'include',
         method: 'POST',
-        body: JSON.stringify(poolId),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ poolId }),
       },
     )
     const json = await response.json()
+    console.log(json)
 
-    // API 응답 구조에 맞춰 처리
     if (json.status !== 'success') {
       throw new Error(json.message)
     }
 
-    console.log(json)
     return json
   } catch (error) {
-    console.log(error)
-    return []
+    return false
   }
 }
 
-export const deleteBookmark = async (poolId: string) => {
+export const deleteBookmark = async (poolId: number) => {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER_URL}/bookmarks/${poolId}`,
       {
+        credentials: 'include',
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
     )
+
     const json = await response.json()
-
-    // API 응답 구조에 맞춰 처리
-    if (json.status !== 'success') {
-      throw new Error(json.message)
-    }
-
     console.log(json)
     return json
   } catch (error) {
     console.log(error)
-    return []
+    return true
   }
 }

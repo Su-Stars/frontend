@@ -8,7 +8,7 @@ import {
 import { IoIosCheckboxOutline } from 'react-icons/io'
 
 import { FaPersonSwimming } from 'react-icons/fa6'
-import { LuBookmark, LuLink } from 'react-icons/lu'
+import { LuLink } from 'react-icons/lu'
 
 import { Button } from '../ui/button'
 import Image from 'next/image'
@@ -20,10 +20,9 @@ import PoolBookmark from './pool-bookmark'
 
 interface PoolDetailProps {
   pool: Pool
-  poolId: string
 }
 
-export default function PoolDetail({ pool, poolId }: PoolDetailProps) {
+export default function PoolDetail({ pool }: PoolDetailProps) {
   const generatePoolAdditionalInfo = (pool: Pool): string | React.ReactNode => {
     const infoItems = [
       {
@@ -90,7 +89,7 @@ export default function PoolDetail({ pool, poolId }: PoolDetailProps) {
         <div className="justify-between text-xl font-semibold text-black">
           {pool?.name}
 
-          <PoolBookmark poolId={poolId} />
+          <PoolBookmark poolId={pool.id} />
         </div>
 
         <PoolDetailItem
