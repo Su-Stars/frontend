@@ -6,6 +6,7 @@ import localFont from 'next/font/local'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { Toaster } from '@/components/ui/toaster'
 import type { Metadata } from 'next'
+import Script from 'next/script'
 
 // 개발 환경에서만 MSW 서버를 시작합니다.
 if (process.env.NODE_ENV === 'development') {
@@ -130,6 +131,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0d929ba008c86e3296bdbeb4f341c2cc&libraries=services,clusterer&autoload=false" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${pretendard.variable} font-pretendard antialiased`}
       >

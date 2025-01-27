@@ -45,6 +45,9 @@ const defaultResponse: UseSearchResponse = {
   pools: [],
 }
 
+{
+  /*무한 스크롤 */
+}
 export const useSearch = ({
   region = 'all',
   keyword = 'all',
@@ -76,6 +79,7 @@ export const useSearch = ({
         }
 
         const json = await res.json()
+        console.log(json)
 
         return json.data
       } catch (error) {
@@ -83,7 +87,7 @@ export const useSearch = ({
         throw new Error('검색에 실패했습니다')
       }
     },
-    enabled: !(region === 'all' && keyword === 'all'),
+
     retry: 1,
     staleTime: 1000 * 60 * 5, // 5분
   })

@@ -10,10 +10,9 @@ export interface Center {
   lng: number
 }
 
-// 초기값을 서울역으로 설정
 const initialState: Center = {
-  lat: 37.552987017,
-  lng: 126.972591728,
+  lat: 0,
+  lng: 0,
 }
 
 const useCenterStore = create<CenterState>((set) => ({

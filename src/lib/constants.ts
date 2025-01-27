@@ -1,3 +1,9 @@
+// 서울역 좌표
+export const DEFAULT_MAP_CENTER = {
+  lat: 37.5563,
+  lng: 126.9723,
+}
+
 export interface Region {
   name: string
 }

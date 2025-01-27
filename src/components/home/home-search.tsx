@@ -1,7 +1,7 @@
 'use client'
 
 import { useRegions } from '@/hooks/useRegions'
-import { Pool, useSearch } from '@/hooks/useSearch'
+import { Pool, useSearch } from '@/hooks/use-search'
 import { Region } from '@/lib/constants'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input'
 import useCenterStore from '@/stores/center-store'
 import { useNearby } from '@/hooks/useNearby'
 import PoolCard from '@/components/home/home-pool-card'
-import RegionFilter from '@/components/home/region-filter'
+import RegionFilter from '@/components/home/home-region-filter'
 
 export default function HomeSearch() {
   const [address, setAddress] = useState('전국')
@@ -127,64 +127,18 @@ export default function HomeSearch() {
       {/*결과 출력*/}
       {/*초기에는 nearbySwimmingPools를 사용하여 주변 수영장 1개와 같이 표시합니다 */}
       {/* 키워드나 지역구가 변경되어 검색을 하면 searchResults를 사용 해당 결과를 출력 기존에는 근처 수영장 갯수를 보여줍니다 */}
-      <SearchHeader
-        keyword={keyword}
-        finalRegion={finalRegion}
-        nearbySwimmingPools={nearbySwimmingPools}
-        searchResults={searchResults}
-      />
-
-      {/*로딩 상태일 때 로딩 아이콘 표시*/}
-      {isSearchLoading || (isNearbyLoading && <LuLoader />)}
-
-      {/*에러 상태일 때 로딩 아이콘 표시*/}
-      {isSearchError || (isNearbyError && <div>에러가 발생했습니다.</div>)}
+      <h1>
+        검색 결과 <span className="text-blue-500"> {searchResults?.total}</span>
+      </h1>
 
       {/*검색 결과표시*/}
-
-      {keyword === 'all' && finalRegion === 'all' ? (
-        // 초기 상태: 주변 수영장 표시
-        nearbySwimmingPools?.pools.length === 0 ? (
-          <h1>주변 수영장이 없습니다</h1>
-        ) : (
-          nearbySwimmingPools?.pools?.map((pool: Pool) => (
-            <PoolCard pool={pool} key={`${pool.id} nearby`} />
-          ))
-        )
-      ) : // 검색 결과 표시
-      searchResults?.total === 0 ? (
+      {searchResults?.total === 0 ? (
         <h1>검색 결과가 없습니다</h1>
       ) : (
-        searchResults?.pools.map((pool: Pool) => (
-          <PoolCard pool={pool} key={`${pool.id} search`} />
+        searchResults.pools.map((pool: Pool) => (
+          <PoolCard pool={pool} key={pool.id} />
         ))
       )}
     </>
-  )
-}
-
-interface SearchHeaderProps {
-  keyword: string
-  finalRegion: string
-  nearbySwimmingPools: { pools: Pool[] } | undefined
-  searchResults: { total: number; pools: Pool[] } | undefined
-}
-
-function SearchHeader({
-  keyword,
-  finalRegion,
-  nearbySwimmingPools,
-  searchResults,
-}: SearchHeaderProps) {
-  return (
-    <h2 className="text-2xl font-bold">
-      {keyword === 'all' && finalRegion === 'all' ? '주변 수영장' : '검색 결과'}{' '}
-      <span className="text-theme">
-        {keyword === 'all' && finalRegion === 'all'
-          ? nearbySwimmingPools?.pools.length || 0
-          : searchResults?.total || 0}{' '}
-      </span>
-      개
-    </h2>
   )
 }

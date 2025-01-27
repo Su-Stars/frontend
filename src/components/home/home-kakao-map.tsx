@@ -1,27 +1,38 @@
 'use client'
 
-import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk'
-import { useEffect, useRef } from 'react'
-import useCenterStore from '@/stores/center-store'
-import { LuLoaderCircle } from 'react-icons/lu'
-
-const APP_KEY = '0d929ba008c86e3296bdbeb4f341c2cc'
+import { Map, MapMarker } from 'react-kakao-maps-sdk'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import useCenterStore, { Center } from '@/stores/center-store'
+import { DEFAULT_MAP_CENTER } from '@/lib/constants'
+import { useDebounce } from '@/hooks/use-debounce'
 
 interface Coordinates {
   lat: number
   lng: number
 }
 
-export default function HomeKakaoMap() {
-  const { setCenter, center } = useCenterStore()
-  const mapRef = useRef<kakao.maps.Map>(null)
+interface GeocoderResult {
+  address_name: string
+  region_type: string
+  x: number
+  y: number
+}
 
-  const [loading, error] = useKakaoLoader({
-    appkey: APP_KEY,
-  })
+export default function HomeKakaoMap() {
+  const { center, setCenter } = useCenterStore()
+  const mapRef = useRef<kakao.maps.Map>(null)
+  const [currentAddress, setCurrentAddress] = useState<string>('')
+  const [geocoder, setGeocoder] = useState<kakao.maps.services.Geocoder | null>(
+    null,
+  )
 
   useEffect(() => {
-    // 초기 렌더링 시 유저 위치 정보 확보
+    kakao.maps.load(() => {
+      setGeocoder(new kakao.maps.services.Geocoder())
+    })
+  }, [])
+
+  useEffect(() => {
     const getCurrentLocation = () => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -30,15 +41,11 @@ export default function HomeKakaoMap() {
             lng: position.coords.longitude,
           }
           setCenter(newCenter)
+          console.log(center)
         },
-        // 유저 위치 정보 획득 실패 시 수원역으로 설정
         (error) => {
-          console.log(error)
-          const newCenter: Coordinates = {
-            lng: 127.0286009,
-            lat: 37.2635727,
-          }
-          setCenter(newCenter)
+          console.error('Geolocation error:', error)
+          setCenter(DEFAULT_MAP_CENTER)
         },
       )
     }
@@ -46,23 +53,28 @@ export default function HomeKakaoMap() {
     getCurrentLocation()
   }, [setCenter])
 
-  if (loading) {
-    return (
-      <div className="flex h-[200px] w-full items-center justify-center bg-gray-100">
-        <LuLoaderCircle className="h-8 w-8 animate-spin text-gray-500" />
-      </div>
-    )
+  const handleGeocode = (
+    result: GeocoderResult[],
+    status: kakao.maps.services.Status,
+  ) => {
+    if (status === kakao.maps.services.Status.OK) {
+      const adminDistrict = result.find((item) => item.region_type === 'H')
+      if (adminDistrict) {
+        setCurrentAddress(adminDistrict.address_name)
+        console.log('Current location:', adminDistrict.address_name)
+      }
+    } else {
+      console.error('Geocoding failed:', status)
+    }
   }
 
-  if (error) {
-    return (
-      <div className="flex h-[200px] w-full items-center justify-center bg-gray-100">
-        <p className="text-center text-red-500">
-          카카오 지도를 불러오는 데 오류가 발생했습니다
-        </p>
-      </div>
-    )
-  }
+  const debouncedHandleCenterChanged = useDebounce(() => {
+    const map = mapRef.current
+    if (!map || !geocoder) return
+
+    const center = map.getCenter()
+    geocoder.coord2RegionCode(center.getLng(), center.getLat(), handleGeocode)
+  }, 300)
 
   return (
     <div className="relative h-[200px] w-full overflow-hidden rounded-lg">
@@ -71,9 +83,14 @@ export default function HomeKakaoMap() {
         center={{ lat: center.lat, lng: center.lng }}
         style={{ width: '100%', height: '100%' }}
         level={3}
+        aria-label="지도"
+        role="application"
+        onCenterChanged={debouncedHandleCenterChanged}
       >
         <MapMarker position={{ lat: center.lat, lng: center.lng }}>
-          <div className="p-2 text-sm text-gray-900">Current Location</div>
+          <div className="p-2 text-sm text-gray-900">
+            {currentAddress || 'Current Location'}
+          </div>
         </MapMarker>
       </Map>
     </div>
