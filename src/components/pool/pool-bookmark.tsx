@@ -1,11 +1,12 @@
 'use client'
 
-import { FaBookmark } from 'react-icons/fa'
-import { LuBookmark } from 'react-icons/lu'
 import { Button } from '../ui/button'
 import { useBookmark } from '@/hooks/use-bookmark'
 import { useUserStore } from '@/providers/user-store-provider'
 import { useToast } from '@/hooks/use-toast'
+import { cn } from '@/lib/utils'
+import { FaBookmark } from 'react-icons/fa'
+import { LuBookmark } from 'react-icons/lu'
 
 interface PoolBookmarkProps {
   poolId: number
@@ -41,9 +42,12 @@ export default function PoolBookmark({ poolId }: PoolBookmarkProps) {
     <Button
       variant="ghost"
       onClick={clickBookmark}
-      className="rounded-md bg-transparent text-black hover:bg-accent"
+      className={cn(
+        'h-10 w-10 rounded-full bg-transparent hover:bg-accent hover:text-blue-500',
+        bookmarked ? 'text-black' : 'text-blue-500',
+      )}
     >
-      {bookmarked ? <FaBookmark /> : <LuBookmark />}
+      {bookmarked ? <LuBookmark /> : <FaBookmark />}
     </Button>
   )
 }
