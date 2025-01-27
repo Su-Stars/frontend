@@ -43,23 +43,24 @@ export const postBookmark = async (poolId: number) => {
 }
 
 export const deleteBookmark = async (poolId: number) => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/bookmarks/${poolId}`,
-      {
-        credentials: 'include',
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/bookmarks/${poolId}`,
+    {
+      credentials: 'include',
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    )
+    },
+  )
 
-    const json = await response.json()
-    console.log(json)
-    return json
-  } catch (error) {
-    console.log(error)
-    return true
+  if (!response.ok) {
+    const status = response.status
+    const message = (await response.json()).message
+
+    throw new Error(`[${status} 에러] ${message}`)
   }
+
+  const json = await response.json()
+  return json
 }

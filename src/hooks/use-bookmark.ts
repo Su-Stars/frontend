@@ -3,7 +3,6 @@
 import { postBookmark, deleteBookmark, getBookmark } from '@/actions/bookmark'
 import { QueryClient, useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
-import { useToast } from './use-toast'
 
 interface useBookmarkProps {
   poolId: number
@@ -13,6 +12,7 @@ interface useBookmarkProps {
 export function useBookmark({ poolId, user }: useBookmarkProps) {
   const queryClient = new QueryClient()
   const [bookmarked, setBookmarked] = useState(false)
+  const [bookmarkId, setBookmarkId] = useState<number | null>(null)
 
   useQuery({
     queryKey: ['bookmark', poolId],
@@ -20,6 +20,7 @@ export function useBookmark({ poolId, user }: useBookmarkProps) {
       const res = await getBookmark(poolId)
       if (res.status === 'success') {
         setBookmarked(true)
+        setBookmarkId(res.data.bookId)
         return true
       } else {
         setBookmarked(false)
@@ -31,7 +32,14 @@ export function useBookmark({ poolId, user }: useBookmarkProps) {
 
   const { mutate: addBookmarkMutation } = useMutation({
     mutationFn: async (poolId: number) => {
-      return postBookmark(poolId)
+      const res = await postBookmark(poolId)
+      if (res.status === 'success') {
+        const id = res.data.id
+        setBookmarkId(id)
+        return true
+      } else {
+        return false
+      }
     },
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ['bookmark', poolId] })
@@ -48,8 +56,9 @@ export function useBookmark({ poolId, user }: useBookmarkProps) {
   })
 
   const { mutate: deleteBookmarkMutation } = useMutation({
-    mutationFn: async (poolId: number) => {
-      return deleteBookmark(poolId)
+    mutationFn: async () => {
+      if (!bookmarkId) throw new Error('북마크 ID가 없습니다')
+      return deleteBookmark(bookmarkId)
     },
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ['bookmark', poolId] })
@@ -62,6 +71,7 @@ export function useBookmark({ poolId, user }: useBookmarkProps) {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['bookmark', poolId] })
+      setBookmarkId(null)
     },
   })
 
