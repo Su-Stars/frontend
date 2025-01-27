@@ -1,45 +1,42 @@
-export const getBookmark = async (poolId: number) => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/pools/${poolId}/bookmarked`,
-      {
-        credentials: 'include',
-        method: 'GET',
-      },
-    )
-    const json = await response.json()
+import { th } from 'date-fns/locale'
 
-    return json
-  } catch (error) {
-    console.log(error)
-    return false
+export const getBookmark = async (poolId: number) => {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/pools/${poolId}/bookmarked`,
+    {
+      credentials: 'include',
+      method: 'GET',
+    },
+  )
+  const json = await response.json()
+
+  if (json.status !== 'success') {
+    const status = response.status
+    throw new Error(`[${status} 에러] ${json.message}`)
   }
+
+  return json
 }
 
 export const postBookmark = async (poolId: number) => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/bookmarks`,
-      {
-        credentials: 'include',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ poolId }),
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/bookmarks`,
+    {
+      credentials: 'include',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
-    )
-    const json = await response.json()
-    console.log(json)
+      body: JSON.stringify({ poolId }),
+    },
+  )
+  const json = await response.json()
 
-    if (json.status !== 'success') {
-      throw new Error(json.message)
-    }
-
-    return json
-  } catch (error) {
-    return false
+  if (json.status !== 'success') {
+    const status = response.status
+    throw new Error(`[${status} 에러] ${json.message}`)
   }
+  return json
 }
 
 export const deleteBookmark = async (poolId: number) => {
