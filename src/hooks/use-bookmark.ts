@@ -3,14 +3,15 @@
 import { postBookmark, deleteBookmark, getBookmark } from '@/actions/bookmark'
 import { QueryClient, useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { useToast } from './use-toast'
 
 interface useBookmarkProps {
   poolId: number
+  user: boolean
 }
 
-const queryClient = new QueryClient()
-
-export function useBookmark({ poolId }: useBookmarkProps) {
+export function useBookmark({ poolId, user }: useBookmarkProps) {
+  const queryClient = new QueryClient()
   const [bookmarked, setBookmarked] = useState(false)
 
   useQuery({
@@ -25,6 +26,7 @@ export function useBookmark({ poolId }: useBookmarkProps) {
         return false
       }
     },
+    enabled: user,
   })
 
   const { mutate: addBookmarkMutation } = useMutation({
