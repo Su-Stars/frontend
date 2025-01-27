@@ -16,8 +16,6 @@ export default function DesktopHeaderAuth() {
   const [loading, setLoading] = useState(false)
   const { user, clearUser } = useUserStore((state) => state)
   const queryClient = useQueryClient()
-  console.log('DesktopHeaderAuth')
-  console.log(user)
 
   const handleLogout = async () => {
     if (!confirm('로그아웃 하시겠습니까?')) return
