@@ -53,7 +53,7 @@ export const useReviews = ({
     console.log(poolId, reviewId)
   }
 
-  const deleteReview = async (poolId: string, reviewId: number) => {
+  const deleteReview = async (poolId: number, reviewId: number) => {
     console.log(poolId, reviewId)
   }
 
