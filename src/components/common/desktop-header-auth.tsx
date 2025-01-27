@@ -34,6 +34,24 @@ export default function DesktopHeaderAuth() {
 
       if (!response.ok) {
         const status = response.status
+
+        if (status === 401) {
+          // 유저 상태 초기화
+          clearUser()
+
+          // 캐시 초기화
+          queryClient.clear()
+
+          //홈으로 이동
+          navigateToHome()
+
+          // 토스트 메시지
+          toast({
+            title: '로그아웃',
+            description: '성공적으로 로그아웃되었습니다.',
+          })
+          return
+        }
         const message = data.message || '로그아웃에 실패했습니다.'
         throw new Error(`[${status} 에러] ${message}`)
       }
