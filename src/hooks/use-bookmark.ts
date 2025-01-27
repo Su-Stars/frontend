@@ -2,7 +2,6 @@
 
 import { postBookmark, deleteBookmark, getBookmark } from '@/actions/bookmark'
 import { QueryClient, useMutation, useQuery } from '@tanstack/react-query'
-import { set } from 'date-fns'
 import { useState } from 'react'
 
 interface useBookmarkProps {

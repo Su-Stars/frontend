@@ -6,10 +6,6 @@ export type User = {
   email: string
   nickname: string
   role: 'user' | 'admin'
-  description: string
-  image_url: string
-  created_at: string
-  updated_at: string
 }
 
 export type UserState = {
