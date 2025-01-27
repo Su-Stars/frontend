@@ -44,7 +44,7 @@ export function useBulletin() {
     isFetchingNextPage,
     status,
   } = useInfiniteQuery<useBulletinResponse>({
-    queryKey: ['bulletin'],
+    queryKey: ['bulletin', limit],
     queryFn: async ({ pageParam }) =>
       getBulletin({ limit, page: pageParam as number }),
     initialPageParam: 1,
