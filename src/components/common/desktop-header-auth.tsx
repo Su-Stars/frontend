@@ -16,6 +16,8 @@ export default function DesktopHeaderAuth() {
   const [loading, setLoading] = useState(false)
   const { user, clearUser } = useUserStore((state) => state)
   const queryClient = useQueryClient()
+  console.log('DesktopHeaderAuth')
+  console.log(user)
 
   const handleLogout = async () => {
     if (!confirm('로그아웃 하시겠습니까?')) return
@@ -34,6 +36,24 @@ export default function DesktopHeaderAuth() {
 
       if (!response.ok) {
         const status = response.status
+
+        if (status === 401) {
+          // 유저 상태 초기화
+          clearUser()
+
+          // 캐시 초기화
+          queryClient.clear()
+
+          //홈으로 이동
+          navigateToHome()
+
+          // 토스트 메시지
+          toast({
+            title: '로그아웃',
+            description: '성공적으로 로그아웃되었습니다.',
+          })
+          return
+        }
         const message = data.message || '로그아웃에 실패했습니다.'
         throw new Error(`[${status} 에러] ${message}`)
       }
