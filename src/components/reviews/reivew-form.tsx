@@ -9,11 +9,11 @@ import MotionTap from '@/components/motion/MotionTap'
 import { IReviewForm } from '@/types/reviews'
 
 interface ReviewFormProps {
-  poolId: string
+  poolId: number
   onSubmit:
-    | ((poolId: string, reviewForm: IReviewForm) => Promise<void>)
+    | ((poolId: number, reviewForm: IReviewForm) => Promise<void>)
     | ((
-        poolId: string,
+        poolId: number,
         reviewId: string,
         reviewForm: IReviewForm,
       ) => Promise<void>)

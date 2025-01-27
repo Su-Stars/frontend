@@ -41,12 +41,12 @@ export const useReviews = ({
     },
   })
 
-  const createReview = async (poolId: string, reviewForm: IReviewForm) => {
+  const createReview = async (poolId: number, reviewForm: IReviewForm) => {
     console.log(poolId, reviewForm)
   }
 
   const updateReview = async (
-    poolId: string,
+    poolId: number,
     reviewId: string,
     reviewForm: IReviewForm,
   ) => {
