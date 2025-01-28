@@ -35,8 +35,8 @@ function Calendar({
         caption_label: 'text-xl font-medium',
         nav: 'space-x-1 flex items-center',
         nav_button: cn(
-          buttonVariants({ variant: 'ghost' }),
-          'h-10 w-10 p-0 bg-gray-100 rounded-full shadow',
+          buttonVariants({ variant: 'outline' }),
+          'h-10 w-10 p-0 rounded-full',
         ),
         nav_button_previous: 'absolute left-1',
         nav_button_next: 'absolute right-1',
