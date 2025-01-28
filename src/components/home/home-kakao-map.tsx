@@ -44,6 +44,7 @@ export default function HomeKakaoMap() {
           }
           setCenter(newCenter)
         },
+        // 에러가 발생하면 서울역으로 설정
         (error) => {
           setCenter(DEFAULT_MAP_CENTER)
           console.error('Geolocation error:', error)
@@ -53,12 +54,6 @@ export default function HomeKakaoMap() {
 
     getCurrentLocation()
   }, [setCenter])
-
-  useEffect(() => {
-    if (geocoder) {
-      debouncedGeocode()
-    }
-  }, [center, geocoder])
 
   const handleGeocode = (
     result: GeocoderResult[],
@@ -75,23 +70,20 @@ export default function HomeKakaoMap() {
       console.error('Geocoding failed:', status)
     }
   }
-
-  // 디바운싱
-  const debouncedGeocode = useDebounce(() => {
+  const performGeocode = useCallback(() => {
     const map = mapRef.current
     if (!map || !geocoder || !center) return
-    geocoder.coord2RegionCode(center.lng, center.lat, handleGeocode)
-  }, 200)
 
-  const handleCenterChanged = useCallback(
-    (map: kakao.maps.Map) => {
-      setCenter({
-        lat: map.getCenter().getLat(),
-        lng: map.getCenter().getLng(),
-      })
-    },
-    [setCenter],
-  )
+    const newCenter = {
+      lat: map.getCenter().getLat(),
+      lng: map.getCenter().getLng(),
+    }
+    setCenter(newCenter)
+    geocoder.coord2RegionCode(newCenter.lng, newCenter.lat, handleGeocode)
+  }, [geocoder, center, handleGeocode])
+
+  // Create debounced version of performGeocode
+  const debouncedGeocode = useDebounce(performGeocode, 500)
 
   return (
     <div className="relative h-[200px] w-full overflow-hidden rounded-lg">
@@ -105,7 +97,7 @@ export default function HomeKakaoMap() {
         level={3}
         aria-label="지도"
         role="application"
-        onCenterChanged={handleCenterChanged}
+        onCenterChanged={debouncedGeocode}
       ></Map>
     </div>
   )
