@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { postBookmark, deleteBookmark, getBookmark } from '@/actions/bookmark'
-import { useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface useBookmarkProps {
   poolId: number
@@ -8,47 +7,124 @@ interface useBookmarkProps {
 }
 
 export function useBookmark({ poolId, user }: useBookmarkProps) {
-  const [bookmarked, setBookmarked] = useState(false)
-  const [bookmarkId, setBookmarkId] = useState<number | null>(null)
+  const queryClient = useQueryClient()
 
   // Fetch bookmark status
-  useQuery({
-    queryKey: ['bookmark', poolId],
-    queryFn: async () => {
-      const res = await getBookmark(poolId)
-      if (res.status === 'success') {
-        setBookmarkId(res.data.bookId)
-        return true
-      } else {
-        setBookmarkId(null)
-        return false
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['bookmarks', poolId],
+    queryFn: async ({ queryKey, signal }) => {
+      const [_, poolId] = queryKey
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/pools/${poolId}/bookmark`,
+        {
+          credentials: 'include',
+          method: 'GET',
+          signal,
+        },
+      )
+      const json = await response.json()
+
+      if (!response.ok) {
+        const status = response.status
+        throw new Error(`[${status} 에러] ${json.message}`)
       }
+
+      return json.data.is_bookmarked
     },
     enabled: user,
   })
 
-  const { mutate: addBookmarkMutation } = useMutation({
+  const { mutate: addBookmark } = useMutation({
     mutationFn: async (poolId: number) => {
-      const res = await postBookmark(poolId)
-      if (res.status === 'success') {
-        const id = res.data.id
-        setBookmarkId(id)
-        return true
-      } else {
-        return false
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/pools/${poolId}/bookmark`,
+        {
+          credentials: 'include',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ poolId }),
+        },
+      )
+      const json = await response.json()
+
+      if (!response.ok) {
+        const status = response.status
+        throw new Error(`[${status} 에러] ${json.message}`)
+      }
+      return json.data
+    },
+    onMutate: async (poolId) => {
+      // 진행 중인 북마크 요청 취소
+      await queryClient.cancelQueries({ queryKey: ['bookmarks', poolId] })
+
+      // 이전 북마크 상태 저장
+      const previousBookmarks = queryClient.getQueryData(['bookmarks', poolId])
+
+      // 낙관적으로 캐시 업데이트
+      queryClient.setQueryData(['bookmarks', poolId], (old: any) => ({
+        is_bookmarked: true,
+      }))
+
+      return { previousBookmarks }
+    },
+    onError: (err, variables, context) => {
+      // 에러 발생 시 이전 상태로 롤백
+      if (context?.previousBookmarks) {
+        queryClient.setQueryData(
+          ['bookmarks', poolId],
+          context.previousBookmarks,
+        )
       }
     },
+    onSettled: () => {
+      // 쿼리 무효화하여 서버 상태와 동기화
+      queryClient.invalidateQueries({ queryKey: ['bookmarks', poolId] })
+    },
   })
 
-  const { mutate: deleteBookmarkMutation } = useMutation({
-    mutationFn: async () => {
-      if (!bookmarkId) throw new Error('북마크 ID가 없습니다')
-      return deleteBookmark(bookmarkId)
+  const { mutate: deleteBookmark } = useMutation({
+    mutationFn: async (poolId: number) => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/pools/${poolId}/bookmark`,
+        {
+          credentials: 'include',
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      const json = await response.json()
+
+      if (!response.ok) {
+        const status = response.status
+        const message = (await response.json()).message
+
+        throw new Error(`[${status} 에러] ${message}`)
+      }
+      return json.data
+    },
+    onMutate: async (poolId) => {
+      await queryClient.cancelQueries({ queryKey: ['bookmarks', poolId] })
+      const previousBookmarks = queryClient.getQueryData(['bookmarks', poolId])
+
+      queryClient.setQueryData(['bookmarks', poolId], (old: any) => ({
+        is_bookmarked: false,
+      }))
+
+      return { previousBookmarks }
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousBookmarks) {
+        queryClient.setQueryData(['bookmarks'], context.previousBookmarks)
+      }
     },
     onSettled: () => {
-      setBookmarkId(null)
+      queryClient.invalidateQueries({ queryKey: ['bookmarks', poolId] })
     },
   })
 
-  return { bookmarked, addBookmarkMutation, deleteBookmarkMutation }
+  return { data, addBookmark, deleteBookmark }
 }

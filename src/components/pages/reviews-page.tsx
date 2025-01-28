@@ -10,6 +10,7 @@ import ReviewForm from '@/components/reviews/reivew-form'
 import { Button } from '@/components/ui/button'
 import { PiPencilSimpleLineFill } from 'react-icons/pi'
 import { IReview } from '@/types/reviews'
+import { FaChevronLeft } from 'react-icons/fa'
 
 interface ReviewsPageProps {
   preview?: boolean
@@ -79,9 +80,23 @@ export default function ReviewsPage({
         />
       </ResponsiveDialog>
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">
-          수영장 리뷰<span className="ml-2 text-gray-500">{data.total}</span>
-        </h2>
+        <div className="flex">
+          {!preview && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full"
+              asChild
+            >
+              <Link href="/">
+                <FaChevronLeft />
+              </Link>
+            </Button>
+          )}
+          <h2>
+            수영장 리뷰<span className="ml-2 text-gray-500">{data.total}</span>
+          </h2>
+        </div>
 
         <Button
           variant="ghost"
@@ -94,7 +109,10 @@ export default function ReviewsPage({
       </div>
       <Separator />
       {Object.entries(data.summary).map(([keyword, count]) => (
-        <div key={keyword} className="rounded-md bg-gray-100 p-4">
+        <div
+          key={keyword}
+          className="rounded-md bg-gray-100 p-4 font-semibold text-gray-700"
+        >
           {keyword}: {count}
         </div>
       ))}
@@ -113,7 +131,7 @@ export default function ReviewsPage({
 
       {preview && (
         <Link href={`/pools/${poolId}/reviews`} className="mx-auto">
-          <Button variant="primary" className="rounded-full">
+          <Button variant="secondary" className="rounded-full">
             리뷰 더보기
           </Button>
         </Link>

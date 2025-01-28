@@ -5,11 +5,11 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Skeleton } from '@/components/ui/skeleton'
 import { useUserStore } from '@/providers/user-store-provider'
 import { format } from 'date-fns'
 import { Button } from '@/components/ui/button'
@@ -36,8 +36,8 @@ import {
 import { useToast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
 import { useMyBookmarks } from '@/hooks/use-my-bookmarks'
-import Image from 'next/image'
 import PoolBookmarkPreviewItem from '@/components/pool/pool-bookmark-preview-item'
+import Link from 'next/link'
 
 export default function MyPage() {
   const { user, clearUser } = useUserStore((state) => state)
@@ -79,10 +79,13 @@ export default function MyPage() {
   }
   if (!user) {
     return (
-      <div className="container mx-auto p-4">
-        <Card className="mx-auto max-w-2xl">
-          <CardContent className="p-6 text-center text-red-500">
-            로그인이 필요합니다.
+      <div className="flex flex-col p-2">
+        <Card>
+          <CardContent className="flex flex-col p-6 text-center text-destructive">
+            <p>로그인이 필요합니다.</p>
+            <Link href="/login" className="text-primary">
+              로그인하기
+            </Link>
           </CardContent>
         </Card>
       </div>
@@ -91,12 +94,11 @@ export default function MyPage() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-4">
+      <div className="flex flex-col p-2">
         <Card className="mx-auto max-w-2xl">
-          <CardHeader className="space-y-4">
-            <Skeleton className="h-12 w-12 rounded-full" />
-            <Skeleton className="h-4 w-[250px]" />
-          </CardHeader>
+          <CardContent className="p-6 text-center text-gray-500">
+            프로필을 불러오는 중입니다.
+          </CardContent>
         </Card>
       </div>
     )
@@ -104,7 +106,7 @@ export default function MyPage() {
 
   if (isError) {
     return (
-      <div className="container mx-auto p-4">
+      <div className="flex flex-col p-2">
         <Card className="mx-auto max-w-2xl">
           <CardContent className="p-6 text-center text-red-500">
             프로필을 불러오는데 실패했습니다.
@@ -115,8 +117,8 @@ export default function MyPage() {
   }
 
   return (
-    <div className="container mx-auto p-2">
-      <Card className="max-w-2xl">
+    <div className="flex flex-col p-2">
+      <Card className="flex flex-col">
         <CardHeader>
           <div className="flex justify-end">
             <DropdownMenu>
@@ -169,16 +171,15 @@ export default function MyPage() {
             </div>
           )}
         </CardContent>
-        <Button
-          className="mx-2 mb-2 w-full"
-          onClick={() => setIsEditOpen(true)}
-        >
-          <LuPencil className="mr-2" />
-          프로필 수정
-        </Button>
+        <CardFooter>
+          <Button className="w-full" onClick={() => setIsEditOpen(true)}>
+            <LuPencil className="mr-2" />
+            프로필 수정
+          </Button>
+        </CardFooter>
       </Card>
 
-      <section className="mt-4">
+      <section className="mt-4 flex flex-col">
         <h2 className="text-xl font-bold">즐겨찾기</h2>
         <div className="scrollbar-hide flex gap-4 overflow-x-auto pb-4">
           {bookmarks &&

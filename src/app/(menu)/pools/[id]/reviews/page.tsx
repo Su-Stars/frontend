@@ -7,10 +7,5 @@ export default async function Page({
 }) {
   const poolId = Number((await params).id)
 
-  return (
-    <>
-      <h2>Pool page {poolId}</h2>
-      <ReviewsPage poolId={poolId} />
-    </>
-  )
+  return <ReviewsPage poolId={poolId} />
 }

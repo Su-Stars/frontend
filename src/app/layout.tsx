@@ -1,4 +1,3 @@
-import { Geist, Geist_Mono } from 'next/font/google'
 import '@/styles/globals.css'
 import { server } from '@/mocks/node'
 import GlobalProvider from '@/providers/global-provider'
@@ -92,16 +91,6 @@ export const metadata: Metadata = {
   category: 'information',
 }
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-})
-
 const pretendard = localFont({
   src: '../static/fonts/PretendardVariable.woff2',
   display: 'swap', // 폰트 로딩 중 시스템 폰트로 대체(디폴트 swap)
@@ -134,9 +123,7 @@ export default function RootLayout({
       <head>
         <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0d929ba008c86e3296bdbeb4f341c2cc&libraries=services,clusterer&autoload=false" />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${pretendard.variable} font-pretendard antialiased`}
-      >
+      <body className={`${pretendard.variable} font-pretendard antialiased`}>
         <GoogleAnalytics gaId={GA_ID} />
         <GlobalProvider>{children}</GlobalProvider>
         <Toaster />

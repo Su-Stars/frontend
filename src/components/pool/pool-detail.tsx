@@ -6,10 +6,8 @@ import {
   FaPhoneAlt,
 } from 'react-icons/fa'
 import { IoIosCheckboxOutline } from 'react-icons/io'
-
 import { FaPersonSwimming } from 'react-icons/fa6'
 import { LuLink } from 'react-icons/lu'
-
 import { Button } from '../ui/button'
 import Image from 'next/image'
 import NoImage from '../common/no-image'
@@ -60,18 +58,13 @@ export default function PoolDetail({ pool }: PoolDetailProps) {
 
   return (
     <section className="flex flex-col gap-2">
-      <header className="flex w-full items-center gap-4 border-b-slate-200 bg-white">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="rounded-md bg-transparent text-black hover:bg-accent"
-          asChild
-        >
+      <header className="flex w-full items-center gap-1">
+        <Button variant="ghost" size="icon" className="rounded-full" asChild>
           <Link href="/">
             <FaChevronLeft />
           </Link>
         </Button>
-        <h2 className="text-2xl font-bold">{pool?.name}</h2>
+        <h2>{pool?.name}</h2>
       </header>
       <div className="relative h-[200px] w-full">
         {pool?.images ? (
@@ -79,16 +72,15 @@ export default function PoolDetail({ pool }: PoolDetailProps) {
             src={pool.images[0]}
             fill
             className="object-fill"
-            alt="수영장 이미지"
+            alt={`#{pool.name} 수영장 이미지`}
           />
         ) : (
           <NoImage className="h-[200px] w-full" />
         )}
       </div>
       <div className="flex flex-col gap-2 *:flex *:items-center *:gap-4">
-        <div className="justify-between text-xl font-semibold text-black">
-          {pool?.name}
-
+        <div className="justify-between">
+          <h2> {pool?.name}</h2>
           <PoolBookmark poolId={pool.id} />
         </div>
 

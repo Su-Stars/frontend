@@ -19,7 +19,7 @@ export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {
   const [isMapReady, setIsMapReady] = useState(false)
 
   return (
-    <div className="relative h-[300px] w-full rounded-lg">
+    <div className="relative h-[300px] w-full rounded-lg border">
       <Map
         center={position}
         style={{ width: '100%', height: '100%' }}

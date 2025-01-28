@@ -9,6 +9,7 @@ import SwimLogItem from '@/components/swim-logs/swim-log-item'
 import Link from 'next/link'
 import { LuArrowLeft } from 'react-icons/lu'
 import { useUserStore } from '@/providers/user-store-provider'
+import { LuBook } from 'react-icons/lu'
 
 interface DiaryDetailPageProps {
   date: string
@@ -30,7 +31,7 @@ export default function DiaryDetailPage({ date }: DiaryDetailPageProps) {
         <Button
           variant="ghost"
           size="icon"
-          className="absolute left-4 rounded-md bg-transparent text-black hover:bg-accent"
+          className="absolute left-4 rounded-full bg-transparent text-black hover:bg-accent"
           asChild
         >
           <Link href="/diary">
@@ -56,7 +57,11 @@ export default function DiaryDetailPage({ date }: DiaryDetailPageProps) {
           </div>
         ))
       ) : (
-        <p>기록이 없습니다.</p>
+        <div className="flex flex-col items-center justify-center gap-4 py-12 text-muted-foreground">
+          <LuBook className="h-12 w-12" />
+          <span className="text-lg">기록이 없습니다</span>
+          <p>새로운 수영기록을 추가해보세요</p>
+        </div>
       )}
       <Button
         variant="primary"

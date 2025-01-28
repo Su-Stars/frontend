@@ -82,7 +82,7 @@ export default function HomeKakaoMap() {
   const handleCenterChanged = useDebounce(searchAddressFromCoords, 500)
 
   return (
-    <div className="relative h-[200px] w-full overflow-hidden rounded-lg">
+    <div className="relative h-[200px] w-full overflow-hidden rounded-lg border">
       <Map
         ref={mapRef}
         center={{

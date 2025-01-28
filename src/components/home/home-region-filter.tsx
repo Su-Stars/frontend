@@ -35,25 +35,27 @@ export default function RegionFilter({
   districts,
 }: RegionFilterProps) {
   return (
+    //TODO : 스크롤바 유무로 인한 레이아웃 변경 이슈 해결 필요
     <Dialog>
       <DialogTrigger asChild>
-        <div>
-          <Button className="w-fit">
-            <LuMapPin />
-            {address}
-            <LuChevronDown />
-          </Button>
-        </div>
+        <Button className="w-fit text-lg font-semibold" variant="secondary">
+          <LuMapPin className="stroke-4" />
+          {address}
+          <LuChevronDown className="stroke-4" />
+        </Button>
       </DialogTrigger>
       <DialogContent className="h-96 w-96 overflow-y-auto rounded-2xl md:h-[30rem] md:w-[30rem]">
         <DialogHeader className="flex flex-col gap-2">
-          <DialogTitle>지역으로 검색</DialogTitle>
-          <h3 className="font-semibold text-theme">
+          <DialogTitle className="flex">
+            <LuMapPin className="mr-1 text-primary" />
+            지역 설정
+          </DialogTitle>
+          <h3 className="text-primary">
             {selectedRegion?.name ? (
               <span className="flex items-center gap-4">
                 <Button
-                  className="bg-white text-black hover:text-white"
-                  size="icon"
+                  className="h-5 w-5 rounded-full bg-white text-black hover:text-white"
+                  variant="outline"
                   onClick={clickBack}
                 >
                   <LuChevronLeft />
