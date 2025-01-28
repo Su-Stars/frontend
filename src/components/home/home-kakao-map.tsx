@@ -34,7 +34,9 @@ export default function HomeKakaoMap() {
     (result: GeocoderResult[], status: kakao.maps.services.Status) => {
       if (status === kakao.maps.services.Status.OK) {
         const address = result[0].address_name
-        const adminDistrict = address.split(' ').slice(0, 2).join(' ')
+
+        const adminDistrict = address.split(' ').slice(0, 3).join(' ')
+        console.log(adminDistrict)
         setRegion(adminDistrict)
       }
     },
@@ -67,7 +69,6 @@ export default function HomeKakaoMap() {
   const searchAddressFromCoords = useCallback(() => {
     const map = mapRef.current
     if (!map || !geocoder || !center) {
-      console.log('실패 ㅠㅠ')
       return
     }
 
