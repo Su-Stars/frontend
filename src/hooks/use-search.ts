@@ -55,12 +55,10 @@ export const useSearch = ({
       queryFn: async ({ pageParam }) =>
         searchPools({ region, keyword, page: pageParam as number, limit }),
       initialPageParam: 1,
-      getNextPageParam: (lastPage, allPages) => {
+      getNextPageParam: (lastPage) => {
         const totalPages = Math.ceil(lastPage.total / limit) // 총 페이지 수
         const currentPage = Number(lastPage.page) // 현재 페이지
         if (currentPage < totalPages) {
-          console.log('현재', currentPage)
-
           return currentPage + 1
         }
       },

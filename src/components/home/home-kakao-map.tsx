@@ -5,11 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { DEFAULT_MAP_CENTER } from '@/lib/constants'
 import { useDebounce } from '@/hooks/use-debounce'
 import useRegionStore from '@/stores/region-store'
-
-interface Coordinates {
-  lat: number
-  lng: number
-}
+import { Coordinates } from '@/stores/center-store'
 
 interface GeocoderResult {
   address_name: string
@@ -26,53 +22,54 @@ export default function HomeKakaoMap() {
     null,
   )
 
-  // 지오코더 로딩
+  // 카카오맵 로드와 지오코더 초기화
   useEffect(() => {
     kakao.maps.load(() => {
       setGeocoder(new kakao.maps.services.Geocoder())
     })
   }, [])
 
-  // 유저 위치로 맵 이동
+  // 지오코딩 처리 함수
+  const handleGeocode = useCallback(
+    (result: any[], status: kakao.maps.services.Status) => {
+      if (status === kakao.maps.services.Status.OK) {
+        const address = result[0].address_name
+        const adminDistrict = address.split(' ').slice(0, 2).join(' ')
+        setRegion(adminDistrict)
+      }
+    },
+    [setRegion],
+  )
+
+  // 첫 로딩시 유저의 위치로 설정 - 됨, 지도가 자동으로 유저 위치에서 시작은 하
+  // 유저의 위치에서 지오코딩 실행
+  // 지오코딩으로 얻은 주소로부터 setRegion을 실행시켜 인근 수영장에 대한 검색 실행
   useEffect(() => {
-    const getCurrentLocation = () => {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const newCenter: Coordinates = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          }
-          setCenter(newCenter)
-        },
-        // 에러가 발생하면 서울역으로 설정
-        (error) => {
-          setCenter(DEFAULT_MAP_CENTER)
-          console.error('Geolocation error:', error)
-        },
-      )
-    }
+    if (!geocoder) return
 
-    getCurrentLocation()
-  }, [setCenter])
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const newCenter: Coordinates = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        }
+        setCenter(newCenter)
+        geocoder.coord2RegionCode(newCenter.lng, newCenter.lat, handleGeocode)
+      },
+      // 에러가 발생하면 서울역으로 설정
+      (error) => {
+        setCenter(DEFAULT_MAP_CENTER)
+        console.error('Geolocation error:', error)
+      },
+    )
+  }, [geocoder, setRegion])
 
-  const handleGeocode = (
-    result: GeocoderResult[],
-    status: kakao.maps.services.Status,
-  ) => {
-    if (status === kakao.maps.services.Status.OK) {
-      const address = result[0].address_name
-
-      // '경기도 수원시 장안구 파장동'에서 '경기도 수원시'까지만 추출
-      const adminDistrict = address.split(' ').slice(0, 3).join(' ')
-      console.log(adminDistrict)
-      setRegion(adminDistrict)
-    } else {
-      console.error('Geocoding failed:', status)
-    }
-  }
-  const performGeocode = useCallback(() => {
+  const searchAddressFromCoords = useCallback(() => {
     const map = mapRef.current
-    if (!map || !geocoder || !center) return
+    if (!map || !geocoder || !center) {
+      console.log('실패 ㅠㅠ')
+      return
+    }
 
     const newCenter = {
       lat: map.getCenter().getLat(),
@@ -80,10 +77,9 @@ export default function HomeKakaoMap() {
     }
     setCenter(newCenter)
     geocoder.coord2RegionCode(newCenter.lng, newCenter.lat, handleGeocode)
-  }, [geocoder, center, handleGeocode])
+  }, [geocoder, center])
 
-  // Create debounced version of performGeocode
-  const debouncedGeocode = useDebounce(performGeocode, 500)
+  const handleCenterChanged = useDebounce(searchAddressFromCoords, 500)
 
   return (
     <div className="relative h-[200px] w-full overflow-hidden rounded-lg">
@@ -97,7 +93,7 @@ export default function HomeKakaoMap() {
         level={3}
         aria-label="지도"
         role="application"
-        onCenterChanged={debouncedGeocode}
+        onCenterChanged={handleCenterChanged}
       ></Map>
     </div>
   )
