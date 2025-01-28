@@ -1,7 +1,5 @@
-'use client'
-
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { postBookmark, deleteBookmark, getBookmark } from '@/actions/bookmark'
-import { QueryClient, useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
 interface useBookmarkProps {
@@ -10,14 +8,10 @@ interface useBookmarkProps {
 }
 
 export function useBookmark({ poolId, user }: useBookmarkProps) {
-  const queryClient = new QueryClient()
-
-  //TODO : 중복된 북마크 상태를 제거하고 bookmarkId를 사용하도록 수정
   const [bookmarked, setBookmarked] = useState(false)
   const [bookmarkId, setBookmarkId] = useState<number | null>(null)
 
-  //TODO : 북마크 상태를 가져오는 로직을 useQuery로 변경
-  // 현재는 useQuery의 리턴값을 사용하지 않고 개별 상태로 관리하고 있음
+  // Fetch bookmark status
   useQuery({
     queryKey: ['bookmark', poolId],
     queryFn: async () => {
@@ -44,18 +38,6 @@ export function useBookmark({ poolId, user }: useBookmarkProps) {
         return false
       }
     },
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ['bookmark', poolId] })
-      const previousBookmark = queryClient.getQueryData(['bookmark', poolId])
-      setBookmarked(true)
-      return { previousBookmark }
-    },
-    onError: () => {
-      queryClient.setQueryData(['bookmark', poolId], false)
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['bookmark', poolId] })
-    },
   })
 
   const { mutate: deleteBookmarkMutation } = useMutation({
@@ -63,17 +45,7 @@ export function useBookmark({ poolId, user }: useBookmarkProps) {
       if (!bookmarkId) throw new Error('북마크 ID가 없습니다')
       return deleteBookmark(bookmarkId)
     },
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ['bookmark', poolId] })
-      const previousBookmark = queryClient.getQueryData(['bookmark', poolId])
-      setBookmarked(false)
-      return { previousBookmark }
-    },
-    onError: () => {
-      queryClient.setQueryData(['bookmark', poolId], true)
-    },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['bookmark', poolId] })
       setBookmarkId(null)
     },
   })
