@@ -67,7 +67,8 @@ export default function HomeKakaoMap() {
       const address = result[0].address_name
 
       // '경기도 수원시 장안구 파장동'에서 '경기도 수원시'까지만 추출
-      const adminDistrict = address.split(' ').slice(0, 2).join(' ')
+      const adminDistrict = address.split(' ').slice(0, 3).join(' ')
+      console.log(adminDistrict)
       setRegion(adminDistrict)
     } else {
       console.error('Geocoding failed:', status)
@@ -79,7 +80,7 @@ export default function HomeKakaoMap() {
     const map = mapRef.current
     if (!map || !geocoder) return
     geocoder.coord2RegionCode(center.lng, center.lat, handleGeocode)
-  }, 100)
+  }, 200)
 
   return (
     <div className="relative h-[200px] w-full overflow-hidden rounded-lg">

@@ -82,7 +82,7 @@ export default function PoolDetail({ pool }: PoolDetailProps) {
             alt="수영장 이미지"
           />
         ) : (
-          <NoImage />
+          <NoImage className="h-[200px] w-full" />
         )}
       </div>
       <div className="flex flex-col gap-2 *:flex *:items-center *:gap-4">
