@@ -10,6 +10,7 @@ import PoolCard from '@/components/home/home-pool-card'
 import RegionFilter from '@/components/home/home-region-filter'
 import useRegionStore from '@/stores/region-store'
 import { useIntersectionObserver } from '@/hooks/use-intersectionObserver'
+import { LuSearch } from 'react-icons/lu'
 
 export default function HomeSearch() {
   const { setRegion, region } = useRegionStore()
@@ -127,19 +128,26 @@ export default function HomeSearch() {
 
       <form onSubmit={handleSubmit} className="flex space-x-2">
         <Input
-          placeholder="검색어를 입력하세요"
-          className="flex-1"
+          placeholder="수영장 이름, 특정 지역 검색"
+          className="h-10 flex-1"
           value={value}
           onChange={onChange}
         />
-        <Button type="submit">검색</Button>
+        <Button type="submit" className="h-10" variant="primary">
+          <LuSearch className="h-6 w-6" />
+          검색
+        </Button>
       </form>
 
-      <h1 className="text-lg font-semibold">
+      <h3>
         검색 결과 <span className="text-blue-500"> {total}</span>
-      </h1>
+      </h3>
       {total === 0 ? (
-        <h1>검색 결과가 없습니다</h1>
+        <div className="flex flex-col items-center justify-center gap-4 py-12 text-muted-foreground">
+          <LuSearch className="h-12 w-12" />
+          <h3>검색 결과가 없습니다</h3>
+          <p>다른 검색어로 다시 시도해보세요</p>
+        </div>
       ) : (
         searchResults.map((pool: Pool) => (
           <PoolCard pool={pool} key={pool.id} />

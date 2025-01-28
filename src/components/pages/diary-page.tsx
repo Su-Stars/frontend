@@ -8,7 +8,6 @@ import { format } from 'date-fns'
 import { useUserStore } from '@/providers/user-store-provider'
 import Link from 'next/link'
 
-//TODO : 미들웨어를 사용하여 로그인하지 않은 유저를 걸러냅니다.
 export default function DiaryPage() {
   const [currentDate, setCurrentDate] = useState(format(new Date(), 'yyyy-MM'))
   const { user } = useUserStore((state) => state)
@@ -18,9 +17,6 @@ export default function DiaryPage() {
     month: Number(currentDate.split('-')[1]),
     user: !!user,
   })
-
-  /*TODO : 유저정보를 윺저스토어에서 가져옵니다*/
-
   // if (isPending) return <p>Loading...</p>
 
   if (isError)
@@ -60,13 +56,13 @@ export default function DiaryPage() {
       />
 
       {user ? (
-        <Button className="w-full" variant="primary" asChild>
+        <Button className="h-10 w-full" variant="primary" asChild>
           <Link href={`/diary/${format(new Date(), 'yyyy-MM-dd')}`}>
             오늘의 수영 기록 남기기
           </Link>
         </Button>
       ) : (
-        <Button className="w-full" variant="primary" asChild>
+        <Button className="h-10 w-full" variant="primary" asChild>
           <Link href="/login">오늘의 수영 기록 남기기</Link>
         </Button>
       )}
