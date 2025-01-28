@@ -9,12 +9,22 @@ import { useState } from 'react'
 import { useToast } from '@/hooks/use-toast'
 import { useQueryClient } from '@tanstack/react-query'
 import { navigateToHome } from '@/actions/redirects'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 export default function DesktopHeaderAuth() {
   const pathname = usePathname()
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
   const { user, clearUser } = useUserStore((state) => state)
+
   const queryClient = useQueryClient()
 
   const handleLogout = async () => {
@@ -88,14 +98,36 @@ export default function DesktopHeaderAuth() {
   return (
     <div className="flex items-center justify-end gap-2">
       {user ? (
-        <Button
-          variant="ghost"
-          onClick={handleLogout}
-          className="font-bold text-gray-600 decoration-1 underline-offset-4 hover:text-blue-700 hover:underline"
-          disabled={loading}
-        >
-          로그아웃
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Avatar>
+              <AvatarFallback>{user.nickname}</AvatarFallback>
+              {/* <AvatarImage src={user.image_url} alt={user.nickname} /> */}
+            </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>{user.nickname}</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <Link
+                className="flex w-full items-center justify-start px-2 py-1.5 text-sm font-normal hover:bg-accent"
+                href="/my-page"
+              >
+                마이페이지
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Button
+                variant="ghost"
+                className="flex w-full items-center justify-start px-2 py-1.5 text-sm font-normal hover:bg-accent"
+                onClick={handleLogout}
+                disabled={loading}
+              >
+                로그아웃
+              </Button>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       ) : (
         <>
           <Link

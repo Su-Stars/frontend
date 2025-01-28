@@ -50,13 +50,13 @@ export default function LoginPage() {
         },
         body: JSON.stringify(values),
       })
-      const data = await response.json()
+      const json = await response.json()
 
       if (!response.ok) {
-        const status = response.status
-        const message = data.message || '로그인에 실패했습니다.'
-        throw new Error(`[${status} 에러] ${message}`)
+        throw new Error(`[${response.status}] ${json.message}`)
       }
+
+      const data = json.data
 
       // 3. Update the user store with the user data.
       setUser({
