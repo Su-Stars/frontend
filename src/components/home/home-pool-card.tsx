@@ -1,7 +1,15 @@
 import { Pool } from '@/hooks/use-search'
 import Image from 'next/image'
 import Link from 'next/link'
-import NoImage from '../common/no-image'
+import NoImage from '@/components/common/no-image'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 
 interface PoolCardProps {
   pool: Pool
@@ -9,18 +17,28 @@ interface PoolCardProps {
 
 export default function PoolCard({ pool }: PoolCardProps) {
   return (
-    <div>
-      <Link className="flex gap-4" href={`/pools/${pool.id}`}>
-        {pool?.thumbnail ? (
-          <Image src={pool?.thumbnail} alt="이미지" width={70} height={70} />
-        ) : (
-          <NoImage className="h-[70px] w-[70px] text-sm" />
-        )}
-        <div className="flex-col gap-4">
-          <div className="text-lg font-semibold">{pool.name}</div>
-          <div className="text-sm text-gray-400">{pool.address}</div>
+    <Link href={`/pools/${pool.id}`}>
+      <Card className="flex h-40 p-0 transition hover:opacity-90">
+        <div className="h-full w-40">
+          {pool?.thumbnail ? (
+            <Image
+              src={pool?.thumbnail}
+              alt="이미지"
+              width={70}
+              height={70}
+              className="h-full rounded-l-lg object-cover"
+            />
+          ) : (
+            <NoImage className="h-full w-full rounded-l-lg text-sm" />
+          )}
         </div>
-      </Link>
-    </div>
+        <div className="flex flex-1 flex-col justify-center p-4">
+          <CardTitle className="text-lg hover:underline">{pool.name}</CardTitle>
+          <CardDescription className="text-sm">
+            {pool.address.split(' ').slice(0, 4).join(' ')}
+          </CardDescription>
+        </div>
+      </Card>
+    </Link>
   )
 }
