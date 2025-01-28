@@ -1,4 +1,5 @@
-import { useQuery } from '@tanstack/react-query'
+import { searchPools } from '@/actions/search'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 
 interface UseSearchParams {
   region?: string
@@ -31,7 +32,7 @@ export interface Pool {
   isTowelProvided?: boolean
 }
 
-interface UseSearchResponse {
+export interface UseSearchResponse {
   total: number
   page: number
   limit: number
@@ -55,48 +56,33 @@ export const useSearch = ({
   limit = 10,
 }: UseSearchParams) => {
   const {
-    data: searchResults = defaultResponse,
-    isLoading: isSearchLoading,
-    isError: isSearchError,
-    error: searchError,
-  } = useQuery<UseSearchResponse>({
+    data,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+  } = useInfiniteQuery<UseSearchResponse>({
     queryKey: ['search', region, keyword, page, limit],
-    queryFn: async () => {
-      try {
-        const url = new URL(`${process.env.NEXT_PUBLIC_SERVER_URL}/pools`)
-        url.search = new URLSearchParams({
-          region,
-          keyword,
-          page: String(page),
-          limit: String(limit),
-        }).toString()
-
-        const requestUrl = url.toString()
-        const res = await fetch(requestUrl)
-
-        if (!res.ok) {
-          throw new Error('네트워크 에러')
-        }
-
-        const json = await res.json()
-        console.log(json)
-
-        return json.data
-      } catch (error) {
-        console.error('Search error:', error)
-        throw new Error('검색에 실패했습니다')
-      }
+    queryFn: async ({ pageParam }) =>
+      searchPools({ region, keyword, page: pageParam as number, limit }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage): number | null => {
+      const isLastPage = Math.ceil(lastPage.total / limit) === lastPage.page
+      return isLastPage ? null : lastPage.page + 1
     },
-
-    retry: 1,
-    staleTime: 1000 * 60 * 5, // 5분
   })
 
+  const searchResults = data ? data.pages.flatMap((page) => page.pools) : []
+  const total =
+    data && data.pages.length > 0 ? data.pages[data.pages.length - 1].total : 0
+
   return {
+    total,
     searchResults,
-    isSearchLoading,
-    isSearchError,
-    searchError,
-    total: searchResults.total,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
   }
 }

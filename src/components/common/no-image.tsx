@@ -9,7 +9,7 @@ export default function NoImage({ className }: NoImageProps) {
   return (
     <div
       className={clsx(
-        'flex h-full w-full items-center justify-center bg-gray-300 text-lg font-semibold',
+        'flex items-center justify-center bg-gray-300 text-center text-lg font-semibold',
         className,
       )}
     >

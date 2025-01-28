@@ -6,7 +6,7 @@ interface regionState {
 }
 
 const useRegionStore = create<regionState>((set) => ({
-  region: '전국',
+  region: 'all',
   setRegion: (newRegion: string) => {
     set({ region: newRegion })
   },

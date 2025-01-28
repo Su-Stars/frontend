@@ -5,7 +5,6 @@ import {
 } from '@tanstack/react-query'
 import PoolPage from '@/components/pages/pool-page'
 import { getPool } from '@/actions/get-pool'
-import { getBookmark } from '@/actions/bookmark'
 import type { Metadata, ResolvingMetadata } from 'next'
 import { notFound } from 'next/navigation'
 

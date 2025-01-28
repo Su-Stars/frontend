@@ -1,5 +1,3 @@
-import { th } from 'date-fns/locale'
-
 export const getBookmark = async (poolId: number) => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/pools/${poolId}/bookmarked`,

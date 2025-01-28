@@ -14,7 +14,7 @@ export default function PoolCard({ pool }: PoolCardProps) {
         {pool.thumbnail ? (
           <Image src={pool.thumbnail} alt="이미지" width={70} height={70} />
         ) : (
-          <NoImage className="h-[70px] w-[70px]" />
+          <NoImage className="h-[70px] w-[70px] text-sm" />
         )}
         <div className="flex-col gap-4">
           <div className="text-lg font-semibold">{pool.name}</div>

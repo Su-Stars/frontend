@@ -1,10 +1,10 @@
 'use client'
 
 import { Map, MapMarker } from 'react-kakao-maps-sdk'
-import { useCallback, useEffect, useRef, useState } from 'react'
-import useCenterStore, { Center } from '@/stores/center-store'
+import { useEffect, useRef, useState } from 'react'
 import { DEFAULT_MAP_CENTER } from '@/lib/constants'
 import { useDebounce } from '@/hooks/use-debounce'
+import useRegionStore from '@/stores/region-store'
 
 interface Coordinates {
   lat: number
@@ -19,19 +19,21 @@ interface GeocoderResult {
 }
 
 export default function HomeKakaoMap() {
-  const { center, setCenter } = useCenterStore()
   const mapRef = useRef<kakao.maps.Map>(null)
-  const [currentAddress, setCurrentAddress] = useState<string>('')
+  const { setRegion, region } = useRegionStore()
+  const [center, setCenter] = useState<Coordinates>(DEFAULT_MAP_CENTER)
   const [geocoder, setGeocoder] = useState<kakao.maps.services.Geocoder | null>(
     null,
   )
 
+  // 지오코더 로딩
   useEffect(() => {
     kakao.maps.load(() => {
       setGeocoder(new kakao.maps.services.Geocoder())
     })
   }, [])
 
+  // 유저 위치로 맵 이동
   useEffect(() => {
     const getCurrentLocation = () => {
       navigator.geolocation.getCurrentPosition(
@@ -41,11 +43,9 @@ export default function HomeKakaoMap() {
             lng: position.coords.longitude,
           }
           setCenter(newCenter)
-          console.log(center)
         },
         (error) => {
           console.error('Geolocation error:', error)
-          setCenter(DEFAULT_MAP_CENTER)
         },
       )
     }
@@ -53,28 +53,33 @@ export default function HomeKakaoMap() {
     getCurrentLocation()
   }, [setCenter])
 
+  useEffect(() => {
+    if (geocoder) {
+      debouncedGeocode()
+    }
+  }, [center, geocoder])
+
   const handleGeocode = (
     result: GeocoderResult[],
     status: kakao.maps.services.Status,
   ) => {
     if (status === kakao.maps.services.Status.OK) {
-      const adminDistrict = result.find((item) => item.region_type === 'H')
-      if (adminDistrict) {
-        setCurrentAddress(adminDistrict.address_name)
-        console.log('Current location:', adminDistrict.address_name)
-      }
+      const address = result[0].address_name
+
+      // '경기도 수원시 장안구 파장동'에서 '경기도 수원시'까지만 추출
+      const adminDistrict = address.split(' ').slice(0, 2).join(' ')
+      setRegion(adminDistrict)
     } else {
       console.error('Geocoding failed:', status)
     }
   }
 
-  const debouncedHandleCenterChanged = useDebounce(() => {
+  // 디바운싱
+  const debouncedGeocode = useDebounce(() => {
     const map = mapRef.current
     if (!map || !geocoder) return
-
-    const center = map.getCenter()
-    geocoder.coord2RegionCode(center.getLng(), center.getLat(), handleGeocode)
-  }, 300)
+    geocoder.coord2RegionCode(center.lng, center.lat, handleGeocode)
+  }, 100)
 
   return (
     <div className="relative h-[200px] w-full overflow-hidden rounded-lg">
@@ -85,13 +90,15 @@ export default function HomeKakaoMap() {
         level={3}
         aria-label="지도"
         role="application"
-        onCenterChanged={debouncedHandleCenterChanged}
+        onCenterChanged={(map) => {
+          const newCenter = {
+            lat: map.getCenter().getLat(),
+            lng: map.getCenter().getLng(),
+          }
+          setCenter(newCenter)
+        }}
       >
-        <MapMarker position={{ lat: center.lat, lng: center.lng }}>
-          <div className="p-2 text-sm text-gray-900">
-            {currentAddress || 'Current Location'}
-          </div>
-        </MapMarker>
+        <MapMarker position={{ lat: center.lat, lng: center.lng }}></MapMarker>
       </Map>
     </div>
   )
