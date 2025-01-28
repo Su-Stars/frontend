@@ -1,4 +1,4 @@
-import { Pool } from '@/hooks/useSearch'
+import { Pool } from '@/hooks/use-search'
 import Link from 'next/link'
 import { LuLoaderCircle } from 'react-icons/lu'
 import {
@@ -16,26 +16,7 @@ interface PoolKaKaoMapParams {
 export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {
   const position = { lat: pool.latitude, lng: pool.longtitude }
 
-  const [loading, error] = useKakaoLoader({
-    appkey: process.env.NEXT_PUBLIC_KAKAO_APP_KEY!,
-  })
   const [isMapReady, setIsMapReady] = useState(false)
-
-  if (loading) {
-    return (
-      <div className="flex h-[300px] w-full items-center justify-center bg-gray-100">
-        <LuLoaderCircle className="h-8 w-8 animate-spin text-gray-500" />
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="flex h-[300px] w-full items-center justify-center bg-gray-100">
-        <div>지도를 불러오는 데 실패했습니다</div>
-      </div>
-    )
-  }
 
   return (
     <div className="relative h-[300px] w-full rounded-lg">

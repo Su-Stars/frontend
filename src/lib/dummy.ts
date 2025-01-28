@@ -1,4 +1,4 @@
-import { Pool } from '@/hooks/useSearch'
+import { Pool } from '@/hooks/use-search'
 
 export const dummy: Pool[] = [
   {

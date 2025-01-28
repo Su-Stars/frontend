@@ -1,27 +1,40 @@
 'use client'
 
-import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk'
-import { useEffect, useRef } from 'react'
-import useCenterStore from '@/stores/center-store'
-import { LuLoaderCircle } from 'react-icons/lu'
-
-const APP_KEY = '0d929ba008c86e3296bdbeb4f341c2cc'
+import { Map } from 'react-kakao-maps-sdk'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { DEFAULT_MAP_CENTER } from '@/lib/constants'
+import { useDebounce } from '@/hooks/use-debounce'
+import useRegionStore from '@/stores/region-store'
 
 interface Coordinates {
   lat: number
   lng: number
 }
 
+interface GeocoderResult {
+  address_name: string
+  region_type: string
+  x: number
+  y: number
+}
+
 export default function HomeKakaoMap() {
-  const { setCenter, center } = useCenterStore()
   const mapRef = useRef<kakao.maps.Map>(null)
+  const { setRegion } = useRegionStore()
+  const [center, setCenter] = useState<Coordinates | null>()
+  const [geocoder, setGeocoder] = useState<kakao.maps.services.Geocoder | null>(
+    null,
+  )
 
-  const [loading, error] = useKakaoLoader({
-    appkey: APP_KEY,
-  })
-
+  // 지오코더 로딩
   useEffect(() => {
-    // 초기 렌더링 시 유저 위치 정보 확보
+    kakao.maps.load(() => {
+      setGeocoder(new kakao.maps.services.Geocoder())
+    })
+  }, [])
+
+  // 유저 위치로 맵 이동
+  useEffect(() => {
     const getCurrentLocation = () => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -31,14 +44,9 @@ export default function HomeKakaoMap() {
           }
           setCenter(newCenter)
         },
-        // 유저 위치 정보 획득 실패 시 수원역으로 설정
         (error) => {
-          console.log(error)
-          const newCenter: Coordinates = {
-            lng: 127.0286009,
-            lat: 37.2635727,
-          }
-          setCenter(newCenter)
+          setCenter(DEFAULT_MAP_CENTER)
+          console.error('Geolocation error:', error)
         },
       )
     }
@@ -46,36 +54,59 @@ export default function HomeKakaoMap() {
     getCurrentLocation()
   }, [setCenter])
 
-  if (loading) {
-    return (
-      <div className="flex h-[200px] w-full items-center justify-center bg-gray-100">
-        <LuLoaderCircle className="h-8 w-8 animate-spin text-gray-500" />
-      </div>
-    )
+  useEffect(() => {
+    if (geocoder) {
+      debouncedGeocode()
+    }
+  }, [center, geocoder])
+
+  const handleGeocode = (
+    result: GeocoderResult[],
+    status: kakao.maps.services.Status,
+  ) => {
+    if (status === kakao.maps.services.Status.OK) {
+      const address = result[0].address_name
+
+      // '경기도 수원시 장안구 파장동'에서 '경기도 수원시'까지만 추출
+      const adminDistrict = address.split(' ').slice(0, 3).join(' ')
+      console.log(adminDistrict)
+      setRegion(adminDistrict)
+    } else {
+      console.error('Geocoding failed:', status)
+    }
   }
 
-  if (error) {
-    return (
-      <div className="flex h-[200px] w-full items-center justify-center bg-gray-100">
-        <p className="text-center text-red-500">
-          카카오 지도를 불러오는 데 오류가 발생했습니다
-        </p>
-      </div>
-    )
-  }
+  // 디바운싱
+  const debouncedGeocode = useDebounce(() => {
+    const map = mapRef.current
+    if (!map || !geocoder || !center) return
+    geocoder.coord2RegionCode(center.lng, center.lat, handleGeocode)
+  }, 200)
+
+  const handleCenterChanged = useCallback(
+    (map: kakao.maps.Map) => {
+      setCenter({
+        lat: map.getCenter().getLat(),
+        lng: map.getCenter().getLng(),
+      })
+    },
+    [setCenter],
+  )
 
   return (
     <div className="relative h-[200px] w-full overflow-hidden rounded-lg">
       <Map
         ref={mapRef}
-        center={{ lat: center.lat, lng: center.lng }}
+        center={{
+          lat: center?.lat || DEFAULT_MAP_CENTER.lat,
+          lng: center?.lng || DEFAULT_MAP_CENTER.lng,
+        }}
         style={{ width: '100%', height: '100%' }}
         level={3}
-      >
-        <MapMarker position={{ lat: center.lat, lng: center.lng }}>
-          <div className="p-2 text-sm text-gray-900">Current Location</div>
-        </MapMarker>
-      </Map>
+        aria-label="지도"
+        role="application"
+        onCenterChanged={handleCenterChanged}
+      ></Map>
     </div>
   )
 }
