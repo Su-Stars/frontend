@@ -31,7 +31,7 @@ export default function HomeKakaoMap() {
 
   // 지오코딩 처리 함수
   const handleGeocode = useCallback(
-    (result: any[], status: kakao.maps.services.Status) => {
+    (result: GeocoderResult[], status: kakao.maps.services.Status) => {
       if (status === kakao.maps.services.Status.OK) {
         const address = result[0].address_name
         const adminDistrict = address.split(' ').slice(0, 2).join(' ')
