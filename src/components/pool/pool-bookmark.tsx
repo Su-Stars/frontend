@@ -15,11 +15,16 @@ interface PoolBookmarkProps {
 export default function PoolBookmark({ poolId }: PoolBookmarkProps) {
   const { user } = useUserStore((state) => state)
   const { toast } = useToast()
-  const { bookmarked, addBookmarkMutation, deleteBookmarkMutation } =
-    useBookmark({
-      poolId,
-      user: !!user,
-    })
+  const {
+    data: isBookmarked,
+    addBookmark,
+    deleteBookmark,
+  } = useBookmark({
+    poolId,
+    user: !!user,
+  })
+
+  console.log('isBookmarked', isBookmarked)
 
   const clickBookmark = () => {
     if (!user) {
@@ -31,23 +36,24 @@ export default function PoolBookmark({ poolId }: PoolBookmarkProps) {
       return
     }
 
-    if (bookmarked) {
-      deleteBookmarkMutation()
+    if (isBookmarked) {
+      deleteBookmark(poolId)
     } else {
-      addBookmarkMutation(poolId)
+      addBookmark(poolId)
     }
   }
 
   return (
     <Button
       variant="ghost"
+      size="icon"
       onClick={clickBookmark}
       className={cn(
-        'h-10 w-10 rounded-full bg-transparent hover:bg-accent hover:text-blue-500',
-        bookmarked ? 'text-black' : 'text-blue-500',
+        'flex rounded-full bg-transparent text-3xl transition-colors hover:bg-accent hover:text-blue-500',
+        isBookmarked ? 'text-blue-500' : "text-black' }",
       )}
     >
-      {bookmarked ? <LuBookmark /> : <FaBookmark />}
+      {isBookmarked ? <FaBookmark /> : <LuBookmark />}
     </Button>
   )
 }
