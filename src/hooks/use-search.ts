@@ -59,9 +59,11 @@ export const useSearch = ({
       initialPageParam: 1,
       getNextPageParam: (lastPage, allPages) => {
         const totalPages = Math.ceil(lastPage.total / limit) // 총 페이지 수
-        if (lastPage.page < totalPages) {
-          console.log(lastPage.page)
-          return lastPage.page + 1
+        const currentPage = Number(lastPage.page) // 현재 페이지
+        if (currentPage < totalPages) {
+          console.log('현재', currentPage)
+
+          return currentPage + 1
         }
       },
       retry: 0,
