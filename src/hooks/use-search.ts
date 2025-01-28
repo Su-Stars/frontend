@@ -46,33 +46,26 @@ const defaultResponse: UseSearchResponse = {
   pools: [],
 }
 
-{
-  /*무한 스크롤 */
-}
 export const useSearch = ({
   region = 'all',
   keyword = 'all',
-  page = 1,
   limit = 10,
 }: UseSearchParams) => {
-  const {
-    data,
-    fetchNextPage,
-    fetchPreviousPage,
-    hasNextPage,
-    hasPreviousPage,
-    isFetchingNextPage,
-    isFetchingPreviousPage,
-  } = useInfiniteQuery<UseSearchResponse>({
-    queryKey: ['search', region, keyword, page, limit],
-    queryFn: async ({ pageParam }) =>
-      searchPools({ region, keyword, page: pageParam as number, limit }),
-    initialPageParam: 1,
-    getNextPageParam: (lastPage): number | null => {
-      const isLastPage = Math.ceil(lastPage.total / limit) === lastPage.page
-      return isLastPage ? null : lastPage.page + 1
-    },
-  })
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery<UseSearchResponse>({
+      queryKey: ['search', region, keyword, limit],
+      queryFn: async ({ pageParam }) =>
+        searchPools({ region, keyword, page: pageParam as number, limit }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage, allPages) => {
+        const totalPages = Math.ceil(lastPage.total / limit) // 총 페이지 수
+        if (lastPage.page < totalPages) {
+          console.log(lastPage.page)
+          return lastPage.page + 1
+        }
+      },
+      retry: 0,
+    })
 
   const searchResults = data ? data.pages.flatMap((page) => page.pools) : []
   const total =

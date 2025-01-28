@@ -28,6 +28,7 @@ export const searchPools = async <UseSearchResponse>({
     }
 
     const json = await res.json()
+
     return json.data
   } catch (error) {
     console.error('Search error:', error)

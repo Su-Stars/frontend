@@ -8,9 +8,15 @@ interface ObserverOptions {
   threshold?: number | number[]
 }
 
+const defaultOptions: ObserverOptions = {
+  root: null,
+  rootMargin: '0px',
+  threshold: 0.5,
+}
+
 export const useIntersectionObserver = (
   callback: Callback,
-  options?: ObserverOptions,
+  options: ObserverOptions = defaultOptions,
 ) => {
   const targetRef = useRef(null)
 
@@ -26,6 +32,6 @@ export const useIntersectionObserver = (
         observer.unobserve(targetRef.current)
       }
     }
-  }, [])
+  }, [callback, options])
   return targetRef
 }

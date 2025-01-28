@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input'
 import PoolCard from '@/components/home/home-pool-card'
 import RegionFilter from '@/components/home/home-region-filter'
 import useRegionStore from '@/stores/region-store'
-import { useIntersectionObserver } from '@/hooks/use-intersectioinObserver'
+import { useIntersectionObserver } from '@/hooks/use-intersectionObserver'
 
 export default function HomeSearch() {
   const { setRegion, region } = useRegionStore()
@@ -27,8 +27,8 @@ export default function HomeSearch() {
     searchResults,
     hasNextPage,
     fetchNextPage,
-    isFetchingNextPage,
     total,
+    isFetchingNextPage,
   } = useSearch({
     region,
     keyword,
@@ -36,17 +36,15 @@ export default function HomeSearch() {
 
   const option = {
     threshold: 0.5,
+    rootMargin: '0px',
   }
+
   const moreRef = useIntersectionObserver(([entry]) => {
-    if (entry.isIntersecting) {
-      loadMore()
+    console.log('추적 중')
+    if (entry.isIntersecting && !isFetchingNextPage && hasNextPage) {
+      fetchNextPage()
     }
   }, option)
-
-  const loadMore = () => {
-    if (!hasNextPage) return
-    fetchNextPage()
-  }
 
   // 검색 기능 수행
   const handleSubmit = (e: React.FormEvent) => {
@@ -127,7 +125,6 @@ export default function HomeSearch() {
         districts={districts || { result: [] }}
       />
 
-      {/*검색어 입력 */}
       <form onSubmit={handleSubmit} className="flex space-x-2">
         <Input
           placeholder="검색어를 입력하세요"
@@ -138,7 +135,6 @@ export default function HomeSearch() {
         <Button type="submit">검색</Button>
       </form>
 
-      {/*결과 출력*/}
       <h1 className="text-lg font-semibold">
         검색 결과 <span className="text-blue-500"> {total}</span>
       </h1>
@@ -149,7 +145,12 @@ export default function HomeSearch() {
           <PoolCard pool={pool} key={pool.id} />
         ))
       )}
-      <div ref={moreRef}>{!hasNextPage ? '마지막' : '더보기'}</div>
+      {/* 다음 페이지가 있을 때만 더보기 표시 */}
+      {hasNextPage && (
+        <div ref={moreRef} className="py-4 text-center text-gray-500">
+          {isFetchingNextPage ? '로딩 중...' : '더 보기'}
+        </div>
+      )}
     </>
   )
 }

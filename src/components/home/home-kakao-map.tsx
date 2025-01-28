@@ -1,7 +1,7 @@
 'use client'
 
-import { Map, MapMarker } from 'react-kakao-maps-sdk'
-import { useEffect, useRef, useState } from 'react'
+import { Map } from 'react-kakao-maps-sdk'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { DEFAULT_MAP_CENTER } from '@/lib/constants'
 import { useDebounce } from '@/hooks/use-debounce'
 import useRegionStore from '@/stores/region-store'
@@ -20,8 +20,8 @@ interface GeocoderResult {
 
 export default function HomeKakaoMap() {
   const mapRef = useRef<kakao.maps.Map>(null)
-  const { setRegion, region } = useRegionStore()
-  const [center, setCenter] = useState<Coordinates>(DEFAULT_MAP_CENTER)
+  const { setRegion } = useRegionStore()
+  const [center, setCenter] = useState<Coordinates | null>()
   const [geocoder, setGeocoder] = useState<kakao.maps.services.Geocoder | null>(
     null,
   )
@@ -45,6 +45,7 @@ export default function HomeKakaoMap() {
           setCenter(newCenter)
         },
         (error) => {
+          setCenter(DEFAULT_MAP_CENTER)
           console.error('Geolocation error:', error)
         },
       )
@@ -78,29 +79,34 @@ export default function HomeKakaoMap() {
   // 디바운싱
   const debouncedGeocode = useDebounce(() => {
     const map = mapRef.current
-    if (!map || !geocoder) return
+    if (!map || !geocoder || !center) return
     geocoder.coord2RegionCode(center.lng, center.lat, handleGeocode)
   }, 200)
+
+  const handleCenterChanged = useCallback(
+    (map: kakao.maps.Map) => {
+      setCenter({
+        lat: map.getCenter().getLat(),
+        lng: map.getCenter().getLng(),
+      })
+    },
+    [setCenter],
+  )
 
   return (
     <div className="relative h-[200px] w-full overflow-hidden rounded-lg">
       <Map
         ref={mapRef}
-        center={{ lat: center.lat, lng: center.lng }}
+        center={{
+          lat: center?.lat || DEFAULT_MAP_CENTER.lat,
+          lng: center?.lng || DEFAULT_MAP_CENTER.lng,
+        }}
         style={{ width: '100%', height: '100%' }}
         level={3}
         aria-label="지도"
         role="application"
-        onCenterChanged={(map) => {
-          const newCenter = {
-            lat: map.getCenter().getLat(),
-            lng: map.getCenter().getLng(),
-          }
-          setCenter(newCenter)
-        }}
-      >
-        <MapMarker position={{ lat: center.lat, lng: center.lng }}></MapMarker>
-      </Map>
+        onCenterChanged={handleCenterChanged}
+      ></Map>
     </div>
   )
 }
