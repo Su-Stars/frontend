@@ -41,7 +41,6 @@ export default function HomeSearch() {
   }
 
   const moreRef = useIntersectionObserver(([entry]) => {
-    console.log('추적 중')
     if (entry.isIntersecting && !isFetchingNextPage && hasNextPage) {
       fetchNextPage()
     }
