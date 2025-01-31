@@ -9,12 +9,16 @@ import type { Pool } from '@/types/pool'
 import { notFound } from 'next/navigation'
 import { getPool } from '@/actions/pool'
 
+type Props = {
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
 export async function generateMetadata({
   params,
-}: {
-  params: { id: string }
-}): Promise<Metadata> {
-  const poolId = Number(params.id)
+  searchParams,
+}: Props): Promise<Metadata> {
+  const poolId = Number((await params).id)
   const queryClient = new QueryClient()
 
   try {
