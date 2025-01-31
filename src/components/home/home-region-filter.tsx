@@ -13,19 +13,18 @@ import { REGION, Region } from '@/lib/constants'
 import { District } from '@/hooks/useRegions'
 
 interface RegionFilterProps {
-  address: string
+  filterName: string
   selectedRegion: Region | null
   setSelectedRegion: (region: Region) => void
   clickBack: () => void
   clickAllDistrict: (name: string) => void
   clickDistrict: (fullAddr: string) => void
   clickAllRegion: () => void
-  parseDistrict: (fullAddr: string) => string
   districts: District[]
 }
 
 export default function RegionFilter({
-  address,
+  filterName,
   selectedRegion,
   setSelectedRegion,
   clickBack,
@@ -40,7 +39,7 @@ export default function RegionFilter({
       <DialogTrigger asChild>
         <Button className="w-fit text-lg font-semibold" variant="secondary">
           <LuMapPin className="stroke-4" />
-          {address}
+          {filterName}
           <LuChevronDown className="stroke-4" />
         </Button>
       </DialogTrigger>

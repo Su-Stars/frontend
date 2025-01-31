@@ -1,11 +1,12 @@
 'use client'
 
-import { Map } from 'react-kakao-maps-sdk'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { CustomOverlayMap, Map, MapMarker } from 'react-kakao-maps-sdk'
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { DEFAULT_MAP_CENTER } from '@/lib/constants'
 import { useDebounce } from '@/hooks/use-debounce'
-import useRegionStore from '@/stores/region-store'
-import { Coordinates } from '@/stores/center-store'
+import useCenterStore, { Coordinates } from '@/stores/center-store'
+import { Pool } from '@/hooks/use-search'
+import HomeKakaoMapMarker from './home-kakao-map-marker'
 
 interface GeocoderResult {
   address_name: string
@@ -14,13 +15,23 @@ interface GeocoderResult {
   y: number
 }
 
-export default function HomeKakaoMap() {
+interface HomeKakaoMapProps {
+  searchResults: Pool[]
+  setRegion: (region: string) => void
+}
+
+export default function HomeKakaoMap({
+  searchResults,
+  setRegion,
+}: HomeKakaoMapProps) {
   const mapRef = useRef<kakao.maps.Map>(null)
-  const { setRegion } = useRegionStore()
-  const [center, setCenter] = useState<Coordinates | null>()
+
+  const { center, setCenter } = useCenterStore()
+
   const [geocoder, setGeocoder] = useState<kakao.maps.services.Geocoder | null>(
     null,
   )
+  const [openMarkerId, setOpenMarkerId] = useState<number | null>(null)
 
   // 카카오맵 로드와 지오코더 초기화
   useEffect(() => {
@@ -36,7 +47,6 @@ export default function HomeKakaoMap() {
         const address = result[0].address_name
 
         const adminDistrict = address.split(' ').slice(0, 3).join(' ')
-        console.log(adminDistrict)
         setRegion(adminDistrict)
       }
     },
@@ -82,6 +92,15 @@ export default function HomeKakaoMap() {
 
   const handleCenterChanged = useDebounce(searchAddressFromCoords, 500)
 
+  const clickMarker = (id: number) => {
+    // 같은 걸 두번 클릭 했으면 정보창 닫기
+    if (id === openMarkerId) {
+      setOpenMarkerId(null)
+    } else {
+      setOpenMarkerId(id)
+    }
+  }
+
   return (
     <div className="relative h-[200px] w-full overflow-hidden rounded-lg border">
       <Map
@@ -95,7 +114,22 @@ export default function HomeKakaoMap() {
         aria-label="지도"
         role="application"
         onCenterChanged={handleCenterChanged}
-      ></Map>
+      >
+        {/* 수영장 마커들 */}
+        {searchResults &&
+          searchResults.map((pool) => (
+            <Fragment key={pool.id}>
+              <MapMarker
+                onClick={() => clickMarker(pool.id)}
+                position={{
+                  lat: pool.latitude,
+                  lng: pool.longitude,
+                }}
+              />
+              <HomeKakaoMapMarker pool={pool} open={openMarkerId === pool.id} />
+            </Fragment>
+          ))}
+      </Map>
     </div>
   )
 }

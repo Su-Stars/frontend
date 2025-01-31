@@ -11,10 +11,10 @@ import { LuLink } from 'react-icons/lu'
 import { Button } from '../ui/button'
 import Image from 'next/image'
 import NoImage from '../common/no-image'
-import { Pool } from '@/hooks/use-search'
 import PoolUpdate from './pool-update'
 import PoolDetailItem from './pool-detail-item'
 import PoolBookmark from './pool-bookmark'
+import type { Pool } from '@/types/pool'
 
 interface PoolDetailProps {
   pool: Pool
@@ -67,11 +67,12 @@ export default function PoolDetail({ pool }: PoolDetailProps) {
         <h2>{pool?.name}</h2>
       </header>
       <div className="relative h-[200px] w-full">
-        {pool?.images ? (
+        {/* TODO : 이미지가 여러개 인경우 슬라이드로 보여주기 */}
+        {pool?.images[0] ? (
           <Image
             src={pool.images[0]}
             fill
-            className="object-fill"
+            className="rounded-lg object-fill"
             alt={`#{pool.name} 수영장 이미지`}
           />
         ) : (

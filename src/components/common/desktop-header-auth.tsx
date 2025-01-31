@@ -140,7 +140,7 @@ export default function DesktopHeaderAuth() {
             로그인
           </Link>
           <Link
-            href="/register"
+            href="/sign-up"
             className={clsx(
               'font-bold text-gray-600 decoration-1 underline-offset-4 hover:text-blue-700 hover:underline',
               { 'text-blue-700': pathname === '/register' },

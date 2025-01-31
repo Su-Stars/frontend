@@ -1,10 +1,5 @@
 import { searchPools } from '@/actions/search'
-import {
-  useInfiniteQuery,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query'
-import { useEffect } from 'react'
+import { useInfiniteQuery } from '@tanstack/react-query'
 
 interface UseSearchParams {
   region?: string
@@ -26,7 +21,7 @@ export interface Pool {
   images?: string[]
   laneInfo?: string
   latitude: number
-  longtitude: number
+  longitude: number
   phone?: string
   isDivingAllowed?: boolean
   isFinsAllowed?: boolean

@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
       'search.pstatic.net',
       'jnl-test-server.s3.ap-northeast-2.amazonaws.com',
       'picsum.photos',
+      'ldb-phinf.pstatic.net',
+      'naverbooking-phinf.pstatic.net',
     ],
   },
 }
