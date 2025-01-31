@@ -18,7 +18,7 @@ import Image from 'next/image'
 import { useUserStore } from '@/providers/user-store-provider'
 import { useToast } from '@/hooks/use-toast'
 import { useState } from 'react'
-import { navigateToHome } from '@/actions/actions'
+import { navigateToHome } from '@/actions/redirects'
 
 const formSchema = z.object({
   email: z.string().email('이메일 형식이 아닙니다.'),

@@ -1,4 +1,3 @@
-import { Pool } from '@/hooks/use-search'
 import Link from 'next/link'
 import { LuLoaderCircle } from 'react-icons/lu'
 import {
@@ -8,13 +7,14 @@ import {
   useKakaoLoader,
 } from 'react-kakao-maps-sdk'
 import { useState } from 'react'
+import type { Pool } from '@/types/pool'
 
 interface PoolKaKaoMapParams {
   pool: Pool
 }
 
 export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {
-  const position = { lat: pool.latitude, lng: pool.longtitude }
+  const position = { lat: pool.latitude, lng: pool.longitude }
 
   const [isMapReady, setIsMapReady] = useState(false)
 
@@ -25,6 +25,7 @@ export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {
         style={{ width: '100%', height: '100%' }}
         level={3}
         onCreate={() => setIsMapReady(true)}
+        className="rounded-lg"
       >
         {isMapReady && (
           <>

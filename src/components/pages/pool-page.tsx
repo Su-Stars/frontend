@@ -1,27 +1,36 @@
 'use client'
 
 import PoolDetail from '../pool/pool-detail'
-import PoolKaKaoMap from '../pool/pool-kakao-map'
-import { usePool } from '@/hooks/usePool'
 import { Suspense, lazy } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
+import type { Pool } from '@/types/pool'
+import { useQuery } from '@tanstack/react-query'
+import { getPool } from '@/actions/pool'
 
 const ReviewsPage = lazy(() => import('@/components/pages/reviews-page'))
+const PoolKaKaoMap = lazy(() => import('@/components/pool/pool-kakao-map'))
 
 interface PoolPageParams {
   poolId: number
 }
 
 export default function PoolPage({ poolId }: PoolPageParams) {
-  const { pool, isError, error } = usePool({ poolId })
+  const { data, isPending, isError, error } = useQuery<Pool>({
+    queryKey: ['pool', poolId],
+    queryFn: () => getPool(poolId),
+  })
 
-  if (isError || !pool) {
-    return <div>데이터를 불러오는 중 오류가 발생했습니다.{error?.message}</div>
+  if (isPending) {
+    return <div>Loading...</div>
+  }
+
+  if (isError) {
+    return <div>Error: {error.message}</div>
   }
 
   return (
     <div className="flex flex-col space-y-4">
-      <PoolDetail pool={pool} />
+      <PoolDetail pool={data as Pool} />
       <ErrorBoundary fallback={<div>Something went wrong</div>}>
         <Suspense
           fallback={<div className="flex flex-col gap-2">리뷰 로딩</div>}
@@ -29,7 +38,13 @@ export default function PoolPage({ poolId }: PoolPageParams) {
           <ReviewsPage preview poolId={poolId} />
         </Suspense>
       </ErrorBoundary>
-      <PoolKaKaoMap pool={pool} />
+      <ErrorBoundary fallback={<div>Something went wrong</div>}>
+        <Suspense
+          fallback={<div className="flex flex-col gap-2">지도 로딩</div>}
+        >
+          <PoolKaKaoMap pool={data as Pool} />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   )
 }
