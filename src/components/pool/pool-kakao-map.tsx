@@ -7,10 +7,10 @@ import {
   useKakaoLoader,
 } from 'react-kakao-maps-sdk'
 import { useState } from 'react'
-import type { Pool } from '@/types/pool'
+import type { PoolDetail } from '@/types/pools'
 
 interface PoolKaKaoMapParams {
-  pool: Pool
+  pool: PoolDetail
 }
 
 export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {

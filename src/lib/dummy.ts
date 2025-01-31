@@ -1,6 +1,4 @@
-import { Pool } from '@/hooks/use-search'
-
-export const dummy: Pool[] = [
+export const dummy = [
   {
     id: 1,
     name: '장안구민회관',

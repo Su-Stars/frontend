@@ -1,4 +1,4 @@
-import { Pool } from '@/hooks/use-search'
+import type { Pool } from '@/types/pools'
 import Image from 'next/image'
 import Link from 'next/link'
 import NoImage from '@/components/common/no-image'

@@ -14,14 +14,16 @@ import NoImage from '../common/no-image'
 import PoolUpdate from './pool-update'
 import PoolDetailItem from './pool-detail-item'
 import PoolBookmark from './pool-bookmark'
-import type { Pool } from '@/types/pool'
+import type { PoolDetail as PoolDetailI } from '@/types/pools'
 
 interface PoolDetailProps {
-  pool: Pool
+  pool: PoolDetailI
 }
 
 export default function PoolDetail({ pool }: PoolDetailProps) {
-  const generatePoolAdditionalInfo = (pool: Pool): string | React.ReactNode => {
+  const generatePoolAdditionalInfo = (
+    pool: PoolDetailI,
+  ): string | React.ReactNode => {
     const infoItems = [
       {
         condition: pool.isFinsAllowed,

@@ -5,7 +5,7 @@ import {
 } from '@tanstack/react-query'
 import PoolPage from '@/components/pages/pool-page'
 import type { Metadata } from 'next'
-import type { Pool } from '@/types/pool'
+import type { PoolDetail } from '@/types/pools'
 import { notFound } from 'next/navigation'
 import { getPool } from '@/actions/pool'
 
@@ -26,7 +26,7 @@ export async function generateMetadata({
       queryKey: ['pool', poolId],
       queryFn: () => getPool(poolId),
     })
-    const pool = queryClient.getQueryData<Pool>(['pool', poolId])
+    const pool = queryClient.getQueryData<PoolDetail>(['pool', poolId])
 
     if (!pool) {
       notFound()

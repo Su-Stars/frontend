@@ -1,7 +1,7 @@
 'use client'
 
 import { useRegions } from '@/hooks/useRegions'
-import { Pool, useSearch } from '@/hooks/use-search'
+import { useSearch } from '@/hooks/use-search'
 import { Region } from '@/lib/constants'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
@@ -11,6 +11,7 @@ import RegionFilter from '@/components/home/home-region-filter'
 import useRegionStore from '@/stores/region-store'
 import { useIntersectionObserver } from '@/hooks/use-intersectionObserver'
 import { LuSearch } from 'react-icons/lu'
+import type { Pool } from '@/types/pools'
 
 export default function HomeSearch() {
   const { setRegion, region } = useRegionStore()
