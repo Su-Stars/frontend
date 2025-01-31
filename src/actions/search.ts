@@ -5,7 +5,7 @@ interface searchPoolsParams {
   limit: number
 }
 
-export const searchPools = async <UseSearchResponse>({
+export const searchPools = async ({
   region,
   keyword,
   page,
@@ -21,22 +21,24 @@ export const searchPools = async <UseSearchResponse>({
     }).toString()
 
     const requestUrl = url.toString()
-    const res = await fetch(requestUrl)
+    const response = await fetch(requestUrl, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    })
 
-    if (!res.ok) {
-      throw new Error('네트워크 에러')
+    const json = await response.json()
+
+    if (!response.ok) {
+      throw new Error(
+        `[${response.status}] ${json.message || '수영장을 찾을 수 없습니다.'}`,
+      )
     }
-
-    const json = await res.json()
 
     return json.data
   } catch (error) {
-    console.error('Search error:', error)
-    return {
-      total: 0,
-      page: 0,
-      limit: 0,
-      pools: [],
-    }
+    console.error('Pool fetch error:', error)
+    throw error
   }
 }
