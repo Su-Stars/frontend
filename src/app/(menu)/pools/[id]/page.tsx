@@ -28,6 +28,7 @@ export async function generateMetadata({
       notFound()
     }
 
+    // TODO : OG용 이미지 추가하기
     return {
       title: pool.name,
       description: pool.description || '수영장 상세 정보',
