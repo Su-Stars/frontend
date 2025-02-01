@@ -1,11 +1,5 @@
 import Link from 'next/link'
-import { LuLoaderCircle } from 'react-icons/lu'
-import {
-  CustomOverlayMap,
-  Map,
-  MapMarker,
-  useKakaoLoader,
-} from 'react-kakao-maps-sdk'
+import { CustomOverlayMap, Map, MapMarker } from 'react-kakao-maps-sdk'
 import { useState } from 'react'
 import type { PoolDetail } from '@/types/pools'
 

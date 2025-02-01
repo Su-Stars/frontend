@@ -52,16 +52,7 @@ export default async function Pool({
   params: Promise<{ id: string }>
 }) {
   const poolId = Number((await params).id)
-  const queryClient = new QueryClient()
+  const pool = await getPool(poolId)
 
-  queryClient.prefetchQuery({
-    queryKey: ['pool', poolId],
-    queryFn: () => getPool(poolId),
-  })
-
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <PoolPage poolId={poolId} />
-    </HydrationBoundary>
-  )
+  return <PoolPage pool={pool} />
 }
