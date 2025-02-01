@@ -22,7 +22,7 @@ export const useSearch = ({
     isError,
     error,
   } = useInfiniteQuery<PoolSearchData>({
-    queryKey: ['search', region, keyword, limit],
+    queryKey: ['pools', region, keyword, limit],
     queryFn: async ({ pageParam }) =>
       searchPools({ region, keyword, page: pageParam as number, limit }),
     initialPageParam: 1,
