@@ -5,7 +5,7 @@ import { Card, CardDescription, CardTitle } from '@/components/ui/card'
 import { LuMapPin } from 'react-icons/lu'
 import useCenterStore from '@/stores/center-store'
 import { useState } from 'react'
-import { Pool } from '@/types/pool'
+import type { Pool } from '@/types/pools'
 
 interface PoolItemProps {
   pool: Pool

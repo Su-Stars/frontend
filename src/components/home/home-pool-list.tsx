@@ -1,6 +1,6 @@
 import { LuSearch } from 'react-icons/lu'
 import PoolCard from './home-pool-item'
-import { Pool } from '@/types/pool'
+import type { Pool } from '@/types/pools'
 
 interface HomePoolListProps {
   total: number

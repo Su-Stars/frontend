@@ -1,5 +1,3 @@
-import type { ApiResponse } from '@/types/api'
-
 export interface Pool {
   id: number
   name: string
