@@ -39,7 +39,6 @@ export const useSearch = ({
   const searchResults = data ? data.pages.flatMap((page) => page.pools) : []
   const total =
     data && data.pages.length > 0 ? data.pages[data.pages.length - 1].total : 0
-
   return {
     total,
     searchResults,
