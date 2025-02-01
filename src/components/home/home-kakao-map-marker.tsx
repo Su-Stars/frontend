@@ -1,4 +1,4 @@
-import { Pool } from '@/types/pool'
+import type { Pool } from '@/types/pools'
 import { CustomOverlayMap } from 'react-kakao-maps-sdk'
 
 interface HomeKakaoMapMarkerProps {
