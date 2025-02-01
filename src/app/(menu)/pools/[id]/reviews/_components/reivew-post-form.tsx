@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button'
 import { useState, Dispatch, SetStateAction } from 'react'
 import { REVIEW_KEYWORDS } from '@/lib/constants'
 import MotionTap from '@/components/motion/MotionTap'
-import { IReviewForm } from '@/types/reviews'
 import { useToast } from '@/hooks/use-toast'
 import { useQueryClient } from '@tanstack/react-query'
 

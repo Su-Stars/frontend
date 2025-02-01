@@ -6,11 +6,9 @@ import { Button } from '@/components/ui/button'
 import { useState, Dispatch, SetStateAction } from 'react'
 import { REVIEW_KEYWORDS } from '@/lib/constants'
 import MotionTap from '@/components/motion/MotionTap'
-import { IReviewForm } from '@/types/reviews'
-import { useReviews } from '@/hooks/useReviews'
 import { useToast } from '@/hooks/use-toast'
 import { useQueryClient } from '@tanstack/react-query'
-import { IReview } from '@/types/reviews'
+import { IReview } from '@/app/(menu)/pools/[id]/reviews/_types/reviews'
 
 interface ReviewPostFormProps {
   poolId: number

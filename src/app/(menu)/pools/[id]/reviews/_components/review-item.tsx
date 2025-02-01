@@ -1,4 +1,4 @@
-import { IReview } from '@/types/reviews'
+import { IReview } from '@/app/(menu)/pools/[id]/reviews/_types/reviews'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +11,7 @@ import dayjs from '@/lib/dayjs'
 import { useToast } from '@/hooks/use-toast'
 import { ResponsiveDialog } from '@/components/responsive-dialog'
 import { useState } from 'react'
-import ReviewEditForm from '@/components/reviews/review-edit-form'
+import ReviewEditForm from '@/app/(menu)/pools/[id]/reviews/_components/review-edit-form'
 import { useUserStore } from '@/providers/user-store-provider'
 import { useQueryClient } from '@tanstack/react-query'
 
