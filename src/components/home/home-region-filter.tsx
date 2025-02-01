@@ -9,38 +9,63 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { LuMapPin, LuChevronDown, LuChevronLeft } from 'react-icons/lu'
-import { REGION, Region } from '@/lib/constants'
-import { District } from '@/hooks/useRegions'
+import { REGION } from '@/lib/constants'
+import { useRegions } from '@/hooks/useRegions'
+import { useSearchStore } from '@/stores/search-store'
 
-interface RegionFilterProps {
-  address: string
-  selectedRegion: Region | null
-  setSelectedRegion: (region: Region) => void
-  clickBack: () => void
-  clickAllDistrict: (name: string) => void
-  clickDistrict: (fullAddr: string) => void
-  clickAllRegion: () => void
-  parseDistrict: (fullAddr: string) => string
-  districts: District[]
-}
+export default function HomeRegionFilter() {
+  const {
+    selectedRegion,
+    setRegion,
+    setKeyword,
+    setSelectedRegion,
+    filterName,
+    setFilterName,
+  } = useSearchStore()
 
-export default function RegionFilter({
-  address,
-  selectedRegion,
-  setSelectedRegion,
-  clickBack,
-  clickAllDistrict,
-  clickDistrict,
-  clickAllRegion,
-  districts,
-}: RegionFilterProps) {
+  const { districts } = useRegions({
+    regionName: selectedRegion?.name || '',
+  })
+
+  const parseDistrict = (name: string) => {
+    return name.split(' ').length === 2
+      ? name.split(' ')[1]
+      : name.split(' ')[1] + ' ' + name.split(' ')[2]
+  }
+  const clickAllRegion = () => {
+    setKeyword('all')
+    setFilterName('전국')
+    setRegion('all')
+    setSelectedRegion(null)
+  }
+
+  const clickAllDistrict = (region: string) => {
+    setFilterName(`${region} 전체`)
+    setKeyword('all')
+    setRegion(region)
+    setSelectedRegion(null)
+  }
+
+  const clickDistrict = (district: string) => {
+    setKeyword('all')
+    const DISTRICT = parseDistrict(district)
+    const query = `${selectedRegion?.name} ${DISTRICT}`
+    setFilterName(query)
+    setRegion(query)
+    setSelectedRegion(null)
+  }
+
+  const clickBack = () => {
+    setSelectedRegion(null)
+  }
+
   return (
     //TODO : 스크롤바 유무로 인한 레이아웃 변경 이슈 해결 필요
     <Dialog>
       <DialogTrigger asChild>
         <Button className="w-fit text-lg font-semibold" variant="secondary">
           <LuMapPin className="stroke-4" />
-          {address}
+          {filterName}
           <LuChevronDown className="stroke-4" />
         </Button>
       </DialogTrigger>
