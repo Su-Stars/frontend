@@ -8,6 +8,7 @@ import useCenterStore from '@/stores/center-store'
 import HomeKakaoMapMarker from './home-kakao-map-marker'
 import { Coordinates } from '@/types/coordinate'
 import { Pool } from '@/types/pool'
+import { useSearchStore } from '@/stores/search-store'
 
 interface GeocoderResult {
   address_name: string
@@ -18,15 +19,11 @@ interface GeocoderResult {
 
 interface HomeKakaoMapProps {
   searchResults: Pool[]
-  setRegion: (region: string) => void
 }
 
-export default function HomeKakaoMap({
-  searchResults,
-  setRegion,
-}: HomeKakaoMapProps) {
+export default function HomeKakaoMap({ searchResults }: HomeKakaoMapProps) {
   const mapRef = useRef<kakao.maps.Map>(null)
-
+  const { setRegion } = useSearchStore()
   const { center, setCenter } = useCenterStore()
 
   const [geocoder, setGeocoder] = useState<kakao.maps.services.Geocoder | null>(

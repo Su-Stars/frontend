@@ -1,5 +1,5 @@
-import { Pool } from '@/hooks/use-search'
-import { CustomOverlayMap, MapMarker } from 'react-kakao-maps-sdk'
+import { Pool } from '@/types/pool'
+import { CustomOverlayMap } from 'react-kakao-maps-sdk'
 
 interface HomeKakaoMapMarkerProps {
   pool: Pool

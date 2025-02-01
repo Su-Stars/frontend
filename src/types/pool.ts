@@ -21,4 +21,5 @@ export interface Pool {
   created_at: string
   updated_at: string
   images: string[]
+  thumbnail: string | null
 }

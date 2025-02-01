@@ -23,9 +23,9 @@ export default function PoolItem({ pool }: PoolItemProps) {
     <div>
       <Card className="flex h-40 p-0 transition hover:opacity-90">
         <Link className="h-full w-40" href={`/pools/${pool.id}`}>
-          {pool.images[0] ? (
+          {pool.thumbnail ? (
             <Image
-              src={pool?.images[0]}
+              src={pool?.thumbnail}
               alt="이미지"
               width={70}
               height={70}
