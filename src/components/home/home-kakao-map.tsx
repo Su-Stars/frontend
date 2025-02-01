@@ -7,7 +7,7 @@ import { useDebounce } from '@/hooks/use-debounce'
 import useCenterStore from '@/stores/center-store'
 import HomeKakaoMapMarker from './home-kakao-map-marker'
 import { Coordinates } from '@/types/coordinate'
-import { Pool } from '@/types/pool'
+import type { Pool } from '@/types/pools'
 import { useSearchStore } from '@/stores/search-store'
 
 interface GeocoderResult {
