@@ -1,6 +1,6 @@
 import { searchPools } from '@/actions/search'
-import { Pool } from '@/types/pool'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import type { PoolSearchData } from '@/types/pools'
 
 interface UseSearchParams {
   region?: string
@@ -9,33 +9,32 @@ interface UseSearchParams {
   limit?: number
 }
 
-export interface UseSearchResponse {
-  total: number
-  page: number
-  limit: number
-  pools: Pool[]
-}
-
 export const useSearch = ({
   region = 'all',
   keyword = 'all',
   limit = 10,
 }: UseSearchParams) => {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useInfiniteQuery<UseSearchResponse>({
-      queryKey: ['search', region, keyword, limit],
-      queryFn: async ({ pageParam }) =>
-        searchPools({ region, keyword, page: pageParam as number, limit }),
-      initialPageParam: 1,
-      getNextPageParam: (lastPage) => {
-        const totalPages = Math.ceil(lastPage.total / limit) // 총 페이지 수
-        const currentPage = Number(lastPage.page) // 현재 페이지
-        if (currentPage < totalPages) {
-          return currentPage + 1
-        }
-      },
-      retry: 0,
-    })
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isError,
+    error,
+  } = useInfiniteQuery<PoolSearchData>({
+    queryKey: ['pools', region, keyword, limit],
+    queryFn: async ({ pageParam }) =>
+      searchPools({ region, keyword, page: pageParam as number, limit }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      const totalPages = Math.ceil(lastPage.total / limit) // 총 페이지 수
+      const currentPage = Number(lastPage.page) // 현재 페이지
+      if (currentPage < totalPages) {
+        return currentPage + 1
+      }
+    },
+    retry: 0,
+  })
 
   const searchResults = data ? data.pages.flatMap((page) => page.pools) : []
   const total =

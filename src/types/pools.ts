@@ -1,4 +1,23 @@
+import type { ApiResponse } from '@/types/api'
+
 export interface Pool {
+  id: number
+  name: string
+  address: string
+  longitude: number
+  latitude: number
+  thumbnail?: string
+  isBookMarked: boolean
+}
+
+export interface PoolSearchData {
+  total: number
+  page: number
+  limit: number
+  pools: Pool[]
+}
+
+export interface PoolDetail {
   id: number
   name: string
   address: string

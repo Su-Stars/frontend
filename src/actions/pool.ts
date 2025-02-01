@@ -1,7 +1,7 @@
 import { ApiResponse } from '@/types/api'
-import type { Pool } from '@/types/pool'
+import type { PoolDetail } from '@/types/pools'
 
-export const getPool = async (poolId: number): Promise<Pool> => {
+export const getPool = async (poolId: number): Promise<PoolDetail> => {
   try {
     const response = await fetch(
       `https://nest-aws.site/api/v1/pools/${poolId}`,
@@ -19,13 +19,13 @@ export const getPool = async (poolId: number): Promise<Pool> => {
       )
     }
 
-    const json: ApiResponse<Pool> = await response.json()
+    const json: ApiResponse<PoolDetail> = await response.json()
 
     if (!json.data) {
       throw new Error('수영장 데이터가 존재하지 않습니다.')
     }
 
-    return json.data as Pool
+    return json.data as PoolDetail
   } catch (error) {
     console.error('Pool fetch error:', error)
     throw error
