@@ -7,37 +7,30 @@ import { useState, Dispatch, SetStateAction } from 'react'
 import { REVIEW_KEYWORDS } from '@/lib/constants'
 import MotionTap from '@/components/motion/MotionTap'
 import { IReviewForm } from '@/types/reviews'
+import { useReviews } from '@/hooks/useReviews'
+import { useToast } from '@/hooks/use-toast'
+import { useQueryClient } from '@tanstack/react-query'
+import { IReview } from '@/types/reviews'
 
-interface ReviewFormProps {
+interface ReviewPostFormProps {
   poolId: number
-  onSubmit:
-    | ((poolId: number, reviewForm: IReviewForm) => Promise<void>)
-    | ((
-        poolId: number,
-        reviewId: string,
-        reviewForm: IReviewForm,
-      ) => Promise<void>)
-  defaultValues?: {
-    keywords: string[]
-    content: string
-  }
   setIsOpen: Dispatch<SetStateAction<boolean>>
+  review: IReview
 }
 
-export default function ReviewForm({
+export default function ReviewEditForm({
   poolId,
-  onSubmit,
-  defaultValues,
   setIsOpen,
-}: ReviewFormProps) {
+  review,
+}: ReviewPostFormProps) {
   const [revewKeywords, setReviewKeywords] = useState<string[]>(
-    defaultValues?.keywords || [],
+    review.keywords || [],
   )
-  const [reviewContent, setReviewContent] = useState(
-    defaultValues?.content || '',
-  )
+  const [reviewContent, setReviewContent] = useState(review.content)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const { toast } = useToast()
+  const queryClient = useQueryClient()
 
   const handleToggle = (keyword: string) => {
     setReviewKeywords((prev) =>
@@ -47,7 +40,8 @@ export default function ReviewForm({
     )
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    setLoading(true)
     if (!reviewContent.trim()) {
       setError('리뷰 내용을 입력해주세요')
       return
@@ -59,21 +53,47 @@ export default function ReviewForm({
     }
 
     const reviewForm = {
-      keywords: revewKeywords,
+      keyword: revewKeywords,
       content: reviewContent,
     }
 
-    setIsOpen(false)
-
     try {
-      setLoading(true)
-      setTimeout(() => {
-        console.log(poolId, reviewForm)
-      }, 1000)
+      const response = await fetch(
+        `https://nest-aws.site/api/v1/pools/${poolId}/reviews/${review.id}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify(reviewForm),
+        },
+      )
 
-      // onSubmit(poolId, reviewForm)
+      const json = await response.json()
+
+      if (!response.ok) {
+        throw new Error(`[${response.status}] ${json.message}`)
+      }
+
+      // 토스트 메세지
+      toast({
+        title: '리뷰 수정 성공',
+        description: '리뷰가 성공적으로 수정되었습니다',
+      })
+
+      // 리뷰 목록 다시 불러오기
+      queryClient.invalidateQueries({ queryKey: ['reviews', poolId] })
+
+      // 리뷰 수정 모달 닫기
+      setIsOpen(false)
     } catch (error) {
-      setError('리뷰 작성에 실패했습니다. 다시 시도해주세요.')
+      console.error('리뷰 작성 실패', error)
+      toast({
+        title: '리뷰 작성 실패',
+        description: '리뷰 작성에 실패했습니다. 잠시 후 다시 시도해주세요',
+        variant: 'destructive',
+      })
     } finally {
       setLoading(false)
     }
@@ -144,7 +164,7 @@ export default function ReviewForm({
             disabled={loading || reviewContent.length < 4}
             variant="primary"
           >
-            완료하기
+            수정하기
           </Button>
         </MotionTap>
       </div>

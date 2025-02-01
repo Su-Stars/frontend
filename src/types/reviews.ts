@@ -1,13 +1,21 @@
+export interface ReviewsResponse {
+  total: number
+  page: number
+  limit: number
+  reviews: IReview[]
+}
+
 export interface IReview {
   id: number
-  userId: number
   poolId: number
-  poolName: string
-  nickname: string
+  userId: number
   content: string
-  keywords: string[]
+  keywords?: string[]
   createdAt: string
-  updatedAt: string
+  updatedAt: string | null
+  users: {
+    nickname: string
+  }
 }
 
 export interface IReviewForm {

@@ -6,11 +6,12 @@ import { Separator } from '@/components/ui/separator'
 import ReviewItem from '@/components/reviews/review-item'
 import { ResponsiveDialog } from '@/components/responsive-dialog'
 import { useState } from 'react'
-import ReviewForm from '@/components/reviews/reivew-form'
+import ReviewForm from '@/components/reviews/reivew-post-form'
 import { Button } from '@/components/ui/button'
 import { PiPencilSimpleLineFill } from 'react-icons/pi'
 import { IReview } from '@/types/reviews'
 import { FaChevronLeft } from 'react-icons/fa'
+import { useIntersectionObserver } from '@/hooks/use-intersectionObserver'
 
 interface ReviewsPageProps {
   preview?: boolean
@@ -21,29 +22,27 @@ export default function ReviewsPage({
   preview = false,
   poolId,
 }: ReviewsPageProps) {
-  const { data, isLoading, isError, createReview, updateReview, deleteReview } =
-    useReviews({ poolId })
+  const {
+    total,
+    reviews,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isError,
+    error,
+  } = useReviews({ poolId })
   const [isWriteOpen, setIsWriteOpen] = useState(false)
-  const [isEditOpen, setIsEditOpen] = useState(false)
-  const [selectedReview, setSelectedReview] = useState<IReview | null>(null)
 
-  const handleEdit = (review: IReview) => {
-    setSelectedReview(review)
-    setIsEditOpen(true)
+  const option = {
+    threshold: 0.5,
+    rootMargin: '0px',
   }
 
-  //TODO : 로딩중과 에러발생시 UI를 개선합니다.
-  if (isLoading) {
-    return <div>로딩 중...</div>
-  }
-
-  if (isError) {
-    return <div>에러가 발생했습니다.</div>
-  }
-
-  if (!data) {
-    return <div>데이터가 없습니다.</div>
-  }
+  const moreRef = useIntersectionObserver(([entry]) => {
+    if (entry.isIntersecting && !isFetchingNextPage && hasNextPage) {
+      fetchNextPage()
+    }
+  }, option)
 
   return (
     <section className="flex flex-col space-y-4">
@@ -53,31 +52,7 @@ export default function ReviewsPage({
         title="수영장 리뷰를 남겨주세요"
         description="여러분들의 소중한 리뷰는 다른 사용자들에게 큰 도움이 됩니다."
       >
-        <ReviewForm
-          poolId={poolId}
-          onSubmit={createReview}
-          setIsOpen={setIsWriteOpen}
-        />
-      </ResponsiveDialog>
-      <ResponsiveDialog
-        isOpen={isEditOpen}
-        setIsOpen={setIsEditOpen}
-        title="리뷰 수정하기"
-        description="여러분들의 소중한 리뷰는 다른 사용자들에게 큰 도움이 됩니다."
-      >
-        <ReviewForm
-          poolId={poolId}
-          onSubmit={updateReview}
-          setIsOpen={setIsEditOpen}
-          defaultValues={
-            selectedReview
-              ? {
-                  keywords: selectedReview.keywords,
-                  content: selectedReview.content,
-                }
-              : undefined
-          }
-        />
+        <ReviewForm poolId={poolId} setIsOpen={setIsWriteOpen} />
       </ResponsiveDialog>
       <div className="flex items-center justify-between">
         <div className="flex">
@@ -94,7 +69,7 @@ export default function ReviewsPage({
             </Button>
           )}
           <h2>
-            수영장 리뷰<span className="ml-2 text-gray-500">{data.total}</span>
+            수영장 리뷰<span className="ml-2 text-gray-500">{total}</span>
           </h2>
         </div>
 
@@ -107,29 +82,39 @@ export default function ReviewsPage({
           리뷰 작성하기
         </Button>
       </div>
-      <Separator />
-      {Object.entries(data.summary).map(([keyword, count]) => (
+      {/* <Separator /> */}
+      {/* // 리뷰 서머리는 현재 API에서 제공하지 않으므로 이부분을 주석처리합니다. */}
+      {/* {Object.entries(data.summary).map(([keyword, count]) => (
         <div
           key={keyword}
           className="rounded-md bg-gray-100 p-4 font-semibold text-gray-700"
         >
           {keyword}: {count}
         </div>
-      ))}
+      ))} */}
       <Separator />
       <div className="flex flex-col divide-y-0 rounded-md bg-gray-100 p-2">
-        {data.reviews.map((review) => (
-          <ReviewItem
-            key={review.id}
-            review={review}
-            poolId={poolId}
-            deleteReview={deleteReview}
-            onEdit={handleEdit}
-          />
-        ))}
+        {/* // 리뷰가 있을 경우 리뷰 아이템을 렌더링합니다. */}
+        {reviews.length > 0 ? (
+          <div className="flex flex-col divide-y divide-gray-300 rounded-md bg-gray-100 p-2">
+            {reviews.map((review) => (
+              <ReviewItem key={review.id} review={review} poolId={poolId} />
+            ))}
+          </div>
+        ) : (
+          // 리뷰가 없을 경우 아래와 같은 메시지를 렌더링합니다.
+          <div className="flex flex-col items-center justify-center gap-4 py-12 text-muted-foreground">
+            <p>
+              <span className="text-lg font-medium">아직 리뷰가 없어요</span>
+            </p>
+            <p>
+              <span className="text-sm">첫 번째 리뷰를 작성해보세요!</span>
+            </p>
+          </div>
+        )}
       </div>
-
-      {preview && (
+      {/* // 프리뷰 상태인 경우와 리뷰가 있는 경우 리뷰 더보기 버튼을 렌더링합니다. */}
+      {preview && reviews.length > 0 && (
         <Link href={`/pools/${poolId}/reviews`} className="mx-auto">
           <Button variant="secondary" className="rounded-full">
             리뷰 더보기
@@ -137,6 +122,11 @@ export default function ReviewsPage({
         </Link>
       )}
       {/* TODO : 프리뷰 상태가 아닌경우 무한스크롤을 활성화합니다. */}
+      {!preview && hasNextPage && (
+        <div ref={moreRef} className="py-4 text-center text-gray-500">
+          {isFetchingNextPage ? '로딩 중...' : '더 보기'}
+        </div>
+      )}
     </section>
   )
 }
