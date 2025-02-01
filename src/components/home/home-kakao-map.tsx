@@ -1,12 +1,13 @@
 'use client'
 
-import { CustomOverlayMap, Map, MapMarker } from 'react-kakao-maps-sdk'
+import { Map, MapMarker } from 'react-kakao-maps-sdk'
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { DEFAULT_MAP_CENTER } from '@/lib/constants'
 import { useDebounce } from '@/hooks/use-debounce'
-import useCenterStore, { Coordinates } from '@/stores/center-store'
-import { Pool } from '@/hooks/use-search'
+import useCenterStore from '@/stores/center-store'
 import HomeKakaoMapMarker from './home-kakao-map-marker'
+import { Coordinates } from '@/types/coordinate'
+import { Pool } from '@/types/pool'
 
 interface GeocoderResult {
   address_name: string
@@ -53,7 +54,7 @@ export default function HomeKakaoMap({
     [setRegion],
   )
 
-  // 첫 로딩시 유저의 위치로 설정 - 됨, 지도가 자동으로 유저 위치에서 시작은 하
+  // 첫 로딩시 지도의 위치를 유저의 위치로 설정
   // 유저의 위치에서 지오코딩 실행
   // 지오코딩으로 얻은 주소로부터 setRegion을 실행시켜 인근 수영장에 대한 검색 실행
   useEffect(() => {
@@ -93,7 +94,6 @@ export default function HomeKakaoMap({
   const handleCenterChanged = useDebounce(searchAddressFromCoords, 500)
 
   const clickMarker = (id: number) => {
-    // 같은 걸 두번 클릭 했으면 정보창 닫기
     if (id === openMarkerId) {
       setOpenMarkerId(null)
     } else {
@@ -115,7 +115,6 @@ export default function HomeKakaoMap({
         role="application"
         onCenterChanged={handleCenterChanged}
       >
-        {/* 수영장 마커들 */}
         {searchResults &&
           searchResults.map((pool) => (
             <Fragment key={pool.id}>

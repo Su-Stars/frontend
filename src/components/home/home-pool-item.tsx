@@ -1,4 +1,3 @@
-import { Pool } from '@/hooks/use-search'
 import Image from 'next/image'
 import Link from 'next/link'
 import NoImage from '@/components/common/no-image'
@@ -6,6 +5,7 @@ import { Card, CardDescription, CardTitle } from '@/components/ui/card'
 import { LuMapPin } from 'react-icons/lu'
 import useCenterStore from '@/stores/center-store'
 import { useState } from 'react'
+import { Pool } from '@/types/pool'
 
 interface PoolItemProps {
   pool: Pool
@@ -23,9 +23,9 @@ export default function PoolItem({ pool }: PoolItemProps) {
     <div>
       <Card className="flex h-40 p-0 transition hover:opacity-90">
         <Link className="h-full w-40" href={`/pools/${pool.id}`}>
-          {pool?.thumbnail ? (
+          {pool.images[0] ? (
             <Image
-              src={pool?.thumbnail}
+              src={pool?.images[0]}
               alt="이미지"
               width={70}
               height={70}

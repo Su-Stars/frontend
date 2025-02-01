@@ -1,9 +1,5 @@
+import { Coordinates } from '@/types/coordinate'
 import { create } from 'zustand'
-
-export interface Coordinates {
-  lat: number
-  lng: number
-}
 
 interface centerState {
   center: Coordinates | null

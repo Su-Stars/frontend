@@ -1,4 +1,5 @@
 import { searchPools } from '@/actions/search'
+import { Pool } from '@/types/pool'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 interface UseSearchParams {
@@ -6,30 +7,6 @@ interface UseSearchParams {
   keyword?: string
   page?: number
   limit?: number
-}
-
-export interface Pool {
-  id: number
-  name: string
-  address: string
-  thumbnail: string
-  distance?: number
-  isBookMarked: boolean
-  website?: string
-  freeSwimLink?: string
-  swimLessonLink?: string
-  images?: string[]
-  laneInfo?: string
-  latitude: number
-  longitude: number
-  phone?: string
-  isDivingAllowed?: boolean
-  isFinsAllowed?: boolean
-  isKickboardAllowed?: boolean
-  isKickboardRental?: boolean
-  isPhotoAllowed?: boolean
-  isSoapProvided?: boolean
-  isTowelProvided?: boolean
 }
 
 export interface UseSearchResponse {

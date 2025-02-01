@@ -1,6 +1,4 @@
 import { Pool } from '@/hooks/use-search'
-import Image from 'next/image'
-import { useState } from 'react'
 import { CustomOverlayMap, MapMarker } from 'react-kakao-maps-sdk'
 
 interface HomeKakaoMapMarkerProps {
