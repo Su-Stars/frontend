@@ -5,7 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { LuEllipsisVertical } from 'react-icons/lu'
+import { LuEllipsisVertical, LuTrash2, LuNotebookPen } from 'react-icons/lu'
 import { Button } from '@/components/ui/button'
 import dayjs from '@/lib/dayjs'
 import { useToast } from '@/hooks/use-toast'
@@ -14,6 +14,7 @@ import { useState } from 'react'
 import ReviewEditForm from '@/app/(menu)/pools/[id]/reviews/_components/review-edit-form'
 import { useUserStore } from '@/providers/user-store-provider'
 import { useQueryClient } from '@tanstack/react-query'
+import IconMenu from '@/components/common/icon-menu'
 
 interface ReviewItemProps {
   review: IReview
@@ -148,14 +149,21 @@ export default function ReviewItem({ review, poolId }: ReviewItemProps) {
                 setIsEditOpen(true)
               }}
             >
-              수정하기
+              <IconMenu
+                text="수정하기"
+                icon={<LuNotebookPen className="h-4 w-4" />}
+              />
             </DropdownMenuItem>
             <DropdownMenuItem
               onSelect={() => {
                 handleDelete()
               }}
             >
-              삭제하기
+              <IconMenu
+                text="삭제하기"
+                icon={<LuTrash2 className="h-4 w-4" />}
+                className="text-red-500 hover:text-red-500"
+              />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
