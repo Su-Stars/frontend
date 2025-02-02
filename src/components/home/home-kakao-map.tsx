@@ -9,7 +9,8 @@ import HomeKakaoMapMarker from './home-kakao-map-marker'
 import { Coordinates } from '@/types/coordinate'
 import type { Pool } from '@/types/pools'
 import { useSearchStore } from '@/stores/search-store'
-
+import { Skeleton } from '../ui/skeleton'
+import { LuLoaderCircle } from 'react-icons/lu'
 interface GeocoderResult {
   address_name: string
   region_type: string
@@ -100,32 +101,41 @@ export default function HomeKakaoMap({ searchResults }: HomeKakaoMapProps) {
 
   return (
     <div className="relative h-[200px] w-full overflow-hidden rounded-lg border">
-      <Map
-        ref={mapRef}
-        center={{
-          lat: center?.lat || DEFAULT_MAP_CENTER.lat,
-          lng: center?.lng || DEFAULT_MAP_CENTER.lng,
-        }}
-        style={{ width: '100%', height: '100%' }}
-        level={3}
-        aria-label="지도"
-        role="application"
-        onCenterChanged={handleCenterChanged}
-      >
-        {searchResults &&
-          searchResults.map((pool) => (
-            <Fragment key={pool.id}>
-              <MapMarker
-                onClick={() => clickMarker(pool.id)}
-                position={{
-                  lat: pool.latitude,
-                  lng: pool.longitude,
-                }}
-              />
-              <HomeKakaoMapMarker pool={pool} open={openMarkerId === pool.id} />
-            </Fragment>
-          ))}
-      </Map>
+      {center ? (
+        <Map
+          ref={mapRef}
+          center={{
+            lat: center.lat,
+            lng: center.lng,
+          }}
+          style={{ width: '100%', height: '100%' }}
+          level={3}
+          aria-label="지도"
+          role="application"
+          onCenterChanged={handleCenterChanged}
+        >
+          {searchResults &&
+            searchResults.map((pool) => (
+              <Fragment key={pool.id}>
+                <MapMarker
+                  onClick={() => clickMarker(pool.id)}
+                  position={{
+                    lat: pool.latitude,
+                    lng: pool.longitude,
+                  }}
+                />
+                <HomeKakaoMapMarker
+                  pool={pool}
+                  open={openMarkerId === pool.id}
+                />
+              </Fragment>
+            ))}
+        </Map>
+      ) : (
+        <Skeleton className="flex h-[200px] w-full items-center justify-center bg-slate-300">
+          <LuLoaderCircle className="animate-spin" />
+        </Skeleton>
+      )}
     </div>
   )
 }
