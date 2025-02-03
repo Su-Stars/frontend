@@ -1,12 +1,15 @@
-import { IUserRecord } from '@/hooks/use-bulletin'
-import Image from 'next/image'
+import { Record } from '@/types/bulletin'
+import dayjs from '@/lib/dayjs'
 
 interface BulletinItemProps {
-  item: IUserRecord
+  record: Record
 }
 
-export default function BulletinItem({ item }: BulletinItemProps) {
-  const calculateTime = (startTime: string, endTime: string) => {
+export default function BulletinItem({ record }: BulletinItemProps) {
+  const calculateTime = (startTime: string | null, endTime: string | null) => {
+    if (startTime === null || endTime === null) {
+      return ' -- : -- '
+    }
     const hour = Number(endTime.split(':')[0]) - Number(startTime.split(':')[0])
     const minute =
       Number(endTime.split(':')[1]) - Number(startTime.split(':')[1])
@@ -23,42 +26,29 @@ export default function BulletinItem({ item }: BulletinItemProps) {
   return (
     <div className="relative flex flex-col gap-3">
       <div>
-        {item.image_url ? (
-          <Image
-            src={item.image_url}
-            width={100}
-            height={100}
-            className="h-40 w-full"
-            alt="물"
-          />
-        ) : (
-          <div className="h-40 w-full bg-blue-500" />
-        )}
+        <div className="h-40 w-full bg-blue-500" />
       </div>
       <div className="flex items-center gap-4">
         <div className="h-10 w-10 rounded-full bg-gray-400" />
 
-        <span>{item.nickname}</span>
+        <span>{record.users.nickname}</span>
       </div>
       <div>
-        {Object.entries(item.record).map(([date, records], index) => (
-          <div key={`${date}-${index}`}>
-            {records.map((record) => (
-              <div key={record.logId}>
-                <p className="absolute right-4 top-[120px] text-lg font-semibold text-white">
-                  거리: {record.swimLength}m
-                </p>
+        <div>
+          <p className="absolute right-4 top-[120px] text-lg font-semibold text-white">
+            거리: {record.swim_length}m
+          </p>
 
-                <p className="absolute left-4 top-[120px] text-lg font-semibold text-white">
-                  {calculateTime(record.startTime, record.endTime)}
-                </p>
+          <p className="absolute left-4 top-[120px] text-lg font-semibold text-white">
+            {calculateTime(record.start_time, record.end_time)}
+          </p>
 
-                <p>메모: {record.note}</p>
-              </div>
-            ))}
-            <h3 className="text-sm text-gray-400">{date}</h3>
-          </div>
-        ))}
+          <p>메모: {record.note}</p>
+        </div>
+
+        <h3 className="text-sm font-medium text-gray-400">
+          {dayjs(record.swim_date).format('YY.MM.DD')}
+        </h3>
       </div>
     </div>
   )
