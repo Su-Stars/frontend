@@ -6,7 +6,7 @@ interface getBulletinProps {
 export const getBulletin = async ({ limit, page }: getBulletinProps) => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/bulletin?page=${page}&limit=${10}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/bulletin?page=${page}&limit=${limit}`,
     )
 
     if (!res.ok) {

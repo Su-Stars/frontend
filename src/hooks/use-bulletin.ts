@@ -14,7 +14,7 @@ export function useBulletin() {
     isFetchingNextPage,
     status,
   } = useInfiniteQuery<BulletinResponse>({
-    queryKey: ['bulletin'],
+    queryKey: ['bulletin', limit],
     queryFn: async ({ pageParam }) =>
       getBulletin({ limit, page: pageParam as number }),
     initialPageParam: 1,
@@ -26,7 +26,7 @@ export function useBulletin() {
   })
 
   const records = data?.pages
-    ? data.pages.pages.flatMap((page) => page.data.record)
+    ? data.pages.flatMap((page) => page.data.record)
     : []
 
   const isEmpty = records.length === 0

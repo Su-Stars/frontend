@@ -1,6 +1,6 @@
 import { getBulletin } from '@/actions/bulletin'
 import BulletinPage from '@/components/pages/bulletin-page'
-import { BulletinResponse, Data } from '@/types/bulletin'
+import { BulletinResponse } from '@/types/bulletin'
 import {
   dehydrate,
   HydrationBoundary,
@@ -21,7 +21,7 @@ export default async function Bulletin() {
   })
 
   await queryClient.prefetchInfiniteQuery<BulletinResponse>({
-    queryKey: ['bulletin'],
+    queryKey: ['bulletin', limit],
     initialPageParam: 1,
     queryFn: async ({ pageParam = 1 }) =>
       getBulletin({ limit, page: pageParam as number }),

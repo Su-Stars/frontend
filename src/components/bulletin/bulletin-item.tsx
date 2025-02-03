@@ -1,5 +1,7 @@
 import { Record } from '@/types/bulletin'
 import dayjs from '@/lib/dayjs'
+import Image from 'next/image'
+import { Clock, MapPin } from 'lucide-react'
 
 interface BulletinItemProps {
   record: Record
@@ -24,31 +26,53 @@ export default function BulletinItem({ record }: BulletinItemProps) {
   }
 
   return (
-    <div className="relative flex flex-col gap-3">
-      <div>
+    <div className="overflow-hidden rounded-lg bg-white shadow-md">
+      <div className="relative">
         <div className="h-40 w-full bg-blue-500" />
+        <div className="absolute bottom-4 left-0 right-0 flex items-center justify-between px-4 text-white">
+          <div className="flex items-center space-x-2">
+            <Clock size={16} className="text-white" />
+            <span className="text-lg font-semibold">
+              {calculateTime(record.start_time, record.end_time)}
+            </span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <MapPin size={16} className="text-white" />
+            <span className="text-lg font-semibold">
+              거리: {record.swim_length}m
+            </span>
+          </div>
+        </div>
       </div>
-      <div className="flex items-center gap-4">
-        <div className="h-10 w-10 rounded-full bg-gray-400" />
 
-        <span>{record.users.nickname}</span>
-      </div>
-      <div>
-        <div>
-          <p className="absolute right-4 top-[120px] text-lg font-semibold text-white">
-            거리: {record.swim_length}m
-          </p>
-
-          <p className="absolute left-4 top-[120px] text-lg font-semibold text-white">
-            {calculateTime(record.start_time, record.end_time)}
-          </p>
-
-          <p>메모: {record.note}</p>
+      <div className="space-y-4 p-4">
+        <div className="flex items-center space-x-3">
+          <Image
+            src={`https://picsum.photos/id/${record.user_id}/50/50`}
+            className="rounded-full shadow-md"
+            width={50}
+            height={50}
+            alt="profile"
+          />
+          <div className="flex-1">
+            <h3 className="font-semibold text-gray-900">
+              {record.users.nickname}
+            </h3>
+            <time className="text-sm text-gray-500">
+              {dayjs(record.swim_date).format('YY.MM.DD')}
+            </time>
+          </div>
         </div>
 
-        <h3 className="text-sm font-medium text-gray-400">
-          {dayjs(record.swim_date).format('YY.MM.DD')}
-        </h3>
+        <div className="space-y-2">
+          <p className="leading-relaxed text-gray-700">
+            {record.note ? (
+              record.note
+            ) : (
+              <span className="italic text-gray-400">메모를 입력하세요</span>
+            )}
+          </p>
+        </div>
       </div>
     </div>
   )
