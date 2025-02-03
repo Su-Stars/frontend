@@ -31,29 +31,25 @@ export default function PoolItem({ pool }: PoolItemProps) {
 
   return (
     <div>
-      <Card className="flex h-40 p-0 transition hover:opacity-90">
-        <Link
-          className="h-full w-40"
-          href={`/pools/${pool.id}`}
-          onClick={clearFilterName}
-        >
+      <Card className="flex h-32 p-0 transition hover:opacity-90 lg:h-40">
+        <Link href={`/pools/${pool.id}`} onClick={clearFilterName}>
           {pool.thumbnail ? (
-            <div className="relative h-full w-full overflow-hidden rounded-l-lg">
+            <div className="relative aspect-square h-full overflow-hidden rounded-l-lg">
               <Image
                 src={pool?.thumbnail}
                 alt={`${pool.name} 수영장 이미지`}
                 width={160}
                 height={160}
-                sizes="160px"
+                sizes="(max-width: 768px) 128px, 160px"
                 className="h-full w-full object-cover transition-transform duration-300 hover:scale-110"
                 priority={false}
               />
             </div>
           ) : (
-            <NoImage className="h-full w-full rounded-l-lg text-sm" />
+            <NoImage className="aspect-square h-full rounded-l-lg text-sm" />
           )}
         </Link>
-        <div className="flex flex-1 items-center justify-between p-4">
+        <div className="flex flex-1 items-center justify-between p-2 md:p-4">
           <Link
             className="flex flex-col justify-center"
             href={`/pools/${pool.id}`}
