@@ -27,6 +27,7 @@ import { GiDuckPalm } from 'react-icons/gi'
 import { PiTowel } from 'react-icons/pi'
 import { FaRegCaretSquareUp } from 'react-icons/fa'
 import { GiDropletSplash } from 'react-icons/gi'
+import PoolImages from '@/components/pool/pool-images'
 
 interface PoolDetailProps {
   pool: PoolDetailI
@@ -131,30 +132,7 @@ export default function PoolDetail({ pool }: PoolDetailProps) {
       {/* 메인 */}
       <main className="flex flex-col space-y-4">
         {/* 이미지 */}
-        <div className="relative h-[200px] w-full">
-          {pool?.images?.length > 0 ? (
-            <Carousel>
-              <CarouselContent>
-                {pool.images.map((image, index) => (
-                  <CarouselItem key={index}>
-                    <div className="relative h-[200px] w-full">
-                      <Image
-                        src={image}
-                        fill
-                        className="rounded-lg object-cover"
-                        alt={`${pool.name} 수영장 이미지 ${index + 1}`}
-                      />
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-2" />
-              <CarouselNext className="right-2" />
-            </Carousel>
-          ) : (
-            <NoImage className="h-[200px] w-full" />
-          )}
-        </div>
+        <PoolImages images={pool.images} poolName={pool.name} />
         {/* Business Info */}
         <div>
           {/* 타이틀과 북마크 버튼 */}
