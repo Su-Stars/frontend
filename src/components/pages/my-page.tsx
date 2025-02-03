@@ -37,6 +37,7 @@ import { useRouter } from 'next/navigation'
 import { useMyBookmarks } from '@/hooks/use-my-bookmarks'
 import PoolBookmarkPreviewItem from '@/components/pool/pool-bookmark-preview-item'
 import Link from 'next/link'
+import { LuBookmark } from 'react-icons/lu'
 
 export default function MyPage() {
   const { user, clearUser } = useUserStore((state) => state)
@@ -178,13 +179,26 @@ export default function MyPage() {
         </CardFooter>
       </Card>
 
-      <section className="mt-4 flex flex-col">
+      <section className="mt-4 flex flex-col space-y-4">
         <h2 className="text-xl font-bold">즐겨찾기</h2>
         <div className="scrollbar-hide flex gap-4 overflow-x-auto pb-4">
-          {bookmarks &&
+          {bookmarks && bookmarks.favorite.length > 0 ? (
             bookmarks.favorite.map((bookmark, index) => (
               <PoolBookmarkPreviewItem key={index} bookmark={bookmark} />
-            ))}
+            ))
+          ) : (
+            <div className="flex min-h-[200px] w-full flex-col items-center justify-center gap-2 rounded-lg border border-dashed bg-muted p-4 text-center">
+              <LuBookmark className="h-8 w-8 text-muted-foreground" />
+              <p className="text-muted-foreground">
+                아직 북마크한 수영장이 없습니다
+              </p>
+              <Link href="/">
+                <Button variant="default" size="sm">
+                  수영장 찾아보기
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 
