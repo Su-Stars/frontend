@@ -53,15 +53,17 @@ export default function ReviewsPage({
         <ReviewForm poolId={poolId} setIsOpen={setIsWriteOpen} />
       </ResponsiveDialog>
       <div className="flex items-center justify-between">
-        <div className="flex">
+        <div className="flex items-center justify-between">
           {!preview && (
             <Button
-              variant="ghost"
+              variant="outline"
               size="icon"
-              className="rounded-full"
+              className="mr-2 rounded-full"
               asChild
+              role="link"
+              aria-label="뒤로가기"
             >
-              <Link href="/">
+              <Link href={`/pools/${poolId}`}>
                 <FaChevronLeft />
               </Link>
             </Button>
@@ -75,8 +77,10 @@ export default function ReviewsPage({
           variant="ghost"
           onClick={() => setIsWriteOpen(true)}
           className="rounded-full"
+          role="button"
+          aria-label="리뷰 작성하기"
         >
-          <PiPencilSimpleLineFill className="text-blue-500" />
+          <PiPencilSimpleLineFill className="text-primary" aria-hidden="true" />
           리뷰 작성하기
         </Button>
       </div>
@@ -113,13 +117,18 @@ export default function ReviewsPage({
       </div>
       {/* // 프리뷰 상태인 경우와 리뷰가 있는 경우 리뷰 더보기 버튼을 렌더링합니다. */}
       {preview && reviews.length > 0 && (
-        <Link href={`/pools/${poolId}/reviews`} className="mx-auto">
-          <Button variant="secondary" className="rounded-full">
+        <Button
+          variant="secondary"
+          className="rounded-full"
+          role="link"
+          asChild
+          aria-label="리뷰 더보기"
+        >
+          <Link href={`/pools/${poolId}/reviews`} className="mx-auto">
             리뷰 더보기
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       )}
-      {/* TODO : 프리뷰 상태가 아닌경우 무한스크롤을 활성화합니다. */}
       {!preview && hasNextPage && (
         <div ref={moreRef} className="py-4 text-center text-gray-500">
           {isFetchingNextPage ? '로딩 중...' : '더 보기'}
