@@ -14,25 +14,34 @@ type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
-export async function generateMetadata({
-  params,
-  searchParams,
-}: Props): Promise<Metadata> {
-  const poolId = Number((await params).id)
+async function prefetchPool(poolId: number) {
   const queryClient = new QueryClient()
 
+  await queryClient.prefetchQuery({
+    queryKey: ['pool', poolId],
+    queryFn: () => getPool(poolId),
+  })
+
+  return {
+    queryClient,
+    pool: queryClient.getQueryData<PoolDetail>(['pool', poolId]),
+  }
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string }
+}): Promise<Metadata> {
+  const poolId = Number(params.id)
+
   try {
-    await queryClient.prefetchQuery({
-      queryKey: ['pool', poolId],
-      queryFn: () => getPool(poolId),
-    })
-    const pool = queryClient.getQueryData<PoolDetail>(['pool', poolId])
+    const { pool } = await prefetchPool(poolId)
 
     if (!pool) {
       notFound()
     }
 
-    // TODO : OG용 이미지 추가하기
     return {
       title: pool.name,
       description: pool.description || '수영장 상세 정보',
@@ -42,22 +51,14 @@ export async function generateMetadata({
       },
     }
   } catch (error) {
-    throw error
+    console.error(error)
+    notFound()
   }
 }
 
-export default async function Pool({
-  params,
-}: {
-  params: Promise<{ id: string }>
-}) {
-  const poolId = Number((await params).id)
-  const queryClient = new QueryClient()
-
-  queryClient.prefetchQuery({
-    queryKey: ['pool', poolId],
-    queryFn: () => getPool(poolId),
-  })
+export default async function Page({ params }: { params: { id: string } }) {
+  const poolId = Number(params.id)
+  const { queryClient } = await prefetchPool(poolId)
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

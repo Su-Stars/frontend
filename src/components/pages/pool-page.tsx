@@ -4,7 +4,6 @@ import PoolDetail from '../pool/pool-detail'
 import { Suspense, lazy } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import type { PoolDetail as PoolDetailI } from '@/types/pools'
-import { useQuery } from '@tanstack/react-query'
 import { usePool } from '@/hooks/use-pool'
 
 const ReviewsPage = lazy(() => import('@/components/pages/reviews-page'))
@@ -16,14 +15,6 @@ interface PoolPageParams {
 
 export default function PoolPage({ poolId }: PoolPageParams) {
   const { data, isPending, isError, error } = usePool({ poolId })
-
-  if (isPending) {
-    return <div>Loading...</div>
-  }
-
-  if (isError) {
-    return <div>Error: {error?.message ?? 'Unknown error'}</div>
-  }
 
   return (
     <div className="flex flex-col space-y-4">
