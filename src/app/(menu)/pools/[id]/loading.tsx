@@ -33,7 +33,7 @@ export default function Loading() {
             {/* Addditional Info */}
             <div className="mt-4 flex flex-wrap items-center gap-2">
               {Array.from({ length: 5 }).map((_, index) => {
-                return <Skeleton className="h-4 w-4" />
+                return <Skeleton className="h-4 w-4" key={index} />
               })}
             </div>
 
