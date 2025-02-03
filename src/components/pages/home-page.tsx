@@ -6,9 +6,15 @@ import { useIntersectionObserver } from '@/hooks/use-intersectionObserver'
 import { useSearch } from '@/hooks/use-search'
 import HomePoolList from '../home/home-pool-list'
 import { useSearchStore } from '@/stores/search-store'
+import { useEffect } from 'react'
+import { Coordinates } from '@/types/coordinate'
+import useCenterStore from '@/stores/center-store'
+import { DEFAULT_MAP_CENTER } from '@/lib/constants'
+import HomeSearchInput from '../home/home-search-input'
 
 export default function HomePage() {
   const { region, keyword } = useSearchStore()
+  const { setCenter } = useCenterStore()
   const {
     searchResults,
     hasNextPage,
@@ -19,6 +25,22 @@ export default function HomePage() {
     region,
     keyword,
   })
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const newCenter: Coordinates = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        }
+        setCenter(newCenter)
+      },
+      // 에러가 발생하면 서울역으로 설정
+      (error) => {
+        setCenter(DEFAULT_MAP_CENTER)
+      },
+    )
+  }, [])
 
   const option = {
     threshold: 0.5,
@@ -36,6 +58,7 @@ export default function HomePage() {
       <h2 className="text-2xl font-bold">수영장 검색</h2>
       <HomeKakaoMap searchResults={searchResults} />
       <HomeRegionFilter />
+      <HomeSearchInput />
       <HomePoolList total={total} searchResults={searchResults} />
       {hasNextPage && (
         <div ref={moreRef} className="py-4 text-center text-gray-500">

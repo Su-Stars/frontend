@@ -24,7 +24,7 @@ interface HomeKakaoMapProps {
 
 export default function HomeKakaoMap({ searchResults }: HomeKakaoMapProps) {
   const mapRef = useRef<kakao.maps.Map>(null)
-  const { setRegion } = useSearchStore()
+  const { setRegion, setFilterName } = useSearchStore()
   const { center, setCenter } = useCenterStore()
 
   const [geocoder, setGeocoder] = useState<kakao.maps.services.Geocoder | null>(
@@ -32,14 +32,12 @@ export default function HomeKakaoMap({ searchResults }: HomeKakaoMapProps) {
   )
   const [openMarkerId, setOpenMarkerId] = useState<number | null>(null)
 
-  // 카카오맵 로드와 지오코더 초기화
   useEffect(() => {
     kakao.maps.load(() => {
       setGeocoder(new kakao.maps.services.Geocoder())
     })
   }, [])
 
-  // 지오코딩 처리 함수
   const handleGeocode = useCallback(
     (result: GeocoderResult[], status: kakao.maps.services.Status) => {
       if (status === kakao.maps.services.Status.OK) {
@@ -47,14 +45,11 @@ export default function HomeKakaoMap({ searchResults }: HomeKakaoMapProps) {
 
         const adminDistrict = address.split(' ').slice(0, 3).join(' ')
         setRegion(adminDistrict)
+        setFilterName(adminDistrict)
       }
     },
     [setRegion],
   )
-
-  // 첫 로딩시 지도의 위치를 유저의 위치로 설정
-  // 유저의 위치에서 지오코딩 실행
-  // 지오코딩으로 얻은 주소로부터 setRegion을 실행시켜 인근 수영장에 대한 검색 실행
   useEffect(() => {
     if (!geocoder) return
 
@@ -67,7 +62,6 @@ export default function HomeKakaoMap({ searchResults }: HomeKakaoMapProps) {
         setCenter(newCenter)
         geocoder.coord2RegionCode(newCenter.lng, newCenter.lat, handleGeocode)
       },
-      // 에러가 발생하면 서울역으로 설정
       (error) => {
         setCenter(DEFAULT_MAP_CENTER)
         console.error('Geolocation error:', error)
