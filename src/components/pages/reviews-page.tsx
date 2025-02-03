@@ -2,14 +2,12 @@
 
 import Link from 'next/link'
 import { useReviews } from '@/app/(menu)/pools/[id]/reviews/_hooks/useReviews'
-import { Separator } from '@/components/ui/separator'
 import ReviewItem from '@/app/(menu)/pools/[id]/reviews/_components/review-item'
 import { ResponsiveDialog } from '@/components/responsive-dialog'
 import { useState } from 'react'
 import ReviewForm from '@/app/(menu)/pools/[id]/reviews/_components/reivew-post-form'
 import { Button } from '@/components/ui/button'
 import { PiPencilSimpleLineFill } from 'react-icons/pi'
-import { IReview } from '@/app/(menu)/pools/[id]/reviews/_types/reviews'
 import { FaChevronLeft } from 'react-icons/fa'
 import { useIntersectionObserver } from '@/hooks/use-intersectionObserver'
 
@@ -45,7 +43,7 @@ export default function ReviewsPage({
   }, option)
 
   return (
-    <section className="flex flex-col space-y-4">
+    <section className="flex flex-col space-y-3">
       <ResponsiveDialog
         isOpen={isWriteOpen}
         setIsOpen={setIsWriteOpen}
@@ -68,9 +66,9 @@ export default function ReviewsPage({
               </Link>
             </Button>
           )}
-          <h2>
+          <h3>
             수영장 리뷰<span className="ml-2 text-gray-500">{total}</span>
-          </h2>
+          </h3>
         </div>
 
         <Button
@@ -92,7 +90,7 @@ export default function ReviewsPage({
           {keyword}: {count}
         </div>
       ))} */}
-      <Separator />
+
       <div className="flex flex-col divide-y-0 rounded-md bg-gray-100 p-2">
         {/* // 리뷰가 있을 경우 리뷰 아이템을 렌더링합니다. */}
         {reviews.length > 0 ? (

@@ -4,7 +4,6 @@ import { useMe } from '@/hooks/use-me'
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,

@@ -1,11 +1,5 @@
 import Link from 'next/link'
-import { LuLoaderCircle } from 'react-icons/lu'
-import {
-  CustomOverlayMap,
-  Map,
-  MapMarker,
-  useKakaoLoader,
-} from 'react-kakao-maps-sdk'
+import { CustomOverlayMap, Map, MapMarker } from 'react-kakao-maps-sdk'
 import { useState } from 'react'
 import type { PoolDetail } from '@/types/pools'
 
@@ -19,13 +13,15 @@ export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {
   const [isMapReady, setIsMapReady] = useState(false)
 
   return (
-    <div className="relative h-[300px] w-full rounded-lg border">
+    <section className="relative mb-8 h-[400px] w-full space-y-3">
+      <h3>위치정보</h3>
       <Map
         center={position}
         style={{ width: '100%', height: '100%' }}
-        level={3}
+        level={5}
         onCreate={() => setIsMapReady(true)}
-        className="rounded-lg"
+        className="rounded-lg border"
+        scrollwheel={false}
       >
         {isMapReady && (
           <>
@@ -41,6 +37,6 @@ export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {
           </>
         )}
       </Map>
-    </div>
+    </section>
   )
 }

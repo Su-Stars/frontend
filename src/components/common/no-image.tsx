@@ -1,5 +1,5 @@
-import React from 'react'
-import clsx from 'clsx'
+import { cn } from '@/lib/utils'
+import { LuImage } from 'react-icons/lu'
 
 interface NoImageProps {
   className?: string
@@ -8,11 +8,12 @@ interface NoImageProps {
 export default function NoImage({ className }: NoImageProps) {
   return (
     <div
-      className={clsx(
-        'flex items-center justify-center rounded-lg border bg-gray-300 text-center text-lg font-semibold',
+      className={cn(
+        'flex flex-col items-center justify-center rounded-lg border bg-muted text-center text-lg font-normal text-muted-foreground',
         className,
       )}
     >
+      <LuImage className="h-8 w-8" />
       이미지가 없습니다
     </div>
   )
