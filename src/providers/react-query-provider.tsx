@@ -7,7 +7,6 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
-import { ReactQueryStreamedHydration } from '@tanstack/react-query-next-experimental'
 
 const ReactQueryDevtoolsProduction = dynamic(() =>
   import('@tanstack/react-query-devtools/production').then((d) => ({

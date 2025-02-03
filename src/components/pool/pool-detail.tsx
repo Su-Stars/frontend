@@ -80,7 +80,8 @@ export default function PoolDetail({ pool }: PoolDetailProps) {
         title: `${label} 복사됨`,
         description: text,
       })
-    } catch (err) {
+    } catch (error) {
+      console.error(error)
       toast({
         title: `${label} 복사 실패`,
         description: `${label}를 복사하는데 실패했습니다.`,

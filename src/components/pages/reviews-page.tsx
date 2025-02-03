@@ -2,17 +2,14 @@
 
 import Link from 'next/link'
 import { useReviews } from '@/app/(menu)/pools/[id]/reviews/_hooks/useReviews'
-import { Separator } from '@/components/ui/separator'
 import ReviewItem from '@/app/(menu)/pools/[id]/reviews/_components/review-item'
 import { ResponsiveDialog } from '@/components/responsive-dialog'
 import { useState } from 'react'
 import ReviewForm from '@/app/(menu)/pools/[id]/reviews/_components/reivew-post-form'
 import { Button } from '@/components/ui/button'
 import { PiPencilSimpleLineFill } from 'react-icons/pi'
-import { IReview } from '@/app/(menu)/pools/[id]/reviews/_types/reviews'
 import { FaChevronLeft } from 'react-icons/fa'
 import { useIntersectionObserver } from '@/hooks/use-intersectionObserver'
-import SkeletonReviewPreview from '@/app/(menu)/pools/[id]/reviews/_components/review-preview-skeleton'
 
 interface ReviewsPageProps {
   preview?: boolean
