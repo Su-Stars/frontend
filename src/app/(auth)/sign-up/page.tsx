@@ -26,6 +26,11 @@ const formSchema = z.object({
   nickname: z.string().min(2, '닉네임은 2자 이상이어야 합니다.'),
 })
 
+type ApiError = {
+  message: string
+  status?: number
+}
+
 export default function SignUpPage() {
   const { setUser } = useUserStore((state) => state)
   const { toast } = useToast()
@@ -36,10 +41,10 @@ export default function SignUpPage() {
     defaultValues: {
       email: '',
       password: '',
+      nickname: '',
     },
   })
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true)
     try {
@@ -57,18 +62,12 @@ export default function SignUpPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        const errorMessages: Record<number, string> = {
-          400: '잘못된 요청입니다.',
-          409: '동일한 이메일이 이미 존재합니다.',
-          500: '서버 오류가 발생했습니다.',
+        if (response.status === 409) {
+          throw new Error('동일한 이메일이 이미 존재합니다.')
         }
-
-        const message =
-          errorMessages[response.status] || '로그인에 실패했습니다.'
-        throw new Error(message)
+        throw new Error(data.message || '회원가입에 실패했습니다.')
       }
 
-      // 3. Update the user store with the user data.
       setUser({
         id: data.id,
         email: data.email,
@@ -76,19 +75,18 @@ export default function SignUpPage() {
         role: data.role,
       })
 
-      // 4. Show a success toast message and navigate to the home page.
       toast({
         title: '회원가입 성공',
         description: '환영합니다! 이제 로그인할 수 있습니다.',
       })
       navigateToHome()
     } catch (error) {
-      console.error(error)
+      const errorMessage =
+        error instanceof Error ? error.message : '회원가입에 실패했습니다.'
       toast({
         variant: 'destructive',
         title: '회원가입 실패',
-        description:
-          error instanceof Error ? error.message : '회원가입에 실패했습니다.',
+        description: errorMessage,
       })
     } finally {
       setLoading(false)
@@ -112,7 +110,6 @@ export default function SignUpPage() {
                 <FormControl>
                   <Input placeholder="example@example.com" {...field} />
                 </FormControl>
-
                 <FormMessage />
               </FormItem>
             )}
@@ -149,7 +146,7 @@ export default function SignUpPage() {
             className="w-full"
             disabled={loading}
           >
-            다음
+            회원가입
           </Button>
         </form>
       </Form>
