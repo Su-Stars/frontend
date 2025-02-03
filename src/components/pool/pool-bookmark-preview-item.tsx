@@ -18,19 +18,28 @@ export default function PoolBookmarkPreviewItem({
   bookmark,
 }: PoolBookmarkPreviewItemProps) {
   return (
-    <Link href={`/pools/${bookmark.pool.id}`} key={bookmark.id}>
-      <Card className="mt-4 min-w-[300px] p-0 transition hover:opacity-90">
+    <Link
+      href={`/pools/${bookmark.pool.id}`}
+      key={bookmark.id}
+      role="listitem"
+      aria-lable="북마크 수영장"
+    >
+      <Card className="mt-4 min-w-[150px] p-0 transition hover:opacity-90 lg:min-w-[300px]">
         <CardHeader className="relative h-[200px] p-0">
           {bookmark.pool.img_url ? (
-            <Image
-              src={bookmark.pool.img_url}
-              alt={bookmark.pool.name}
-              fill
-              className="rounded-t-lg object-cover"
-              sizes="(max-width: 300px) 100vw, 300px"
-            />
+            <div className="relative aspect-square h-full overflow-hidden rounded-l-lg">
+              <Image
+                src={bookmark.pool.img_url}
+                alt={`${bookmark.pool.name} 수영장 이미지`}
+                width={160}
+                height={160}
+                sizes="(max-width: 768px) 128px, 160px"
+                className="h-full w-full object-cover transition-transform duration-300 hover:scale-110"
+                priority={false}
+              />
+            </div>
           ) : (
-            <NoImage className="h-full w-full rounded-t-lg text-sm" />
+            <NoImage className="aspect-square h-full rounded-l-lg text-sm" />
           )}
         </CardHeader>
         <CardContent className="flex flex-col gap-2 p-4">
