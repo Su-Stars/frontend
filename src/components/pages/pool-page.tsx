@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator'
 import dynamic from 'next/dynamic'
 import ReviewPreviewSkeleton from '@/app/(menu)/pools/[id]/reviews/_components/review-preview-skeleton'
 import SkeletonPoolMap from '@/components/pool/skeleton-pool-map'
+import ErrorFallback from '@/components/common/error-fallback'
 
 const ReviewsPage = dynamic(() => import('@/components/pages/reviews-page'), {
   loading: () => <ReviewPreviewSkeleton />,
@@ -28,11 +29,11 @@ export default function PoolPage({ poolId }: PoolPageParams) {
     <div className="flex flex-col space-y-4">
       <PoolDetail pool={data as PoolDetailI} />
       <Separator />
-      <ErrorBoundary fallback={<div>Something went wrong</div>}>
+      <ErrorBoundary fallback={<ErrorFallback error={error} />}>
         <ReviewsPage preview poolId={poolId} />
       </ErrorBoundary>
       <Separator />
-      <ErrorBoundary fallback={<div>Something went wrong</div>}>
+      <ErrorBoundary fallback={<ErrorFallback error={error} />}>
         <PoolKaKaoMap pool={data as PoolDetailI} />
       </ErrorBoundary>
     </div>
