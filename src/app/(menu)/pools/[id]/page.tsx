@@ -33,7 +33,7 @@ export async function generateMetadata({
 }: {
   params: { id: string }
 }): Promise<Metadata> {
-  const poolId = Number(params.id)
+  const poolId = Number((await params).id)
 
   try {
     const { pool } = await prefetchPool(poolId)
@@ -57,7 +57,7 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const poolId = Number(params.id)
+  const poolId = Number((await params).id)
   const { queryClient } = await prefetchPool(poolId)
 
   return (
