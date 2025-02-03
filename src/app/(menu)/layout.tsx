@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       {/* 메인 컨텐츠 영역 */}
       <main className="flex h-full min-h-screen w-full items-center justify-center bg-white">
-        <div className="min-h-screen w-[640px] border-l border-r border-[rgb(241,241,241)] bg-white px-4 pb-6 pt-2">
+        <div className="min-h-screen w-full max-w-[640px] border-l border-r border-[rgb(241,241,241)] bg-white px-4 pb-6 pt-2">
           {children}
         </div>
       </main>
