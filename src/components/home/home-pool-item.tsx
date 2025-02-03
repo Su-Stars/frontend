@@ -6,6 +6,7 @@ import { LuMapPin } from 'react-icons/lu'
 import useCenterStore from '@/stores/center-store'
 import { useState } from 'react'
 import type { Pool } from '@/types/pools'
+import { useSearchStore } from '@/stores/search-store'
 
 interface PoolItemProps {
   pool: Pool
@@ -13,8 +14,13 @@ interface PoolItemProps {
 
 export default function PoolItem({ pool }: PoolItemProps) {
   const { setCenter } = useCenterStore()
+  const { setFilterName } = useSearchStore()
+
   const clickMapPin = () => {
     setCenter({ lat: pool.latitude, lng: pool.longitude })
+  }
+  const clearFilterName = () => {
+    setFilterName('전국')
   }
 
   const [isHovered, setIsHovered] = useState(false)
@@ -22,7 +28,11 @@ export default function PoolItem({ pool }: PoolItemProps) {
   return (
     <div>
       <Card className="flex h-40 p-0 transition hover:opacity-90">
-        <Link className="h-full w-40" href={`/pools/${pool.id}`}>
+        <Link
+          className="h-full w-40"
+          href={`/pools/${pool.id}`}
+          onClick={clearFilterName}
+        >
           {pool.thumbnail ? (
             <Image
               src={pool?.thumbnail}
@@ -39,6 +49,7 @@ export default function PoolItem({ pool }: PoolItemProps) {
           <Link
             className="flex flex-col justify-center"
             href={`/pools/${pool.id}`}
+            onClick={clearFilterName}
           >
             <CardTitle className="text-lg hover:underline">
               {pool.name}

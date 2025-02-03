@@ -121,7 +121,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0d929ba008c86e3296bdbeb4f341c2cc&libraries=services,clusterer&autoload=false" />
+        <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=0d929ba008c86e3296bdbeb4f341c2cc&libraries=services&autoload=false" />
       </head>
       <body className={`${pretendard.variable} font-pretendard antialiased`}>
         <GoogleAnalytics gaId={GA_ID} />
