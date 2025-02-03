@@ -38,6 +38,7 @@ import { useMyBookmarks } from '@/hooks/use-my-bookmarks'
 import PoolBookmarkPreviewItem from '@/components/pool/pool-bookmark-preview-item'
 import Link from 'next/link'
 import { LuBookmark } from 'react-icons/lu'
+import UserImageForm from '../my-page/user-image-form'
 
 export default function MyPage() {
   const { user, clearUser } = useUserStore((state) => state)
@@ -140,7 +141,7 @@ export default function MyPage() {
             </DropdownMenu>
           </div>
           <Avatar className="mb-4 size-14 lg:size-20">
-            <AvatarImage src={data?.image_url} />
+            <AvatarImage src={data?.userImage} />
             <AvatarFallback>
               {data?.nickname?.slice(0, 2).toUpperCase()}
             </AvatarFallback>
@@ -226,6 +227,7 @@ export default function MyPage() {
         title="프로필 수정하기"
         description="내 프로필 수정하기"
       >
+        <UserImageForm />
         <ProfileForm
           setIsOpen={setIsEditOpen}
           defaultValues={{ description: data?.description || '' }}
