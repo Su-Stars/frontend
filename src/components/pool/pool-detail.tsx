@@ -241,12 +241,12 @@ export default function PoolDetail({ pool }: PoolDetailProps) {
           </div>
 
           {/* Action Buttons */}
-          <div className="mt-4 flex gap-2">
+          <div className="mt-4 grid grid-cols-5 gap-2 md:flex">
             {/* TODO : 수영장 정보 등록 요청 기능 추가 */}
             <Button
               variant="outline"
               size="lg"
-              className="flex-1"
+              className="col-span-2 md:flex-1"
               onClick={() => {
                 toast({
                   title: '준비 중인 기능입니다',
@@ -263,12 +263,21 @@ export default function PoolDetail({ pool }: PoolDetailProps) {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button variant="outline" size="lg" className="flex-1">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="col-span-2 md:flex-1"
+                >
                   사이트 방문 하기
                 </Button>
               </Link>
             ) : (
-              <Button variant="outline" size="lg" className="flex-1" disabled>
+              <Button
+                variant="outline"
+                size="lg"
+                className="col-span-2 md:flex-1"
+                disabled
+              >
                 사이트 정보 없음
               </Button>
             )}
@@ -280,7 +289,7 @@ export default function PoolDetail({ pool }: PoolDetailProps) {
               role="button"
               aria-label="공유하기"
             >
-              <LuShare2 className="h-4 w-4" />
+              <LuShare2 className="col-span-1 h-4 w-4" />
             </Button>
           </div>
         </div>
