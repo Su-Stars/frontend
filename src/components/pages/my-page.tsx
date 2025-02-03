@@ -182,11 +182,13 @@ export default function MyPage() {
       <section className="mt-4 flex flex-col space-y-4">
         <h2 className="text-xl font-bold">즐겨찾기</h2>
         <div className="scrollbar-hide flex gap-4 overflow-x-auto pb-4">
+          {/* 북마크가 있을 경우 */}
           {bookmarks && bookmarks.favorite.length > 0 ? (
             bookmarks.favorite.map((bookmark, index) => (
               <PoolBookmarkPreviewItem key={index} bookmark={bookmark} />
             ))
           ) : (
+            // 북마크가 없을 경우
             <div className="flex min-h-[200px] w-full flex-col items-center justify-center gap-2 rounded-lg border border-dashed bg-muted p-4 text-center">
               <LuBookmark className="h-8 w-8 text-muted-foreground" />
               <p className="text-muted-foreground">
