@@ -16,6 +16,7 @@ export const useSearch = ({
 }: UseSearchParams) => {
   const {
     data,
+    isPending,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
@@ -45,5 +46,6 @@ export const useSearch = ({
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
+    isPending,
   }
 }

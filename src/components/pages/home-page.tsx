@@ -21,6 +21,7 @@ export default function HomePage() {
     fetchNextPage,
     total,
     isFetchingNextPage,
+    isPending,
   } = useSearch({
     region,
     keyword,
@@ -55,11 +56,15 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col space-y-4">
-      <h2 className="text-2xl font-bold">수영장 검색</h2>
+      <h2>수영장 찾기</h2>
       <HomeKakaoMap searchResults={searchResults} />
       <HomeRegionFilter />
       <HomeSearchInput />
-      <HomePoolList total={total} searchResults={searchResults} />
+      <HomePoolList
+        total={total}
+        searchResults={searchResults}
+        isPending={isPending}
+      />
       {hasNextPage && (
         <div ref={moreRef} className="py-4 text-center text-gray-500">
           {isFetchingNextPage ? '로딩 중...' : '더 보기'}

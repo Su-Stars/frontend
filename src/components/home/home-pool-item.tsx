@@ -7,7 +7,12 @@ import useCenterStore from '@/stores/center-store'
 import type { Pool } from '@/types/pools'
 import { useSearchStore } from '@/stores/search-store'
 import { Button } from '@/components/ui/button'
-import PoolBookmark from '@/components/pool/pool-bookmark'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 interface PoolItemProps {
   pool: Pool
@@ -61,14 +66,26 @@ export default function PoolItem({ pool }: PoolItemProps) {
               {pool.address.split(' ').slice(0, 4).join(' ')}
             </CardDescription>
           </Link>
-          <Button
-            variant="ghost"
-            className="flex items-center justify-center rounded-full hover:text-blue-500"
-            onClick={clickMapPin}
-            aria-label="지도 보기"
-          >
-            <LuMapPin size={24} />
-          </Button>
+
+          {/* 지도에서 보기 버튼 */}
+          {/* 해당 버튼을 누르면 지도의 해당 수영장 위치로 설정됩니다. */}
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="flex items-center justify-center rounded-full hover:text-primary"
+                  onClick={clickMapPin}
+                  aria-label="지도에서 보기"
+                >
+                  <LuMapPin size={24} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>지도에서 보기</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </Card>
     </div>
