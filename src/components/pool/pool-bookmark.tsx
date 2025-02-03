@@ -7,6 +7,12 @@ import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
 import { FaBookmark } from 'react-icons/fa'
 import { LuBookmark } from 'react-icons/lu'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 interface PoolBookmarkProps {
   poolId: number
@@ -23,8 +29,6 @@ export default function PoolBookmark({ poolId }: PoolBookmarkProps) {
     poolId,
     user: !!user,
   })
-
-  console.log('isBookmarked', isBookmarked)
 
   const clickBookmark = () => {
     if (!user) {
@@ -44,16 +48,30 @@ export default function PoolBookmark({ poolId }: PoolBookmarkProps) {
   }
 
   return (
-    <Button
-      variant="ghost"
-      size="icon"
-      onClick={clickBookmark}
-      className={cn(
-        'flex rounded-full bg-transparent text-3xl transition-colors hover:bg-accent hover:text-blue-500',
-        isBookmarked ? 'text-blue-500' : "text-black' }",
-      )}
-    >
-      {isBookmarked ? <FaBookmark /> : <LuBookmark />}
-    </Button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            variant="ghost"
+            onClick={clickBookmark}
+            role="button"
+            aria-label={isBookmarked ? '북마크 해제하기' : '북마크 추가하기'}
+            className={cn(
+              'h-8 w-8 rounded-full bg-transparent p-1 transition-colors hover:bg-accent hover:text-blue-500',
+              isBookmarked ? 'text-blue-500' : 'text-black',
+            )}
+          >
+            {isBookmarked ? (
+              <FaBookmark className="h-14 w-14" />
+            ) : (
+              <LuBookmark className="h-14 w-14" />
+            )}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <span>{isBookmarked ? '북마크 해제하기' : '북마크 추가하기'}</span>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   )
 }
