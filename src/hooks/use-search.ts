@@ -12,6 +12,7 @@ interface UseSearchParams {
 export const useSearch = ({
   region = 'all',
   keyword = 'all',
+  page = 1,
   limit = 10,
 }: UseSearchParams) => {
   const {
@@ -23,7 +24,7 @@ export const useSearch = ({
     isError,
     error,
   } = useInfiniteQuery<PoolSearchData>({
-    queryKey: ['pools', region, keyword, limit],
+    queryKey: ['pools', region, keyword, page, limit],
     queryFn: async ({ pageParam }) =>
       searchPools({ region, keyword, page: pageParam as number, limit }),
     initialPageParam: 1,
