@@ -37,6 +37,8 @@ import { useRouter } from 'next/navigation'
 import { useMyBookmarks } from '@/hooks/use-my-bookmarks'
 import PoolBookmarkPreviewItem from '@/components/pool/pool-bookmark-preview-item'
 import Link from 'next/link'
+import { LuBookmark } from 'react-icons/lu'
+import UserImageForm from '../my-page/user-image-form'
 
 export default function MyPage() {
   const { user, clearUser } = useUserStore((state) => state)
@@ -78,14 +80,16 @@ export default function MyPage() {
   }
   if (!user) {
     return (
-      <div className="flex flex-col p-2">
-        <Card>
-          <CardContent className="flex flex-col p-6 text-center text-destructive">
-            <p>로그인이 필요합니다.</p>
-            <Link href="/login" className="text-primary">
-              로그인하기
-            </Link>
+      <div className="flex min-h-screen flex-col p-2">
+        <Card className="m-auto p-2">
+          <CardContent className="flex flex-col gap-2 p-2 text-center text-destructive">
+            <p role="alert">로그인이 필요합니다.</p>
           </CardContent>
+          <CardFooter className="p-2 text-center">
+            <Button variant="primary" className="w-full" asChild>
+              <Link href="/login">로그인하기</Link>
+            </Button>
+          </CardFooter>
         </Card>
       </div>
     )
@@ -93,8 +97,8 @@ export default function MyPage() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col p-2">
-        <Card className="mx-auto max-w-2xl">
+      <div className="flex min-h-screen flex-col p-2">
+        <Card className="m-auto max-w-2xl">
           <CardContent className="p-6 text-center text-gray-500">
             프로필을 불러오는 중입니다.
           </CardContent>
@@ -117,8 +121,8 @@ export default function MyPage() {
 
   return (
     <div className="flex flex-col p-2">
-      <Card className="flex flex-col">
-        <CardHeader>
+      <Card className="flex flex-col p-1">
+        <CardHeader className="p-2">
           <div className="flex justify-end">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -136,55 +140,84 @@ export default function MyPage() {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <Avatar className="mb-4 h-24 w-24">
-            <AvatarImage src={data?.image_url} />
+          <Avatar className="mb-4 size-14 lg:size-20">
+            <AvatarImage src={data?.userImage} />
             <AvatarFallback>
               {data?.nickname?.slice(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <CardTitle className="text-2xl font-bold">{data?.nickname}</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <CardContent className="p-2">
+          <div className="grid grid-cols-1 gap-2 text-sm md:grid-cols-2 lg:gap-4">
             <div className="space-y-2">
-              <div className="text-sm font-semibold text-gray-500">이메일</div>
+              <div className="font-semibold text-gray-500">이메일</div>
               <div>{data?.email}</div>
             </div>
 
             <div className="space-y-2 md:col-span-2">
-              <div className="text-sm font-semibold text-gray-500">소개</div>
+              <div className="font-semibold text-gray-500">소개</div>
               <div className="text-gray-700">
                 {data?.description || '소개가 없습니다.'}
               </div>
             </div>
             <div className="space-y-2">
-              <div className="text-sm font-semibold text-gray-500">가입일</div>
+              <div className="font-semibold text-gray-500">가입일</div>
               <div>{format(new Date(data?.create_at), 'yy년 MM월 dd일')}</div>
             </div>
           </div>
 
           {data?.role === 'admin' && (
             <div className="space-y-2">
-              <div className="text-sm font-semibold text-gray-500">역할</div>
+              <div className="font-semibold text-gray-500">역할</div>
               <div>{data?.role}</div>
             </div>
           )}
         </CardContent>
-        <CardFooter>
-          <Button className="w-full" onClick={() => setIsEditOpen(true)}>
-            <LuPencil className="mr-2" />
+        <CardFooter className="p-2">
+          <Button
+            className="w-full"
+            onClick={() => setIsEditOpen(true)}
+            variant="primary"
+            aria-label="프로필 수정"
+            role="button"
+          >
+            <LuPencil className="mr-2" aria-hidden />
             프로필 수정
           </Button>
         </CardFooter>
       </Card>
 
-      <section className="mt-4 flex flex-col">
+      <section className="mt-4 flex flex-col space-y-2 lg:space-y-4">
         <h2 className="text-xl font-bold">즐겨찾기</h2>
         <div className="scrollbar-hide flex gap-4 overflow-x-auto pb-4">
-          {bookmarks &&
+          {/* 북마크가 있을 경우 */}
+          {bookmarks && bookmarks.favorite.length > 0 ? (
             bookmarks.favorite.map((bookmark, index) => (
               <PoolBookmarkPreviewItem key={index} bookmark={bookmark} />
-            ))}
+            ))
+          ) : (
+            // 북마크가 없을 경우
+            <div className="flex min-h-[200px] w-full flex-col items-center justify-center gap-2 rounded-lg border border-dashed bg-muted p-4 text-center">
+              <LuBookmark
+                className="h-8 w-8 text-muted-foreground"
+                aria-hidden
+              />
+              <p className="text-muted-foreground">
+                아직 북마크한 수영장이 없습니다
+              </p>
+
+              <Button
+                variant="default"
+                size="sm"
+                asChild
+                aria-label="수영장 찾기"
+                role="button"
+              >
+                <Link href="/">수영장 찾아보기</Link>
+              </Button>
+            </div>
+          )}
         </div>
       </section>
 
@@ -194,6 +227,7 @@ export default function MyPage() {
         title="프로필 수정하기"
         description="내 프로필 수정하기"
       >
+        <UserImageForm />
         <ProfileForm
           setIsOpen={setIsEditOpen}
           defaultValues={{ description: data?.description || '' }}

@@ -11,6 +11,7 @@ import type { Pool } from '@/types/pools'
 import { useSearchStore } from '@/stores/search-store'
 import { Skeleton } from '../ui/skeleton'
 import { LuLoaderCircle } from 'react-icons/lu'
+
 interface GeocoderResult {
   address_name: string
   region_type: string
@@ -126,7 +127,7 @@ export default function HomeKakaoMap({ searchResults }: HomeKakaoMapProps) {
             ))}
         </Map>
       ) : (
-        <Skeleton className="flex h-[200px] w-full items-center justify-center bg-slate-300">
+        <Skeleton className="flex h-[200px] w-full items-center justify-center bg-muted">
           <LuLoaderCircle className="animate-spin" />
         </Skeleton>
       )}

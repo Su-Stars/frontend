@@ -1,19 +1,23 @@
 import '@/styles/globals.css'
-import { server } from '@/mocks/node'
 import GlobalProvider from '@/providers/global-provider'
 import localFont from 'next/font/local'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import { Toaster } from '@/components/ui/toaster'
 import type { Metadata } from 'next'
 
-// 개발 환경에서만 MSW 서버를 시작합니다.
-if (process.env.NODE_ENV === 'development') {
-  server.listen()
+// 개발 환경에서만 MSW 서버를 시작합니다. 프로덕션 빌드에서는 실행되지 않습니다.
+if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
+  const initMocks = async () => {
+    const { server } = await import('@/mocks/node')
+    server.listen()
+  }
+
+  initMocks().catch(console.error)
 }
 
 export const metadata: Metadata = {
   title: {
-    template: '%s | Acme',
+    template: '%s | 어푸!',
     default: '어푸!',
   },
   description: '어푸!는 전국 수영인들을 위해 수영장 정보를 제공합니다.',

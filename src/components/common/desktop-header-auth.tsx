@@ -101,7 +101,10 @@ export default function DesktopHeaderAuth() {
         <DropdownMenu>
           <DropdownMenuTrigger>
             <Avatar>
-              <AvatarFallback>{user.nickname}</AvatarFallback>
+              <AvatarFallback>
+                {user?.nickname?.slice(0, 2).toUpperCase()}
+              </AvatarFallback>
+              {/* TODO : 현재 유저 정보에 이미지가 없으므로 주석처리함 후에 생기면 주석 해제 */}
               {/* <AvatarImage src={user.image_url} alt={user.nickname} /> */}
             </Avatar>
           </DropdownMenuTrigger>

@@ -23,7 +23,7 @@ export default function DiaryPage() {
     return <p>Error: {error ? error.message : 'An unknown error occurred'}</p>
 
   return (
-    <div className="flex min-h-[calc(100vh-64px)] flex-col space-y-2">
+    <div className="flex flex-col space-y-2">
       {/*TODO : 유저정보에 따라 닉네임을 보여주고, 다른 리포트내용은 수영기록 데이터에 따라 렌더링 합니다*/}
       {/* <div className="flex flex-col space-y-2 rounded-md bg-white p-4 shadow-md">
         <h2>

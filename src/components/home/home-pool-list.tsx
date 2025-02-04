@@ -1,16 +1,32 @@
 import { LuSearch } from 'react-icons/lu'
 import PoolCard from './home-pool-item'
 import type { Pool } from '@/types/pools'
+import SkeletonHomePoolItem from '@/components/home/skeleton-home-pool-item'
 
 interface HomePoolListProps {
   total: number
   searchResults: Pool[]
+  isPending: boolean
 }
 
 export default function HomePoolList({
   total,
   searchResults,
+  isPending,
 }: HomePoolListProps) {
+  if (isPending) {
+    return (
+      <>
+        <h3>검색 중...</h3>
+        <div className="flex flex-col gap-4">
+          {[...Array(5)].map((_, i) => (
+            <SkeletonHomePoolItem key={i} />
+          ))}
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
       <h3>

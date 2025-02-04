@@ -1,18 +1,12 @@
 'use client'
 
 import * as React from 'react'
-import dynamic from 'next/dynamic'
 import {
   isServer,
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
-
-const ReactQueryDevtoolsProduction = dynamic(() =>
-  import('@tanstack/react-query-devtools/production').then((d) => ({
-    default: d.ReactQueryDevtools,
-  })),
-)
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 function makeQueryClient() {
   return new QueryClient({
@@ -54,7 +48,7 @@ export function ReactQueryProvider(props: { children: React.ReactNode }) {
     <QueryClientProvider client={queryClient}>
       {/* <ReactQueryStreamedHydration> */}
       {props.children}
-      <ReactQueryDevtoolsProduction />
+      {/* <ReactQueryDevtools initialIsOpen={true} /> */}
       {/* </ReactQueryStreamedHydration> */}
     </QueryClientProvider>
   )

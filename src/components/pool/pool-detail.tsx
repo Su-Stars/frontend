@@ -27,6 +27,7 @@ import { GiDuckPalm } from 'react-icons/gi'
 import { PiTowel } from 'react-icons/pi'
 import { FaRegCaretSquareUp } from 'react-icons/fa'
 import { GiDropletSplash } from 'react-icons/gi'
+import PoolImages from '@/components/pool/pool-images'
 
 interface PoolDetailProps {
   pool: PoolDetailI
@@ -131,30 +132,7 @@ export default function PoolDetail({ pool }: PoolDetailProps) {
       {/* 메인 */}
       <main className="flex flex-col space-y-4">
         {/* 이미지 */}
-        <div className="relative h-[200px] w-full">
-          {pool?.images?.length > 0 ? (
-            <Carousel>
-              <CarouselContent>
-                {pool.images.map((image, index) => (
-                  <CarouselItem key={index}>
-                    <div className="relative h-[200px] w-full">
-                      <Image
-                        src={image}
-                        fill
-                        className="rounded-lg object-cover"
-                        alt={`${pool.name} 수영장 이미지 ${index + 1}`}
-                      />
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-2" />
-              <CarouselNext className="right-2" />
-            </Carousel>
-          ) : (
-            <NoImage className="h-[200px] w-full" />
-          )}
-        </div>
+        <PoolImages images={pool.images} poolName={pool.name} />
         {/* Business Info */}
         <div>
           {/* 타이틀과 북마크 버튼 */}
@@ -241,12 +219,12 @@ export default function PoolDetail({ pool }: PoolDetailProps) {
           </div>
 
           {/* Action Buttons */}
-          <div className="mt-4 flex gap-2">
+          <div className="mt-4 grid grid-cols-5 gap-2 md:flex">
             {/* TODO : 수영장 정보 등록 요청 기능 추가 */}
             <Button
               variant="outline"
               size="lg"
-              className="flex-1"
+              className="col-span-2 md:flex-1"
               onClick={() => {
                 toast({
                   title: '준비 중인 기능입니다',
@@ -263,12 +241,21 @@ export default function PoolDetail({ pool }: PoolDetailProps) {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button variant="outline" size="lg" className="flex-1">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="col-span-2 md:flex-1"
+                >
                   사이트 방문 하기
                 </Button>
               </Link>
             ) : (
-              <Button variant="outline" size="lg" className="flex-1" disabled>
+              <Button
+                variant="outline"
+                size="lg"
+                className="col-span-2 md:flex-1"
+                disabled
+              >
                 사이트 정보 없음
               </Button>
             )}
@@ -280,7 +267,7 @@ export default function PoolDetail({ pool }: PoolDetailProps) {
               role="button"
               aria-label="공유하기"
             >
-              <LuShare2 className="h-4 w-4" />
+              <LuShare2 className="col-span-1 h-4 w-4" />
             </Button>
           </div>
         </div>

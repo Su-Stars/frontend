@@ -81,6 +81,9 @@ export function useBookmark({ poolId, user }: useBookmarkProps) {
     onSettled: () => {
       // 쿼리 무효화하여 서버 상태와 동기화
       queryClient.invalidateQueries({ queryKey: ['bookmarks', poolId] })
+
+      // 북마크 목록 새로고침
+      queryClient.invalidateQueries({ queryKey: ['my-bookmarks'] })
     },
   })
 
@@ -123,6 +126,9 @@ export function useBookmark({ poolId, user }: useBookmarkProps) {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['bookmarks', poolId] })
+
+      // 북마크 목록 새로고침
+      queryClient.invalidateQueries({ queryKey: ['my-bookmarks'] })
     },
   })
 
