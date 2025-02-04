@@ -38,19 +38,6 @@ export const metadata: Metadata = {
     description: '어푸!는 전국 수영인들을 위해 수영장 정보를 제공합니다.',
     url: 'https://apuu.netlify.app/',
     siteName: '어푸!',
-    images: [
-      {
-        url: 'https://nextjs.org/og.png', // Must be an absolute URL
-        width: 800,
-        height: 600,
-      },
-      {
-        url: 'https://nextjs.org/og-alt.png', // Must be an absolute URL
-        width: 1800,
-        height: 1600,
-        alt: 'My custom alt',
-      },
-    ],
     locale: 'ko_KR',
     type: 'website',
   },
@@ -65,15 +52,6 @@ export const metadata: Metadata = {
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
-    },
-  },
-  icons: {
-    icon: '/icon.png',
-    shortcut: '/shortcut-icon.png',
-    apple: '/apple-icon.png',
-    other: {
-      rel: 'apple-touch-icon-precomposed',
-      url: '/apple-touch-icon-precomposed.png',
     },
   },
   twitter: {
