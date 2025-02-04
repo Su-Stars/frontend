@@ -1,12 +1,17 @@
-import { IUserRecord } from '@/hooks/use-bulletin'
+import { Record } from '@/types/bulletin'
+import dayjs from '@/lib/dayjs'
 import Image from 'next/image'
+import { Clock, MapPin } from 'lucide-react'
 
 interface BulletinItemProps {
-  item: IUserRecord
+  record: Record
 }
 
-export default function BulletinItem({ item }: BulletinItemProps) {
-  const calculateTime = (startTime: string, endTime: string) => {
+export default function BulletinItem({ record }: BulletinItemProps) {
+  const calculateTime = (startTime: string | null, endTime: string | null) => {
+    if (startTime === null || endTime === null) {
+      return ' -- : -- '
+    }
     const hour = Number(endTime.split(':')[0]) - Number(startTime.split(':')[0])
     const minute =
       Number(endTime.split(':')[1]) - Number(startTime.split(':')[1])
@@ -21,44 +26,53 @@ export default function BulletinItem({ item }: BulletinItemProps) {
   }
 
   return (
-    <div className="relative flex flex-col gap-3">
-      <div>
-        {item.image_url ? (
-          <Image
-            src={item.image_url}
-            width={100}
-            height={100}
-            className="h-40 w-full"
-            alt="물"
-          />
-        ) : (
-          <div className="h-40 w-full bg-blue-500" />
-        )}
-      </div>
-      <div className="flex items-center gap-4">
-        <div className="h-10 w-10 rounded-full bg-gray-400" />
-
-        <span>{item.nickname}</span>
-      </div>
-      <div>
-        {Object.entries(item.record).map(([date, records], index) => (
-          <div key={`${date}-${index}`}>
-            {records.map((record) => (
-              <div key={record.logId}>
-                <p className="absolute right-4 top-[120px] text-lg font-semibold text-white">
-                  거리: {record.swimLength}m
-                </p>
-
-                <p className="absolute left-4 top-[120px] text-lg font-semibold text-white">
-                  {calculateTime(record.startTime, record.endTime)}
-                </p>
-
-                <p>메모: {record.note}</p>
-              </div>
-            ))}
-            <h3 className="text-sm text-gray-400">{date}</h3>
+    <div className="overflow-hidden rounded-lg bg-white shadow-md">
+      <div className="relative">
+        <div className="h-40 w-full bg-blue-500" />
+        <div className="absolute bottom-4 left-0 right-0 flex items-center justify-between px-4 text-white">
+          <div className="flex items-center space-x-2">
+            <Clock size={16} className="text-white" />
+            <span className="text-lg font-semibold">
+              {calculateTime(record.start_time, record.end_time)}
+            </span>
           </div>
-        ))}
+          <div className="flex items-center space-x-2">
+            <MapPin size={16} className="text-white" />
+            <span className="text-lg font-semibold">
+              거리: {record.swim_length}m
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-4 p-4">
+        <div className="flex items-center space-x-3">
+          <Image
+            src={`https://picsum.photos/id/${record.user_id}/50/50`}
+            className="rounded-full shadow-md"
+            width={50}
+            height={50}
+            alt="profile"
+          />
+          <div className="flex-1">
+            <h3 className="font-semibold text-gray-900">
+              {record.users.nickname}
+            </h3>
+            <time className="text-sm text-gray-500">
+              {dayjs(record.swim_date).format('YY.MM.DD')}
+            </time>
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <p className="leading-relaxed text-gray-700">
+            {record.note ? (
+              record.note
+            ) : (
+              <span className="italic text-gray-400">메모를 입력하세요</span>
+            )}
+          </p>
+        </div>
       </div>
     </div>
   )

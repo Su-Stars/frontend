@@ -1,39 +1,9 @@
 import { getBulletin } from '@/actions/bulletin'
+import { BulletinResponse } from '@/types/bulletin'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
-export interface IUserRecord {
-  nickname: string
-  image_url: null | string
-  record: {
-    [date: string]: IRecord[]
-  }
-}
-
-interface IRecord {
-  logId: number
-  userId: number
-  startTime: string
-  endTime: string
-  laneLength: null | string
-  swimCategory: string
-  swimLength: number
-  note: string
-  created_at: string
-}
-
-export interface useBulletinResponse {
-  status: string
-  message: string
-  totalCount: number
-  page: number
-  limit: number
-  data: IUserRecord[]
-}
-
 export function useBulletin() {
-  // 한 번에 10개씩
   const limit = 10
-
   const {
     isLoading,
     data,
@@ -43,23 +13,26 @@ export function useBulletin() {
     isFetching,
     isFetchingNextPage,
     status,
-  } = useInfiniteQuery<useBulletinResponse>({
+  } = useInfiniteQuery<BulletinResponse>({
     queryKey: ['bulletin', limit],
     queryFn: async ({ pageParam }) =>
       getBulletin({ limit, page: pageParam as number }),
     initialPageParam: 1,
     getNextPageParam: (lastPage): number | null => {
       const isLastPage =
-        Math.ceil(lastPage.totalCount / limit) === lastPage.page
-      return isLastPage ? null : lastPage.page + 1
+        Math.ceil(lastPage.data.totalCount / limit) === lastPage.data.page
+      return isLastPage ? null : lastPage.data.page + 1
     },
   })
 
-  const bulletins = data ? data.pages.flatMap((page) => page.data) : []
-  const isEmpty = bulletins.length === 0
+  const records = data?.pages
+    ? data.pages.flatMap((page) => page.data.record)
+    : []
+
+  const isEmpty = records.length === 0
 
   return {
-    bulletins,
+    records,
     error,
     isEmpty,
     fetchNextPage,

@@ -6,7 +6,7 @@ interface getBulletinProps {
 export const getBulletin = async ({ limit, page }: getBulletinProps) => {
   try {
     const res = await fetch(
-      `http://localhost:9999/api/v1/bulletin?page=${page}&limit=${limit}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/bulletin?page=${page}&limit=${limit}`,
     )
 
     if (!res.ok) {
@@ -20,10 +20,12 @@ export const getBulletin = async ({ limit, page }: getBulletinProps) => {
     return {
       status: 'fail',
       message: '오수완 정보 실패',
-      totalCount: 0,
-      page: 0,
-      limit: 0,
-      data: [],
+      data: {
+        totalCount: 0,
+        page: 0,
+        limit: 0,
+        record: [],
+      },
     }
   }
 }

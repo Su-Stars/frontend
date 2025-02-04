@@ -4,7 +4,7 @@ import type { PoolDetail } from '@/types/pools'
 export const getPool = async (poolId: number): Promise<PoolDetail> => {
   try {
     const response = await fetch(
-      `https://nest-aws.site/api/v1/pools/${poolId}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/pools/${poolId}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -25,7 +25,7 @@ export const getPool = async (poolId: number): Promise<PoolDetail> => {
       throw new Error('수영장 데이터가 존재하지 않습니다.')
     }
 
-    return json.data as PoolDetail
+    return json.data
   } catch (error) {
     console.error('Pool fetch error:', error)
     throw error
