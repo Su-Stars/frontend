@@ -8,6 +8,7 @@ interface BulletinItemProps {
 }
 
 export default function BulletinItem({ record }: BulletinItemProps) {
+  console.log(record)
   const calculateTime = (startTime: string | null, endTime: string | null) => {
     if (startTime === null || endTime === null) {
       return ' -- : -- '
@@ -27,8 +28,12 @@ export default function BulletinItem({ record }: BulletinItemProps) {
 
   const timeFormat = (time: string) => {
     const now = dayjs()
-    const created = dayjs(time)
+    const created = dayjs(time).add(18, 'hour')
     const diffMinutes = now.diff(created, 'minute') // 현재 시간을 분으로 치환
+
+    console.log('현재', now)
+    console.log('노트 생성', created)
+    console.log('차이', diffMinutes)
 
     if (diffMinutes < 1) return '방금 전'
     if (diffMinutes < 60) return `${diffMinutes}분 전`
