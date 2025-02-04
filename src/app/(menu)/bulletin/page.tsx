@@ -34,15 +34,8 @@ export default async function Bulletin() {
     staleTime: 60 * 1000,
   })
 
-  queryClient.setQueryData(['bulletin'], {
-    pages: (queryClient.getQueryData(['bulletin']) as BulletinResponse) || [],
-    pageParams: [0],
-  })
-
   return (
-    <HydrationBoundary
-      state={JSON.parse(JSON.stringify(dehydrate(queryClient)))}
-    >
+    <HydrationBoundary state={dehydrate(queryClient)}>
       <BulletinPage />
     </HydrationBoundary>
   )

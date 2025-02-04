@@ -1,6 +1,6 @@
 'use client'
 
-import { Map, MapMarker } from 'react-kakao-maps-sdk'
+import { Loader, Map, MapMarker } from 'react-kakao-maps-sdk'
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import { DEFAULT_MAP_CENTER } from '@/lib/constants'
 import { useDebounce } from '@/hooks/use-debounce'
@@ -34,9 +34,19 @@ export default function HomeKakaoMap({ searchResults }: HomeKakaoMapProps) {
   const [openMarkerId, setOpenMarkerId] = useState<number | null>(null)
 
   useEffect(() => {
-    kakao.maps.load(() => {
-      setGeocoder(new kakao.maps.services.Geocoder())
+    const loader = new Loader({
+      appkey: '0d929ba008c86e3296bdbeb4f341c2cc',
+      libraries: ['services'],
     })
+
+    loader
+      .load()
+      .then(() => {
+        setGeocoder(new kakao.maps.services.Geocoder())
+      })
+      .catch((error) => {
+        console.error('카카오맵 로드 실패:', error)
+      })
   }, [])
 
   const handleGeocode = useCallback(
