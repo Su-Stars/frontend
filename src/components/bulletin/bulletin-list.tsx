@@ -10,9 +10,14 @@ interface BulletinListProps {
 export default function BulletinList({ records }: BulletinListProps) {
   return (
     <>
-      {records.map((record: Record) => (
-        <BulletinItem record={record} key={record.id} />
-      ))}
+      {records
+        .sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+        )
+        .map((record: Record) => (
+          <BulletinItem record={record} key={record.id} />
+        ))}
     </>
   )
 }
