@@ -20,6 +20,7 @@ async function prefetchPool(poolId: number) {
   await queryClient.prefetchQuery({
     queryKey: ['pool', poolId],
     queryFn: () => getPool(poolId),
+    staleTime: 1000 * 60 * 24 * 7, // 1 week
   })
 
   return {
@@ -55,7 +56,6 @@ export async function generateMetadata({
     notFound()
   }
 }
-
 type PageParams = Promise<{ id: string }>
 
 export default async function Page({ params }: { params: PageParams }) {

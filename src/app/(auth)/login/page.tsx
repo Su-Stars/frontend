@@ -19,6 +19,14 @@ import { useUserStore } from '@/providers/user-store-provider'
 import { useToast } from '@/hooks/use-toast'
 import { useState } from 'react'
 import { navigateToHome } from '@/actions/redirects'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 
 const formSchema = z.object({
   email: z.string().email('이메일 형식이 아닙니다.'),
@@ -86,56 +94,60 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex flex-col justify-center">
-      <div>
-        <Image src="/logo_image.svg" width={83} height={83} alt="logo" />
-        <h1 className="text-4xl font-bold">로그인</h1>
-      </div>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>이메일</FormLabel>
-                <FormControl>
-                  <Input placeholder="example@example.com" {...field} />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>비밀번호</FormLabel>
-                <FormControl>
-                  <Input placeholder="" type="password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Link href="/find-password" className="text-blue-500 hover:underline">
-            비밀번호를 잊으셨나요?
+    <div className="flex min-h-screen w-full flex-col items-center justify-center p-2">
+      <Card className="xl:maw-w-lg flex w-full max-w-md flex-col">
+        <CardHeader className="sm:p-8">
+          <CardTitle className="text-2xl sm:text-3xl">로그인</CardTitle>
+          <CardDescription className="sm:text-lg">
+            계정에 로그인하세요.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="px-6 sm:px-8">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>이메일</FormLabel>
+                    <FormControl>
+                      <Input placeholder="example@example.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>비밀번호</FormLabel>
+                    <FormControl>
+                      <Input placeholder="" type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                type="submit"
+                variant="primary"
+                className="w-full"
+                disabled={loading}
+              >
+                로그인
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+        <CardFooter>
+          <Link href="/sign-up" className="text-primary hover:underline">
+            계정이 없으신가요?
           </Link>
-          <Button
-            type="submit"
-            variant="primary"
-            className="w-full"
-            disabled={loading}
-          >
-            로그인
-          </Button>
-        </form>
-      </Form>
-      <Link href="/sign-up" className="text-blue-500 hover:underline">
-        계정이 없으신가요?
-      </Link>
+        </CardFooter>
+      </Card>
     </div>
   )
 }

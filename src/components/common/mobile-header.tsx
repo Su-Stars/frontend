@@ -3,11 +3,12 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import clsx from 'clsx'
-import { LuHouse, LuNotepadText, LuUser } from 'react-icons/lu'
+import { LuHouse, LuNotepadText, LuUser, LuWaves } from 'react-icons/lu'
 
 const LINKS = [
   { href: '/', label: '홈', icon: LuHouse },
   { href: '/diary', label: '기록', icon: LuNotepadText },
+  { href: '/bulletin', label: '오수완', icon: LuWaves },
   { href: '/my-page', label: 'MY', icon: LuUser },
 ]
 

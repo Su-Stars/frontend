@@ -38,7 +38,8 @@ import { useMyBookmarks } from '@/hooks/use-my-bookmarks'
 import PoolBookmarkPreviewItem from '@/components/pool/pool-bookmark-preview-item'
 import Link from 'next/link'
 import { LuBookmark } from 'react-icons/lu'
-import UserImageForm from '../my-page/user-image-form'
+import UserImageForm from '@/components/my-page/user-image-form'
+import { useQueryClient } from '@tanstack/react-query'
 
 export default function MyPage() {
   const { user, clearUser } = useUserStore((state) => state)
@@ -49,6 +50,7 @@ export default function MyPage() {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
+  const queryClient = useQueryClient()
 
   const handleDelete = async () => {
     try {
@@ -65,7 +67,13 @@ export default function MyPage() {
       if (!response.ok) {
         throw new Error(`[${response.status}] ${json.message}`)
       }
+
+      // 유저 정보 삭제
       clearUser()
+
+      // 캐시 초기화
+      queryClient.clear()
+
       toast({
         title: '회원탈퇴 완료',
         description: '회원탈퇴가 완료되었습니다.',
