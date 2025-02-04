@@ -25,6 +25,23 @@ export default function BulletinItem({ record }: BulletinItemProps) {
     }
   }
 
+  const timeFormat = (time: string) => {
+    const now = dayjs()
+    const created = dayjs(time)
+    const diffMinutes = now.diff(created, 'minute') // 현재 시간을 분으로 치환
+
+    if (diffMinutes < 1) return '방금 전'
+    if (diffMinutes < 60) return `${diffMinutes}분 전`
+
+    const diffHours = now.diff(created, 'hour')
+    if (diffHours < 24) return `${diffHours}시간 전`
+
+    const diffDays = now.diff(created, 'day')
+    if (diffDays < 7) return `${diffDays}일 전`
+
+    return dayjs(record.created_at).format('YY.MM.DD')
+  }
+
   return (
     <div className="overflow-hidden rounded-lg bg-white shadow-md">
       <div className="relative">
@@ -59,7 +76,7 @@ export default function BulletinItem({ record }: BulletinItemProps) {
               {record.users.nickname}
             </h3>
             <time className="text-sm text-gray-500">
-              {dayjs(record.swim_date).format('YY.MM.DD')}
+              {timeFormat(record.created_at)}
             </time>
           </div>
         </div>

@@ -1,6 +1,11 @@
 import Link from 'next/link'
-import { CustomOverlayMap, Map, MapMarker } from 'react-kakao-maps-sdk'
-import { useState } from 'react'
+import {
+  CustomOverlayMap,
+  Map,
+  MapMarker,
+  useKakaoLoader,
+} from 'react-kakao-maps-sdk'
+import { useEffect, useState } from 'react'
 import type { PoolDetail } from '@/types/pools'
 
 interface PoolKaKaoMapParams {
@@ -9,6 +14,11 @@ interface PoolKaKaoMapParams {
 
 export default function PoolKaKaoMap({ pool }: PoolKaKaoMapParams) {
   const position = { lat: pool.latitude, lng: pool.longitude }
+
+  const [loading, error] = useKakaoLoader({
+    appkey: '0d929ba008c86e3296bdbeb4f341c2cc',
+    libraries: ['services'],
+  })
 
   const [isMapReady, setIsMapReady] = useState(false)
 
