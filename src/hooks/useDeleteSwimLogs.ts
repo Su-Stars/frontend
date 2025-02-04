@@ -81,6 +81,7 @@ export function useDeleteSwimLog({ year, month, day }: DeleteSwimLogsParams) {
       queryClient.invalidateQueries({
         queryKey: createSwimLogsQueryKey({ year, month, day }),
       })
+      queryClient.invalidateQueries({ queryKey: ['bulletin'] })
     },
   })
 }
