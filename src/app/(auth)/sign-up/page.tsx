@@ -32,7 +32,6 @@ type ApiError = {
 }
 
 export default function SignUpPage() {
-  const { setUser } = useUserStore((state) => state)
   const { toast } = useToast()
   const [loading, setLoading] = useState(false)
 
@@ -67,13 +66,6 @@ export default function SignUpPage() {
         }
         throw new Error(data.message || '회원가입에 실패했습니다.')
       }
-
-      setUser({
-        id: data.id,
-        email: data.email,
-        nickname: data.nickname,
-        role: data.role,
-      })
 
       toast({
         title: '회원가입 성공',
