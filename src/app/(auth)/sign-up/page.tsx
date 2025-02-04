@@ -14,11 +14,17 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
-import Image from 'next/image'
-import { useUserStore } from '@/providers/user-store-provider'
 import { useToast } from '@/hooks/use-toast'
 import { useState } from 'react'
 import { navigateToHome } from '@/actions/redirects'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 
 const formSchema = z.object({
   email: z.string().email('이메일 형식이 아닙니다.'),
@@ -86,62 +92,73 @@ export default function SignUpPage() {
   }
 
   return (
-    <div className="flex flex-col justify-center">
-      <div>
-        <Image src="/logo_image.svg" width={83} height={83} alt="logo" />
-        <h1 className="text-4xl font-bold">회원가입</h1>
-      </div>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>이메일</FormLabel>
-                <FormControl>
-                  <Input placeholder="example@example.com" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>비밀번호</FormLabel>
-                <FormControl>
-                  <Input placeholder="" type="password" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="nickname"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>닉네임</FormLabel>
-                <FormControl>
-                  <Input placeholder="" type="text" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button
-            type="submit"
-            variant="primary"
-            className="w-full"
-            disabled={loading}
-          >
-            회원가입
-          </Button>
-        </form>
-      </Form>
+    <div className="flex min-h-screen w-full flex-col items-center justify-center p-2">
+      <Card className="xl:maw-w-lg flex w-full max-w-md flex-col">
+        <CardHeader className="sm:p-8">
+          <CardTitle className="text-2xl sm:text-3xl">회원가입</CardTitle>
+          <CardDescription className="sm:text-lg">
+            이메일과 비밀번호를 입력해주세요.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="px-6 sm:px-8">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>이메일</FormLabel>
+                    <FormControl>
+                      <Input placeholder="example@example.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>비밀번호</FormLabel>
+                    <FormControl>
+                      <Input placeholder="" type="password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="nickname"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>닉네임</FormLabel>
+                    <FormControl>
+                      <Input placeholder="" type="text" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                type="submit"
+                variant="primary"
+                className="w-full"
+                disabled={loading}
+              >
+                회원가입
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+        <CardFooter>
+          <Link href="/login" className="text-primary hover:underline">
+            이미 계정이 있으신가요?
+          </Link>
+        </CardFooter>
+      </Card>
     </div>
   )
 }
