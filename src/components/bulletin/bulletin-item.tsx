@@ -8,24 +8,26 @@ interface BulletinItemProps {
 }
 
 export default function BulletinItem({ record }: BulletinItemProps) {
+  console.log(record)
   const calculateTime = (startTime: string | null, endTime: string | null) => {
     if (startTime === null || endTime === null) {
       return ' -- : -- '
     }
+    const [startHour, startMinute] = startTime.split(':').map(Number)
+    const [endHour, endMinute] = endTime.split(':').map(Number)
 
-    const end = dayjs(endTime)
-    const start = dayjs(startTime)
-    const diffMinutes = end.diff(start, 'minute')
+    const startTotalMinutes = startHour * 60 + startMinute
+    const endTotalMinutes = endHour * 60 + endMinute
+    const duration = endTotalMinutes - startTotalMinutes
+    const hours = Math.floor(duration / 60)
+    const minutes = duration % 60
 
-    const hour = diffMinutes / 60
-    const minute = diffMinutes % 60
-
-    if (hour === 0) {
-      return `${minute} 분`
-    } else if (minute === 0) {
-      return `${hour} 시간`
+    if (hours === 0) {
+      return `${minutes} 분`
+    } else if (minutes === 0) {
+      return `${hours} 시간`
     } else {
-      return `${hour} 시간 ${minute} 분`
+      return `${hours} 시간 ${minutes} 분`
     }
   }
 
@@ -34,9 +36,9 @@ export default function BulletinItem({ record }: BulletinItemProps) {
     const created = dayjs(time).add(9, 'hour')
     const diffMinutes = now.diff(created, 'minute') // 현재 시간을 분으로 치환
 
-    console.log('현재', now)
-    console.log('노트 생성', created)
-    console.log('차이', diffMinutes)
+    // console.log('현재', now)
+    // console.log('노트 생성', created)
+    // console.log('차이', diffMinutes)
 
     if (diffMinutes < 1) return '방금 전'
     if (diffMinutes < 60) return `${diffMinutes}분 전`
