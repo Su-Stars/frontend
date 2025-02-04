@@ -9,6 +9,7 @@ export const getPool = async (poolId: number): Promise<PoolDetail> => {
         headers: {
           'Content-Type': 'application/json',
         },
+        cache: 'force-cache',
       },
     )
 
