@@ -12,9 +12,13 @@ export default function BulletinItem({ record }: BulletinItemProps) {
     if (startTime === null || endTime === null) {
       return ' -- : -- '
     }
-    const hour = Number(endTime.split(':')[0]) - Number(startTime.split(':')[0])
-    const minute =
-      Number(endTime.split(':')[1]) - Number(startTime.split(':')[1])
+
+    const end = dayjs(endTime)
+    const start = dayjs(startTime)
+    const diffMinutes = end.diff(start, 'minute')
+
+    const hour = diffMinutes / 60
+    const minute = diffMinutes % 60
 
     if (hour === 0) {
       return `${minute} 분`
