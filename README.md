@@ -22,23 +22,31 @@
 
 ## 1. 기술 스택
 
-React
-Typescript
-NextJS
-TailwindCSS
-Tanstack-Query
-Zustand
-msw
-Zod
+코어
+- React 19
+- Typescript
+- NextJS 15 : 일부 페이지 동적으로 메타데이터 설정하고 SSR 적용하여, SEO 최적화와 초기 로딩 속도 개선
 
-shadcn/ui
+스타일링
+- TailwindCSS v.3.4.17
+- shadcn/ui
 
-Github
-Netlify
+상태관리
+- Tanstack-Query : 데이터 상태 관리, 적절한 캐싱과 데이터 갱신 전략, 낙관적 업데이트 무한스크롤 구현
+- Zustand : 전역상태 관리
 
-[Notion](https://www.notion.so/2-a09c02ff095545d4bf00884941e82dd0)
-[Figma](https://www.figma.com/design/1HrYWDA8qCQhe16X9KLbeQ/%EC%96%B4%ED%91%B8-with-NextUI?node-id=5402-214&t=q1VwnV6tjMuvYoQY-1)
-Slack
+기타
+- msw : 백엔드 API 개발 이전 모킹 서버 이용하여 유연한 개발
+- Zod : 폼 유효성 검사
+
+버젼관리 및 배포
+- Github
+- Netlify
+
+협업
+- [Notion](https://www.notion.so/2-a09c02ff095545d4bf00884941e82dd0)
+- [Figma](https://www.figma.com/design/1HrYWDA8qCQhe16X9KLbeQ/%EC%96%B4%ED%91%B8-with-NextUI?node-id=5402-214&t=q1VwnV6tjMuvYoQY-1)
+- Slack
 
 ## 2. 시작하기
 <details>
