@@ -41,10 +41,9 @@ const formSchema = z.object({
 
 interface EditFormProps {
   poolId: number
-  setIsOpen: (isOpen: boolean) => void
 }
 
-export default function EditForm({ poolId, setIsOpen }: EditFormProps) {
+export default function EditForm({ poolId }: EditFormProps) {
   const { data, isPending, isError, error } = usePool({ poolId })
   const [loading, setLoading] = useState(false)
   const { toast } = useToast()
@@ -133,9 +132,6 @@ export default function EditForm({ poolId, setIsOpen }: EditFormProps) {
         title: '수영장 수정 완료',
         description: '해당 수영장이 수정되었습니다.',
       })
-
-      // 모달 닫기
-      setIsOpen(false)
     } catch (error) {
       toast({
         variant: 'destructive',

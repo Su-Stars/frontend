@@ -22,7 +22,14 @@ export const createSwimLogsQueryKey = (params: {
   month: number
   day?: number
 }): SwimLogsQueryKey => {
-  return ['swimLogs', params]
+  // undefined 값을 제외한 객체 생성
+  const queryParams = {
+    year: params.year,
+    month: params.month,
+    ...(params.day && { day: params.day }),
+  }
+
+  return ['swimLogs', queryParams]
 }
 
 export const useSwimLogs = ({ year, month, day, user }: useSwimlogsParams) => {

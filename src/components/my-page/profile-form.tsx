@@ -65,6 +65,9 @@ export default function ProfileForm({
 
         description: '프로필이 수정되었습니다.',
       })
+
+      // Close the modal
+      setIsOpen(false)
     } catch (error) {
       toast({
         title: '실패',

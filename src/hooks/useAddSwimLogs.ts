@@ -87,9 +87,12 @@ export function useAddSwimLog({
       )
     },
     onSettled: () => {
+      // 새로운 기록 추가 후 캐시 무효화
+      // 일별 기록 캐시 무효화
       queryClient.invalidateQueries({
         queryKey: createSwimLogsQueryKey({ year, month, day }),
       })
+      // 월별 기록 캐시 무효화
       queryClient.invalidateQueries({
         queryKey: createSwimLogsQueryKey({ year, month }),
       })

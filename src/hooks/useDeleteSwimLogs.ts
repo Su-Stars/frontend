@@ -78,10 +78,20 @@ export function useDeleteSwimLog({ year, month, day }: DeleteSwimLogsParams) {
     },
 
     onSettled: () => {
+      // 기록 삭제후 캐시 무효화
+      // 일별 기록 캐시 무효화
       queryClient.invalidateQueries({
         queryKey: createSwimLogsQueryKey({ year, month, day }),
       })
+
+      // 월별 기록 캐시 무효화
+      queryClient.invalidateQueries({
+        queryKey: createSwimLogsQueryKey({ year, month }),
+      })
+
+      // 오수완 캐시 
       queryClient.invalidateQueries({ queryKey: ['bulletin'] })
+
     },
   })
 }
