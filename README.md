@@ -220,11 +220,11 @@ Slack
   ### [인증]
 | 로그인                                                                           |
 | ----------------------------------------------------------------------------------------- |
-| <div align="center"><img src="https://github.com/user-attachments/assets/e7a04376-81d1-4e15-b5f3-f8329a61adf2" width="50%"></div> |
+| <div align="center"><img src="https://github.com/user-attachments/assets/24c228f2-d0e4-4f2a-a8ba-bd1c9fe86b14" width="50%"></div> |
 
 | 회원가입                                                                           |
 | ----------------------------------------------------------------------------------------- |
-| <div align="center"><img src="https://github.com/user-attachments/assets/e7a04376-81d1-4e15-b5f3-f8329a61adf2" width="50%"></div> |
+| <div align="center"><img src="https://github.com/user-attachments/assets/b91a2a8d-3544-4e86-a0da-b15181fffbe8" width="50%"></div> |
 - Zod로 유효성검사를 구현했습니다.
 
   
