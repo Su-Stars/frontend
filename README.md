@@ -148,7 +148,9 @@ Slack
 
 | 초기화면                                                                                  |
 | ----------------------------------------------------------------------------------------- |
-| ![image](https://github.com/user-attachments/assets/16162300-7cdf-4fb7-8cf4-e68dac3ac0f3) |
+| ![Image](https://github.com/user-attachments/assets/07082857-c19c-4ae7-a043-2435eb890218) |
+| ![Image](https://github.com/user-attachments/assets/ddda33c0-2f08-42ab-be65-e5bb6296f7a9) |
+| ![Image](https://github.com/user-attachments/assets/47e57da8-1636-4778-a73d-1cf1baa373a9) |
 
 <br>
 
