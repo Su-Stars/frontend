@@ -2,8 +2,6 @@
 
 ![IMG_1463](https://github.com/user-attachments/assets/84903158-e9e6-4c68-bee2-311d697acb93)
 
-<br>
-
 ## 프로젝트 소개
 
 - [x] **수영장 검색**: 지도, 지역, 이름으로 수영장 검색
@@ -11,8 +9,6 @@
 - [x] **수영장 리뷰**: 키워드 리뷰 기능
 - [x] **수영기록**: 수영기록 남기기 기능
 - [x] **오수완**: 다른 사람들과 수영기록 공유 기능
-
-<br>
 
 ## 팀원 구성
 
@@ -23,8 +19,6 @@
 | [<img src="https://avatars.githubusercontent.com/u/111514472?v=4" height=150 width=150> <br/> @layout-SY](https://github.com/layout-SY) | [<img src="https://avatars.githubusercontent.com/u/152577867?v=4" height=150 width=150> <br/> @chaesunbak](https://github.com/chaesunbak) | [<img src="https://avatars.githubusercontent.com/u/133619736?v=4" height=150 width=150> <br/> @dongguJeong](https://github.com/dongguJeong) |
 
 </div>
-
-<br>
 
 ## 1. 기술 스택
 
@@ -45,8 +39,6 @@ Netlify
 [Notion](https://www.notion.so/2-a09c02ff095545d4bf00884941e82dd0)
 [Figma](https://www.figma.com/design/1HrYWDA8qCQhe16X9KLbeQ/%EC%96%B4%ED%91%B8-with-NextUI?node-id=5402-214&t=q1VwnV6tjMuvYoQY-1)
 Slack
-
-<br>
 
 ## 2. 시작하기
 <details>
@@ -197,21 +189,21 @@ NEXT_PUBLIC_SERVER_URL=${your server url}
   
 | 지역별 조회                                                                                  |
 | ----------------------------------------------------------------------------------------- |
-| <div align="center"><img src="https://github.com/user-attachments/assets/07082857-c19c-4ae7-a043-2435eb890218" width="50%"></div> |
+| <div align="center"><img src="https://github.com/user-attachments/assets/ddda33c0-2f08-42ab-be65-e5bb6296f7a9" width="50%"></div> |
 - 지역 필터를 선택해 해당 지역의 수영장 목록을 조회 할 수 있습니다.
 - 겸색 결과 옆의 맵핀 아이콘 버튼을 눌러 해당 수영장 위치를 지도에서 볼수 있습니다.
 
 | 키워드 검색                                                                                 |
 | ----------------------------------------------------------------------------------------- |
-| <div align="center"><img src="https://github.com/user-attachments/assets/07082857-c19c-4ae7-a043-2435eb890218" width="50%"></div> |
+| <div align="center"><img src="https://github.com/user-attachments/assets/47e57da8-1636-4778-a73d-1cf1baa373a9" width="50%"></div> |
 - 키워드 검색을 통해 해당 키워드 지역이나 이름의 수영장을 검색할 수 있습니다.
 
 <br>
 
 ### [수영장 개별 페이지]
-| 주변 수영장 조회                                                                                 |
+| 개별페이지                                                                                |
 | ----------------------------------------------------------------------------------------- |
-| <div align="center"><img src="https://github.com/user-attachments/assets/07082857-c19c-4ae7-a043-2435eb890218" width="50%"></div> |
+| <div align="center"><img src="https://github.com/user-attachments/assets/e963d94d-d907-4bf4-9538-63e40d05b932" width="50%"></div> |
 - 동적으로 메타데이터를 생성합니다.
 - React Query prefatch를 이용하여 SSR을 구한하면서 React Query로 데이터를 관리합니다.
 - 수영장 이미지, 주소, 위치, 레인정보 등 상세 정보를 알수 있습니다.
@@ -222,7 +214,7 @@ NEXT_PUBLIC_SERVER_URL=${your server url}
 ### [리뷰 페이지]
 | 리뷰 작성                                                                                 |
 | ----------------------------------------------------------------------------------------- |
-| <div align="center"><img src="https://github.com/user-attachments/assets/07082857-c19c-4ae7-a043-2435eb890218" width="50%"></div> |
+| <div align="center"><img src="https://github.com/user-attachments/assets/ad82ba5e-d4af-429b-b02b-fadb63724062" width="50%"></div> |
 - 해당 수영장에 리뷰를 남길 수 있습니다.
 - 키워드리뷰 남길 수 있습니다.
 
@@ -231,7 +223,7 @@ NEXT_PUBLIC_SERVER_URL=${your server url}
 ### [기록일지]
 | 기록일지                                                                                 |
 | ----------------------------------------------------------------------------------------- |
-| <div align="center"><img src="https://github.com/user-attachments/assets/07082857-c19c-4ae7-a043-2435eb890218" width="50%"></div> |
+| <div align="center"><img src="https://github.com/user-attachments/assets/f3bafbf4-863b-4049-a4d7-a0af3f065223" width="50%"></div> |
 - 월별로 내 수영 기록을 조회할 수 있습니다. 수영한 날은 초록색으로 표시됩니다.
 - 일별로 내 수영기록을 조회할 수 있습니다.
 - 일별로 내 수영기록을 조회하고 추가, 삭제할 수 있습니다. 낙관적 업데이트로 구현했습니다.
@@ -251,21 +243,21 @@ NEXT_PUBLIC_SERVER_URL=${your server url}
 ### [유저]
 | 마이페이지                                                                             |
 | ----------------------------------------------------------------------------------------- |
-| <div align="center"><img src="https://github.com/user-attachments/assets/e7a04376-81d1-4e15-b5f3-f8329a61adf2" width="50%"></div> |
+| <div align="center"><img src="https://github.com/user-attachments/assets/c7673802-d97d-4db3-9b04-9bf3252696fe" width="50%"></div> |
 - 내정보를 조회하고 수정할 수 있습니다.
 - 내 북마크 정보를 조회할 수 있습니다.
 
 <br>
 
 ### [어드민]
-| 마이페이지                                                                             |
+| 어드민 페이지                                                                           |
 | ----------------------------------------------------------------------------------------- |
-| <div align="center"><img src="https://github.com/user-attachments/assets/e7a04376-81d1-4e15-b5f3-f8329a61adf2" width="50%"></div> |
+| <div align="center"><img src="https://github.com/user-attachments/assets/6210a833-8229-4d13-b459-a758911565bf" width="50%"></div> |
 - 전체 수영장 정보를 테이블로 조회할 수 있습니다. 필터 기능과 무한스크롤을 적용했습니다.
 - 수영장 정보를 추가하고, 수정하고 , 삭제할 수 있습니다.
 - 유저전역상태로 인가 절차를 구현했습니다.
 
-  ### [인증]
+### [인증]
 | 로그인                                                                           |
 | ----------------------------------------------------------------------------------------- |
 | <div align="center"><img src="https://github.com/user-attachments/assets/24c228f2-d0e4-4f2a-a8ba-bd1c9fe86b14" width="50%"></div> |
