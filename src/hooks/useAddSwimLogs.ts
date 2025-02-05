@@ -96,6 +96,7 @@ export function useAddSwimLog({
       queryClient.invalidateQueries({
         queryKey: createSwimLogsQueryKey({ year, month }),
       })
+      queryClient.invalidateQueries({ queryKey: ['bulletin'] })
     },
   })
 }

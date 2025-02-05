@@ -1,36 +1,276 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🐬 🏊🏻‍♂️ "내 주변 수영장을 한눈에, 수영 기록은 손쉽게" 어푸
+![IMG_1463](https://github.com/user-attachments/assets/84903158-e9e6-4c68-bee2-311d697acb93)
 
-## Getting Started
+## 프로젝트 소개
+- [x] **수영장 검색**: 지도, 지역, 이름으로 수영장 검색
+- [x] **수영장 조회**: 공공데이터와 검색 API로 초기 데이터 확보, 동적으로 메타데이터 설정과 SSR로 SEO 최적화. 
+- [x] **수영장 리뷰**: 키워드 리뷰 기능
+- [x] **수영기록**: 수영기록 남기기 기능
+- [x] **오수완**: 다른 사람들과 수영기록 공유 기능
 
-First, run the development server:
+## 팀원 구성
+<div align="center">
 
+|                                                               **김경원**                                                                |                                                                **채문성**                                                                 |                                                                 **정동구**                                                                  |
+| :-------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------: |
+| [<img src="https://avatars.githubusercontent.com/u/111514472?v=4" height=150 width=150> <br/> @layout-SY](https://github.com/layout-SY) | [<img src="https://avatars.githubusercontent.com/u/152577867?v=4" height=150 width=150> <br/> @chaesunbak](https://github.com/chaesunbak) | [<img src="https://avatars.githubusercontent.com/u/133619736?v=4" height=150 width=150> <br/> @dongguJeong](https://github.com/dongguJeong) |
+
+</div>
+
+## 1. 기술 스택
+코어
+- React 19
+- Typescript
+- NextJS 15 : 일부 페이지 동적으로 메타데이터 설정하고 SSR 적용하여, SEO 최적화와 초기 로딩 속도 개선
+
+스타일링
+- TailwindCSS v.3.4.17
+- shadcn/ui
+
+상태관리
+- Tanstack-Query : 데이터 상태 관리, 적절한 캐싱과 데이터 갱신 전략, 낙관적 업데이트 무한스크롤 구현
+- Zustand : 전역상태 관리
+
+기타
+- msw : 백엔드 API 개발 이전 모킹 서버 이용하여 유연한 개발
+- Zod : 폼 유효성 검사
+
+버젼관리 및 배포
+- Github
+- Netlify
+
+협업
+- [Notion](https://www.notion.so/2-a09c02ff095545d4bf00884941e82dd0)
+- [Figma](https://www.figma.com/design/1HrYWDA8qCQhe16X9KLbeQ/%EC%96%B4%ED%91%B8-with-NextUI?node-id=5402-214&t=q1VwnV6tjMuvYoQY-1)
+- Slack
+
+## 2. 시작하기
+<details>
+<summary>설치 및 시작</summary>
+  
+### Install
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+$ npm i --legacy-peer-deps
+```
+### Build
+```bash
+$ npm run build
+```
+### Start
+```bash
+$ npm start
+```
+### env
+- Fill out `.env` for your api key & server url
+```
+NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=${your GA api key}
+
+NEXT_PUBLIC_KAKAO_APP_KEY=${your api key}
+
+NEXT_PUBLIC_SERVER_URL=${your server url}
+```
+</details>
+
+### 디렉토리
+```bash
+├── public
+├── src
+│   ├── actions # 데이터 패칭 함수 등
+│   ├── app # Next.js 13+ 앱 라우터 디렉토리
+│   ├── components # React 컴포넌트
+│   │   ├── common # 공통으로 사용되는 컴포넌트
+│   │   ├── ... # 기능별 컴포넌트
+│   │   └── ui # shadcn/ui 등 기본 UI 컴포넌트
+│   ├── lib # 유틸리티 함수 및 외부 라이브러리 설정
+│   ├── mocks # MSW 등 목업 데이터 및 핸들러
+│   ├── providers # React Context Providers
+│   └── static # 정적 데이터
+│   └── stores # 전역 상태 관리 (Zustand 등)
+│   └── styles # 전역 스타일 및 테마 설정
+│   └── types # TypeScript 타입 정의
+└── ....etc # 설정 파일들 (eslint, tsconfig 등)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 3. 역할 분담
+### 🍊김경원
+- **UI**
+  - 로그인 , 회원가입 페이지 구현
+- **기능**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 👻채문성
+- **UI**
+  - 리뷰 페이지
+  - 수영 기록 페이지
+  - 유저 페이지
+  - 어드민 페이지
+  - 전반적인 스타일링
+- **기능**
+  - msw 설정
+  - 북마크, 수영기록 낙관적 업데이트 구현
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 😎정동구
+- **UI**
+  - 메인 페이지
+  - 오수완 페이지
+- **기능**
+  - 키워드 검색
+  - 지역 필터
+  - 인근 수영장 자동 검색
 
-## Learn More
+## 4. 개발 기간 및 작업 관리
+### 개발 기간
+- 전체 개발 기간 : 2025년 1월 3일(금) ~ 2025년 2월 6일(목)
 
-To learn more about Next.js, take a look at the following resources:
+  - 주제선정 :2025년 1월 3일(금) ~ 2025년 1월 4일(토)
+  - 스프린트 1 :2025년 1월 6일일(월) ~ 2025년 1월 11일(토)
+  - 스프린트 2 :2025년 1월- 13일(월) ~ 2025년 1월 18일(토)
+  - 스프린트 3 :2025냔 1월 20일(월)  ~ 2025년 01월 25일(토)
+  - 스프린트 4 :2025년 1월 27일(월) ~ 2025년 2월 1일(토)
+  - 스프린트 5 :2025년 2월 3일(월) ~ 2025년 2월 6일(목)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+<details>
+  <summary>개발 진행 자세히 보기</summary>
+  
+  | 과제 | 구분 | 기간 | 담당자 |
+  | ----------------- | -------------- | ------------------------ | ---------------- |
+  | 주제 탐색 | 주제선정 | 01월 03일(금) ~ 01월 04일(토) | 모두 |
+  | 수영장 API 조사 | 자료조사 | 01월 06일(월) ~ 01월 11일(토) | 정동구 |
+  | 기획서, 수영장 API 명세서 작성 | 스프린트 1 | 01월 06일(월) ~ 01월 11일(토) | 채문성 |
+  | 수영기록 API 명세서 | 스플린트 1 | 01월 13일(월) ~ 01월 18일(토) | 채문성 |
+  | 리뷰 구현 | 스플린트 2 | 01월 18일(월) ~ 01월 18일(토) | 채문성 |
+  | 행정구역 필터 구현 | 스플린트 2 | 01월 18일(월) ~ 01월 18일(토) | 정동구 |
+  | 검색 기능 구현 | 스플린트 3 | 01월 20일(월) ~ 01월 25일(토) | 정동구 |
+  | 지역구 json 저장 | 스플린트 3 | 01월 20일(월) ~ 01월 25일(토) | 정동구 |
+  | 수영기록 페이지 | 스플린트 3 | 01월 20일(월) ~ 01월 25일(토) | 채문성 |
+  | 회원가입 페이지 | 스플린트 3 | 01월 20일(월) ~ 01월 25일(토) | 김경원 |
+  | 유저 페이지 | 스플린트 4 | 01월 27일(월) ~ 02월 1일(토) | 채문성 |
+  | 수영장 개별 페이지 | 스플린트 4 | 01월 27일(월) ~ 02월 1일(토) | 정동구 |
+  | 로그인 페이지 | 스플린트 4 | 01월 20일(월) ~ 02월 10(토) | 김경원 |
+  | 메타 데이터 | 스플린트 4 | 01월 20일(월) ~ 02월 1일(토) | 채문성 |
+  | 어드민 페이지 | 스플린트 4 | 01월 27일(월) ~ 02월 1일(토) | 채문성 |
+  | 오수완 페이지 | 스플린트 5 | 02월 03일(월) ~ 02월 06일(목) | 정동구 |
+  | 인증 api 연결 | 스플린트 5 | 02월 03일(월) ~ 02월 06일(목) | 김경원 |
+  | 발표 준비 | 스플린트 5 | 02월 03일(월) ~ 02월 06일(목) | 모두 |
+  
+</details>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 5. 브레이크 스루
+### msw설정 중 SSR 의도한대로 작동하지 않는 이슈(채문성)
+#### 문제 상황
+- msw 설정에서 빌드에러 발생하는 이슈 발견
+- msw 설정 이후 프리렌더링과 SSR이 제대로 작동하지 않은 이슈 발견
+#### 해결 과정
+1. 브라우저관련 모듈을 브라우저에서만 동적 불러오기 하여 해결
+2. msw 서버 시작 이후 조건부 렌더링 하는 부분이 프리렌더링을 막고 있음을 확인.
+   - 조건부 렌더링 제거하여 올바르게 프리렌더링과 SSR 작동하게 변경
+#### 결과
+- Next.JS의 빌드과정과 렌더링 과정을 이해하게 되고 학습한 내용을 [블로그](https://velog.io/@chaesunbak/Next.js%EC%97%90%EC%84%9C-MSW-%EB%8F%84%EC%9E%85%ED%95%98%EA%B8%B0-k5u930zu)에 기록함.
 
-## Deploy on Vercel
+### 행정구역 데이터 처리 최적화(정동구)
+#### 문제 상황
+- 행정구역 필터 UI에서 전체 칸이 먼저 표시된 후 세부 행정구역이 지연되어 표시되는 현상 발생
+- 통계청 API를 통한 단계별 데이터 로딩 과정에서의 지연 문제 확인
+#### 해결 과정
+1. 초기 접근: 전체 행정구역 데이터 프리패칭 검토
+2. 최종 해결책: 행정구역 데이터를 정적 JSON 파일로 프로젝트에 포함
+   - 행정구역 정보가 자주 변경되지 않는 특성 고려
+   - API 호출 없이 즉시 데이터 접근 가능
+#### 결과
+- UI 렌더링 지연 문제 해결
+- 사용자 경험 개선
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 6. 페이지별 기능
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### [홈]
+| 주변 수영장 조회                                                                                 |
+| ----------------------------------------------------------------------------------------- |
+| <div align="center"><img src="https://github.com/user-attachments/assets/07082857-c19c-4ae7-a043-2435eb890218" width="50%"></div> |
+- 초기 접속시 Geolocation API로 사용자의 위치 정보를 가져와 인근의 수영장을 보여줍니다.
+  
+| 지역별 조회                                                                                  |
+| ----------------------------------------------------------------------------------------- |
+| <div align="center"><img src="https://github.com/user-attachments/assets/ddda33c0-2f08-42ab-be65-e5bb6296f7a9" width="50%"></div> |
+- 지역 필터를 선택해 해당 지역의 수영장 목록을 조회 할 수 있습니다.
+- 겸색 결과 옆의 맵핀 아이콘 버튼을 눌러 해당 수영장 위치를 지도에서 볼수 있습니다.
+
+| 키워드 검색                                                                                 |
+| ----------------------------------------------------------------------------------------- |
+| <div align="center"><img src="https://github.com/user-attachments/assets/47e57da8-1636-4778-a73d-1cf1baa373a9" width="50%"></div> |
+- 키워드 검색을 통해 해당 키워드 지역이나 이름의 수영장을 검색할 수 있습니다.
+
+### [수영장 개별 페이지]
+| 개별페이지                                                                                |
+| ----------------------------------------------------------------------------------------- |
+| <div align="center"><img src="https://github.com/user-attachments/assets/e963d94d-d907-4bf4-9538-63e40d05b932" width="50%"></div> |
+- 동적으로 메타데이터를 생성합니다.
+- React Query prefatch를 이용하여 SSR을 구한하면서 React Query로 데이터를 관리합니다.
+- 수영장 이미지, 주소, 위치, 레인정보 등 상세 정보를 알수 있습니다.
+- 북마크 기능을 통해 자주 방분하는 수영장을 저장할 수 있습니다. 북마크 기능은 낙관적 업데이트로 구현했습니다.
+
+### [리뷰 페이지]
+| 리뷰 작성                                                                                 |
+| ----------------------------------------------------------------------------------------- |
+| <div align="center"><img src="https://github.com/user-attachments/assets/ad82ba5e-d4af-429b-b02b-fadb63724062" width="50%"></div> |
+- 해당 수영장에 리뷰를 남길 수 있습니다.
+- 키워드리뷰 남길 수 있습니다.
+
+### [기록일지]
+| 기록일지                                                                                 |
+| ----------------------------------------------------------------------------------------- |
+| <div align="center"><img src="https://github.com/user-attachments/assets/f3bafbf4-863b-4049-a4d7-a0af3f065223" width="50%"></div> |
+- 월별로 내 수영 기록을 조회할 수 있습니다. 수영한 날은 초록색으로 표시됩니다.
+- 일별로 내 수영기록을 조회할 수 있습니다.
+- 일별로 내 수영기록을 조회하고 추가, 삭제할 수 있습니다. 낙관적 업데이트로 구현했습니다.
+
+### [오수완]
+| 오수완                                                                               |
+| ----------------------------------------------------------------------------------------- |
+| <div align="center"><img src="https://github.com/user-attachments/assets/e7a04376-81d1-4e15-b5f3-f8329a61adf2" width="50%"></div> |
+- 모든 유저들의 수영기록을 최신순으로 조회할 수 있습니다.
+- prefetch로 SSR를 구현했습니다.
+- 무한스크롤을 구현했습니다. 
+
+### [유저]
+| 마이페이지                                                                             |
+| ----------------------------------------------------------------------------------------- |
+| <div align="center"><img src="https://github.com/user-attachments/assets/c7673802-d97d-4db3-9b04-9bf3252696fe" width="50%"></div> |
+- 내정보를 조회하고 수정할 수 있습니다.
+- 내 북마크 정보를 조회할 수 있습니다.
+
+### [어드민]
+| 어드민 페이지                                                                           |
+| ----------------------------------------------------------------------------------------- |
+| <div align="center"><img src="https://github.com/user-attachments/assets/6210a833-8229-4d13-b459-a758911565bf" width="50%"></div> |
+- 전체 수영장 정보를 테이블로 조회할 수 있습니다. 필터 기능과 무한스크롤을 적용했습니다.
+- 수영장 정보를 추가하고, 수정하고 , 삭제할 수 있습니다.
+- 유저전역상태로 인가 절차를 구현했습니다.
+
+### [인증]
+| 로그인                                                                           |
+| ----------------------------------------------------------------------------------------- |
+| <div align="center"><img src="https://github.com/user-attachments/assets/24c228f2-d0e4-4f2a-a8ba-bd1c9fe86b14" width="50%"></div> |
+
+| 회원가입                                                                           |
+| ----------------------------------------------------------------------------------------- |
+| <div align="center"><img src="https://github.com/user-attachments/assets/b91a2a8d-3544-4e86-a0da-b15181fffbe8" width="50%"></div> |
+- Zod로 유효성검사를 구현했습니다.
+
+## 7. 개선 목표
+- 코드 리팩토링 : 로직 효율성과 모듈화 등 일부 코드 리팩토링이 필요합니다.
+- 메인 페이지 딜레이 개선 : 메인 화면 로딩 시 지도가 표시되는 데 소요되는 딜레이 개선이 필요합니다
+
+## 8. 프로젝트 후기
+### 🍊 김경원
+
+- 깃허브를 활용한 협업 방법을 배우게 되었습니다. 처음에는 PR 문서에서 제시된 개발 가이드라인을 따르는 것이 익숙하지 않아 어려움을 겪었지만, Github Flow 전략을 적용하면서 작업 내용을 직관적으로 파악할 수 있게 되었습니다. 이를 통해 협업의 효율성이 향상되고 코드의 일관성을 유지하는 것이 중요하다는 점을 깨닫게 되었습니다. 앞으로는 명확한 가이드라인을 기반으로 개발하며, 코드 리뷰를 적극적으로 활용하는 습관을 기르려 합니다.
+- 프로젝트를 진행하면서 Next.js의 폴더 기반 자동 라우팅 방식과 헤더를 활용한 쿠키 기반 인증을 학습하였으며, 이를 더욱 깊이 있게 공부해 나갈 계획입니다.
+
+### 👻 채문성
+
+- 어떻게 하면 협업을 더 잘할 수 있을까 고민했습니다. 어떻게 하면 팀이 같은 목표를 갖고, 더 생산적으로 일할 수 있을까 고민하며, 기획서와 API 명세서같은 문서화에 힘썼습니다. 협업과정을 통해 혼자였으면 도전하지 않았을 목표, 도달하지 못했을 목표를 성취한 것이 만족스럽니다.
+- Next.js로 처음 프로젝트를 진행해보면서, 코드가 빌드되고 렌더링되는 과정을 더 살펴볼 수 있었습니다. 목표했던 SSR과 동적 메타데이터관련 내용을 학습하고 적용해보면서, 여러 난관이 있었지만 이루어낸것이 만족스러웠습니다. 이후에 데이터 캐싱, 풀 라우트 캐싱과 관련한 개념을 학습하고 ISR과 같은 렌더링 방식도 도전해보고 싶다는 목표에 갖을 수 있었습니다.
+
+### 😎 정동구
+
+- 서버 사이드 렌더링을 통해 초기 로딩 속도를 개선하고 사용자 경험(UX)을 향상시킬 수 있었습니다. 또한, 개발자 도구의 성능 탭을 활용하여 INP, LCP와 같은 지표를 분석하고 트래픽을 모니터링하는 방법을 배웠습니다. 이를 통해 웹 페이지의 성능을 지속적으로 개선할 수 있었습니다. 앞으로도 최적화에 힘쓰며 UX 친화적인 웹 사이트 구축을 위해 노력하겠습니다.
+

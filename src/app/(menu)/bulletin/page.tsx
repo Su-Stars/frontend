@@ -16,6 +16,7 @@ export default async function Bulletin() {
     defaultOptions: {
       queries: {
         staleTime: 60 * 1000,
+        refetchOnWindowFocus: true,
       },
     },
   })
