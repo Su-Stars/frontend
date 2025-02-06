@@ -7,12 +7,16 @@ interface HomePoolListProps {
   total: number
   searchResults: Pool[]
   isPending: boolean
+  isError: boolean
+  error: Error
 }
 
 export default function HomePoolList({
   total,
   searchResults,
   isPending,
+  isError,
+  error,
 }: HomePoolListProps) {
   if (isPending) {
     return (
@@ -24,6 +28,16 @@ export default function HomePoolList({
           ))}
         </div>
       </>
+    )
+  }
+
+  if (isError) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 py-12 text-muted-foreground">
+        <LuSearch className="h-12 w-12" />
+        <h3>검색 중 오류가 발생했습니다</h3>
+        <p>{error.message}</p>
+      </div>
     )
   }
 

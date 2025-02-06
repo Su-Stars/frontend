@@ -44,7 +44,7 @@ import { useQueryClient } from '@tanstack/react-query'
 export default function MyPage() {
   const { user, clearUser } = useUserStore((state) => state)
 
-  const { data, isLoading, isError } = useMe({ user: !!user })
+  const { data, isLoading, isError, error } = useMe({ user: !!user })
   const { data: bookmarks } = useMyBookmarks({ user: !!user })
   const [isEditOpen, setIsEditOpen] = useState(false)
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
@@ -54,13 +54,16 @@ export default function MyPage() {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch('https://nest-aws.site/api/v1/users/me', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/me`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
         },
-        credentials: 'include',
-      })
+      )
 
       const json = await response.json()
 
@@ -117,12 +120,9 @@ export default function MyPage() {
 
   if (isError) {
     return (
-      <div className="flex flex-col p-2">
-        <Card className="mx-auto max-w-2xl">
-          <CardContent className="p-6 text-center text-red-500">
-            프로필을 불러오는데 실패했습니다.
-          </CardContent>
-        </Card>
+      <div className="flex flex-col items-center justify-center gap-4 py-12 text-muted-foreground">
+        <h3>프로필 불러오기 중 오류가 발생했습니다</h3>
+        <p>{error?.message}</p>
       </div>
     )
   }

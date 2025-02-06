@@ -38,7 +38,7 @@ export const useSwimLogs = ({ year, month, day, user }: useSwimlogsParams) => {
     queryFn: async () => {
       try {
         const response = await fetch(
-          `https://nest-aws.site/api/v1/logs?year=${year}&month=${month}${day ? `&day=${day}` : ''}`,
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/logs?year=${year}&month=${month}${day ? `&day=${day}` : ''}`,
           {
             method: 'GET',
             headers: {

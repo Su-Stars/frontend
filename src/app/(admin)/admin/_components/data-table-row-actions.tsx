@@ -48,7 +48,7 @@ export function DataTableRowActions<TData extends WithId<string>>({
     }
     try {
       const response = await fetch(
-        `https://nest-aws.site/api/v1/pools/${poolId}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/pools/${poolId}`,
         {
           method: 'DELETE',
           headers: {

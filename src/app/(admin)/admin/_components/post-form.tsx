@@ -102,14 +102,17 @@ export default function PostForm({ setIsOpen }: PostFormProps) {
       {} as Record<string, any>,
     )
     try {
-      const response = await fetch('https://nest-aws.site/api/v1/pools', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/pools`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify(filteredValues),
         },
-        credentials: 'include',
-        body: JSON.stringify(filteredValues),
-      })
+      )
 
       const json = await response.json()
 

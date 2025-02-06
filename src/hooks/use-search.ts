@@ -48,5 +48,7 @@ export const useSearch = ({
     fetchNextPage,
     isFetchingNextPage,
     isPending,
+    isError,
+    error,
   }
 }

@@ -7,12 +7,13 @@ export function useBulletin() {
   const {
     isLoading,
     data,
-    error,
     fetchNextPage,
     hasNextPage,
     isFetching,
     isFetchingNextPage,
     status,
+    isError,
+    error,
   } = useInfiniteQuery<BulletinResponse>({
     queryKey: ['bulletin', limit],
     queryFn: async ({ pageParam }) =>
@@ -33,7 +34,6 @@ export function useBulletin() {
 
   return {
     records,
-    error,
     isEmpty,
     fetchNextPage,
     hasNextPage,
@@ -41,5 +41,7 @@ export function useBulletin() {
     isFetchingNextPage,
     status,
     isLoading,
+    isError,
+    error,
   }
 }

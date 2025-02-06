@@ -32,13 +32,16 @@ export default function DesktopHeaderAuth() {
 
     setLoading(true)
     try {
-      const response = await fetch('https://nest-aws.site/api/v1/auth/logout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/logout`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
         },
-        credentials: 'include',
-      })
+      )
 
       const data = await response.json()
 

@@ -57,7 +57,7 @@ export default function ReviewEditForm({
 
     try {
       const response = await fetch(
-        `https://nest-aws.site/api/v1/pools/${poolId}/reviews/${review.id}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/pools/${poolId}/reviews/${review.id}`,
         {
           method: 'PATCH',
           headers: {
