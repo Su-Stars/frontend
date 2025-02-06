@@ -14,7 +14,6 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
-import Image from 'next/image'
 import { useUserStore } from '@/providers/user-store-provider'
 import { useToast } from '@/hooks/use-toast'
 import { useState } from 'react'
@@ -27,6 +26,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { loginUser } from '@/actions/auth'
 
 const formSchema = z.object({
   email: z.string().email('이메일 형식이 아닙니다.'),
@@ -50,23 +50,10 @@ export default function LoginPage() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true)
     try {
-      const response = await fetch('https://nest-aws.site/api/v1/auth/login', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      })
-      const json = await response.json()
+      // 1. Call the loginUser function with the form values.
+      const data = await loginUser(values)
 
-      if (!response.ok) {
-        throw new Error(`[${response.status}] ${json.message}`)
-      }
-
-      const data = json.data
-
-      // 3. Update the user store with the user data.
+      // 2. Update the user store with the user data.
       setUser({
         id: data.id,
         email: data.email,
@@ -85,8 +72,7 @@ export default function LoginPage() {
       toast({
         variant: 'destructive',
         title: '로그인 실패',
-        description:
-          error instanceof Error ? error.message : '로그인에 실패했습니다.',
+        description: (error as Error).message,
       })
     } finally {
       setLoading(false)

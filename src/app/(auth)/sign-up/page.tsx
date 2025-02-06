@@ -25,6 +25,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { registerUser } from '@/actions/auth'
 
 const formSchema = z.object({
   email: z.string().email('이메일 형식이 아닙니다.'),
@@ -53,25 +54,7 @@ export default function SignUpPage() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true)
     try {
-      const response = await fetch(
-        'https://nest-aws.site/api/v1/auth/register',
-        {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(values),
-        },
-      )
-      const data = await response.json()
-
-      if (!response.ok) {
-        if (response.status === 409) {
-          throw new Error('동일한 이메일이 이미 존재합니다.')
-        }
-        throw new Error(data.message || '회원가입에 실패했습니다.')
-      }
+      const data = await registerUser(values)
 
       toast({
         title: '회원가입 성공',
