@@ -1,31 +1,16 @@
 import { useQuery } from '@tanstack/react-query'
+import { getMe } from '@/actions/user'
 
 interface useMeParams {
   user: boolean
 }
 
 export const useMe = ({ user }: useMeParams) => {
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['me'],
-    queryFn: async () => {
-      const response = await fetch('https://nest-aws.site/api/v1/users/me', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      })
-
-      const json = await response.json()
-
-      if (!response.ok) {
-        throw new Error(`[${response.status}] ${json.message}`)
-      }
-
-      return json.data
-    },
+    queryFn: () => getMe(),
     enabled: user,
   })
 
-  return { data, isLoading, isError }
+  return { data, isLoading, isError, error }
 }
