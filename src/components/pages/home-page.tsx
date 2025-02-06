@@ -22,6 +22,8 @@ export default function HomePage() {
     total,
     isFetchingNextPage,
     isPending,
+    isError,
+    error,
   } = useSearch({
     region,
     keyword,
@@ -64,6 +66,8 @@ export default function HomePage() {
         total={total}
         searchResults={searchResults}
         isPending={isPending}
+        isError={isError}
+        error={error as Error}
       />
       {hasNextPage && (
         <div ref={moreRef} className="py-4 text-center text-gray-500">

@@ -39,6 +39,16 @@ export const searchPools = async ({
     return json.data
   } catch (error) {
     console.error('Pool fetch error:', error)
-    throw error
+    let errorMessage = '수영장을 찾는 중 에러가 발생했습니다.'
+    if (error instanceof Error) {
+      // 네트워크 오류 또는 서버가 꺼진 경우
+      if (error.message.includes('Failed to fetch')) {
+        errorMessage =
+          '서버와의 통신에 실패했습니다. 서버가 실행 중인지 확인하거나 네트워크 연결을 확인해주세요.'
+      } else {
+        errorMessage = error.message
+      }
+    }
+    throw new Error(errorMessage)
   }
 }
