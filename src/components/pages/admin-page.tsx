@@ -6,7 +6,7 @@ import { columns } from '@/app/(admin)/admin/_components/columns'
 import { useSearch } from '@/hooks/use-search'
 import { Button } from '@/components/ui/button'
 import { ResponsiveDialog } from '@/components/responsive-dialog'
-import { LuPlus, LuArrowLeft } from 'react-icons/lu'
+import { LuPlus, LuArrowLeft, LuSearch } from 'react-icons/lu'
 import { useState } from 'react'
 import PostForm from '@/app/(admin)/admin/_components/post-form'
 import { useUserStore } from '@/providers/user-store-provider'
@@ -18,15 +18,31 @@ export default function AdminPage() {
 
   const [isOpen, setIsOpen] = useState(false)
   const [keyword, setKeyword] = useState('')
-  const { searchResults, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useSearch({
-      region: 'all',
-      keyword: keyword || 'all',
-    })
+  const {
+    searchResults,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+    isError,
+    error,
+  } = useSearch({
+    region: 'all',
+    keyword: keyword || 'all',
+  })
 
   // 비인증 상태일 때 404 페이지로 이동
   if (!user || user.role !== 'admin') {
     notFound()
+  }
+
+  if (isError) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 py-12 text-muted-foreground">
+        <LuSearch className="h-12 w-12" />
+        <h3>검색 중 오류가 발생했습니다</h3>
+        <p>{error?.message}</p>
+      </div>
+    )
   }
 
   return (
