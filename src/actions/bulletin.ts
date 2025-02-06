@@ -16,16 +16,16 @@ export const getBulletin = async ({ limit, page }: getBulletinProps) => {
     const json = await res.json()
     return json
   } catch (error) {
-    console.log(error)
-    return {
-      status: 'fail',
-      message: '오수완 정보 실패',
-      data: {
-        totalCount: 0,
-        page: 0,
-        limit: 0,
-        record: [],
-      },
+    console.error('getBulletin fetch error:', error)
+    let errorMessage = '오수완 데이터 패칭 중 에러가 발생했습니다.'
+    if (error instanceof Error) {
+      if (error.message.includes('Failed to fetch')) {
+        errorMessage =
+          '서버와의 통신에 실패했습니다. 서버가 실행 중인지 확인하거나 네트워크 연결을 확인해주세요.'
+      } else {
+        errorMessage = error.message
+      }
     }
+    throw new Error(errorMessage)
   }
 }
