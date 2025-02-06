@@ -58,7 +58,7 @@ export default function ResetPasswordPage() {
   async function handleRequest(values: z.infer<typeof requestSchema>) {
     try {
       const response = await fetch(
-        'https://nest-aws.site/api/v1/auth/request-reset',
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/request-reset`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -90,7 +90,7 @@ export default function ResetPasswordPage() {
   async function handleReset(values: z.infer<typeof resetSchema>) {
     try {
       const response = await fetch(
-        'https://nest-aws.site/api/v1/auth/reset-password',
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/reset-password`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

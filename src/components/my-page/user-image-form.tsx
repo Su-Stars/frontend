@@ -33,11 +33,14 @@ export default function UserImageForm() {
     formData.append('user-image', selectedImage)
 
     try {
-      const response = await fetch(`https://nest-aws.site/api/v1/users/image`, {
-        method: 'POST',
-        body: formData,
-        credentials: 'include',
-      })
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/image`,
+        {
+          method: 'POST',
+          body: formData,
+          credentials: 'include',
+        },
+      )
 
       const json = await response.json()
 

@@ -7,7 +7,7 @@ interface getReviewParams {
 export const getReview = async ({ poolId, page, limit }: getReviewParams) => {
   try {
     const response = await fetch(
-      `https://nest-aws.site/api/v1/pools/${poolId}/reviews?page=${page}&limit=${limit}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/pools/${poolId}/reviews?page=${page}&limit=${limit}`,
       {
         method: 'GET',
         headers: {

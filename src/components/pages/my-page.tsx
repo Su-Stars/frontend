@@ -54,13 +54,16 @@ export default function MyPage() {
 
   const handleDelete = async () => {
     try {
-      const response = await fetch('https://nest-aws.site/api/v1/users/me', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/me`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
         },
-        credentials: 'include',
-      })
+      )
 
       const json = await response.json()
 

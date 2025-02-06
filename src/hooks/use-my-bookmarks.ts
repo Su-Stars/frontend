@@ -24,13 +24,16 @@ export const useMyBookmarks = ({ user }: useMyBookmarksPrams) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['my-bookmarks'],
     queryFn: async () => {
-      const response = await fetch('https://nest-aws.site/api/v1/bookmarks', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/bookmarks`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
         },
-        credentials: 'include',
-      })
+      )
 
       const json = await response.json()
 

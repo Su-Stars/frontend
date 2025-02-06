@@ -45,14 +45,17 @@ export default function ProfileForm({
     setLoading(true)
 
     try {
-      const response = await fetch('https://nest-aws.site/api/v1/users/me', {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/users/me`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+          body: JSON.stringify(values),
         },
-        credentials: 'include',
-        body: JSON.stringify(values),
-      })
+      )
 
       const json = await response.json()
 

@@ -26,14 +26,17 @@ export function useAddSwimLog({
   return useMutation({
     mutationFn: async (newLog: SwimLogPayload) => {
       try {
-        const response = await fetch('https://nest-aws.site/api/v1/logs', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/logs`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify(newLog),
           },
-          credentials: 'include',
-          body: JSON.stringify(newLog),
-        })
+        )
 
         const data = await response.json()
 

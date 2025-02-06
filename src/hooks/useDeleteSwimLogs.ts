@@ -14,7 +14,7 @@ export function useDeleteSwimLog({ year, month, day }: DeleteSwimLogsParams) {
   return useMutation({
     mutationFn: async (logId: number) => {
       const response = await fetch(
-        `https://nest-aws.site/api/v1/logs/${logId}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/logs/${logId}`,
         {
           method: 'DELETE',
           headers: {
@@ -89,9 +89,8 @@ export function useDeleteSwimLog({ year, month, day }: DeleteSwimLogsParams) {
         queryKey: createSwimLogsQueryKey({ year, month }),
       })
 
-      // 오수완 캐시 
+      // 오수완 캐시
       queryClient.invalidateQueries({ queryKey: ['bulletin'] })
-
     },
   })
 }

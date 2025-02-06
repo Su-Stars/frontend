@@ -53,7 +53,7 @@ export default function ReviewPostForm({
 
     try {
       const response = await fetch(
-        `https://nest-aws.site/api/v1/pools/${poolId}/reviews`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/pools/${poolId}/reviews`,
         {
           method: 'POST',
           headers: {

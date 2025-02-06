@@ -5,14 +5,17 @@ export interface LoginValues {
 
 export const loginUser = async (values: LoginValues) => {
   try {
-    const response = await fetch('https://nest-aws.site/api/v1/auth/login', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/login`,
+      {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
       },
-      body: JSON.stringify(values),
-    })
+    )
     const json = await response.json()
 
     if (!response.ok) {
@@ -47,14 +50,17 @@ export interface RegisterValues {
 
 export const registerUser = async (values: RegisterValues) => {
   try {
-    const response = await fetch('https://nest-aws.site/api/v1/auth/register', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/auth/register`,
+      {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
       },
-      body: JSON.stringify(values),
-    })
+    )
 
     const json = await response.json()
 
