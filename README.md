@@ -13,7 +13,7 @@
 
 |                                                               **김경원**                                                                |                                                                **채문성**                                                                 |                                                                 **정동구**                                                                  |
 | :-------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------: |
-| [<img src="https://avatars.githubusercontent.com/u/111514472?v=4" height=150 width=150> <br/> @layout-SY](https://github.com/layout-SY) | [<img src="https://avatars.githubusercontent.com/u/152577867?v=4" height=150 width=150> <br/> @chaesunbak](https://github.com/chaesunbak) | [<img src="https://avatars.githubusercontent.com/u/133619736?v=4" height=150 width=150> <br/> @dongguJeong](https://github.com/dongguJeong) |
+| [<img src="https://avatars.githubusercontent.com/u/111514472?v=4" height=150 width=150> <br/> @layout-SY](https://github.com/Gyeongwon-Gim) | [<img src="https://avatars.githubusercontent.com/u/152577867?v=4" height=150 width=150> <br/> @chaesunbak](https://github.com/chaesunbak) | [<img src="https://avatars.githubusercontent.com/u/133619736?v=4" height=150 width=150> <br/> @dongguJeong](https://github.com/dongguJeong) |
 
 </div>
 
