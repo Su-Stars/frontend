@@ -1,5 +1,6 @@
 # 🐬 🏊🏻‍♂️ "내 주변 수영장을 한눈에, 수영 기록은 손쉽게" 어푸
-![IMG_1463](https://github.com/user-attachments/assets/84903158-e9e6-4c68-bee2-311d697acb93)
+<img width="4000" height="2250" alt="image" src="https://github.com/user-attachments/assets/1a514850-6ac5-4a07-b848-1e9c5ba309a9" />
+
 
 ## 프로젝트 소개
 - [x] **수영장 검색**: 지도, 지역, 이름으로 수영장 검색
